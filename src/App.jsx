@@ -42,10 +42,13 @@ function AppRoutes() {
       </Route>
     </>
   );
-
   return useRoutes(routes);
 }
 
 export default function App() {
-  return <AppRoutes />;
+  return (
+    <div className="App">
+      <AppRoutes />
+    </div>
+  )
 }
