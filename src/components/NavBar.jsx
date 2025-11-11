@@ -9,7 +9,8 @@ export default function Navbar() {
     return (
         <nav>
             <Link to="/dashboard">Dashboard</Link> |{" "}
-            <Link to="/department-categories">Departments</Link> |{" "}
+            <Link to="/departments">Departments</Link> |{" "}
+            <Link to="/department-categories">Department Categories</Link> |{" "}
             <Link to="/account">Account</Link> |{" "}
 
             <button onClick={logout}>Logout</button>

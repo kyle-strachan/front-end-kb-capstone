@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import DepartmentCategories from "./pages/DepartmentCategories";
 import Account from "./pages/Account";
+import Departments from "./pages/Departments";
 
 function ProtectedRoute() {
   const { user } = useAuth();
@@ -33,6 +34,7 @@ function AppRoutes() {
       {/* Protected group */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/departments" element={<Departments />} />
         <Route path="/department-categories" element={<DepartmentCategories />} />
         <Route path="/account" element={<Account />} />
 
