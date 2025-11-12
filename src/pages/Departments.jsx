@@ -13,9 +13,9 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import "../App.css";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Departments() {
-    // const { user } = useAuth();
     const [departments, setDepartments] = useState([]);
     const [edited, setEdited] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,6 +23,10 @@ export default function Departments() {
     const [newDepartment, setNewDepartment] = useState("");
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    function notify(message) {
+        toast(message);
+    }
 
     async function fetchDepartments() {
         try {
@@ -56,7 +60,8 @@ export default function Departments() {
         try {
             const updates = departments.filter((d) => edited.includes(d._id));
             if (updates.length === 0) {
-                alert("No changes to save.");
+                notify("No changes to save.");
+
                 return;
             }
 
@@ -67,41 +72,44 @@ export default function Departments() {
             setEdited((prev) => prev.filter((id) => failedIds.includes(id)));
 
             if (failedIds.length > 0) {
-                alert(
-                    `Some updates failed:\n` +
+                notify(`Some updates failed:\n` +
                     results
                         .filter((r) => !r.success)
                         .map((r) => `${r.id}: ${r.message}`)
-                        .join("\n")
-                );
+                        .join("\n"));
+
             } else {
-                alert("All changes saved successfully.");
+                notify("All changes saved successfully.");
                 setEdited([]);
+
             }
 
             await fetchDepartments();
         } catch (error) {
             console.error("Save failed:", error.message);
-            alert("Failed to save changes.");
+            notify("Failed to save changes.");
         }
     }
 
     async function handleInsert() {
         try {
             if (newDepartment.trim().length < 3) {
-                alert("New departments must have a minimum of 3 characters.");
+                notify("New departments must have a minimum of 3 characters.");
+
                 return;
             }
 
             await api.post("/config/departments", {
                 department: newDepartment.trim(),
             });
-            alert("Department added successfully.");
+            notify("Department added successfully.");
+
             setNewDepartment("");
             await fetchDepartments();
         } catch (error) {
             console.error("Insert failed:", error.message);
-            alert("Failed to insert changes.");
+            notify("Failed to insert department.");
+
         }
     }
 
@@ -230,6 +238,7 @@ export default function Departments() {
                         </Button></div>
                 </div>
             </Paper>
+            <ToastContainer />
         </div>
     );
 }
