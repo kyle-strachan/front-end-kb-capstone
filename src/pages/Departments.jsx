@@ -24,8 +24,12 @@ export default function Departments() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    function notify(message) {
-        toast(message);
+    function notify(message, type = "Info") {
+        if (type === "success") {
+            toast.success(message);
+        } else {
+            toast.error(message);
+        }
     }
 
     async function fetchDepartments() {
@@ -60,8 +64,7 @@ export default function Departments() {
         try {
             const updates = departments.filter((d) => edited.includes(d._id));
             if (updates.length === 0) {
-                notify("No changes to save.");
-
+                notify("No changes to save.", "error");
                 return;
             }
 
@@ -76,10 +79,10 @@ export default function Departments() {
                     results
                         .filter((r) => !r.success)
                         .map((r) => `${r.id}: ${r.message}`)
-                        .join("\n"));
+                        .join("\n"), "error");
 
             } else {
-                notify("All changes saved successfully.");
+                notify("All changes saved successfully.", "success");
                 setEdited([]);
 
             }
@@ -87,29 +90,26 @@ export default function Departments() {
             await fetchDepartments();
         } catch (error) {
             console.error("Save failed:", error.message);
-            notify("Failed to save changes.");
+            notify("Failed to save changes.", "error");
         }
     }
 
     async function handleInsert() {
         try {
             if (newDepartment.trim().length < 3) {
-                notify("New departments must have a minimum of 3 characters.");
-
+                notify("New departments must have a minimum of 3 characters.", "error");
                 return;
             }
 
             await api.post("/config/departments", {
                 department: newDepartment.trim(),
             });
-            notify("Department added successfully.");
-
+            notify("Department added successfully.", "success");
             setNewDepartment("");
             await fetchDepartments();
         } catch (error) {
             console.error("Insert failed:", error.message);
-            notify("Failed to insert department.");
-
+            notify("Failed to insert department.", "error");
         }
     }
 
