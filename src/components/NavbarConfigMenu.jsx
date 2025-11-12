@@ -1,5 +1,7 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
+import Divider from '@mui/material/Divider';
+
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
@@ -56,6 +58,11 @@ export default function NavBarConfigMenu() {
                 <MenuItem component={Link} to="/department-categories" onClick={handleClose}>
                     Department Categories
                 </MenuItem>
+                <Divider />
+                <MenuItem component={Link} to="/system-categories" onClick={handleClose}>
+                    System Categories
+                </MenuItem>
+                <Divider />
                 <MenuItem component={Link} to="/users" onClick={handleClose}>
                     Users
                 </MenuItem>
