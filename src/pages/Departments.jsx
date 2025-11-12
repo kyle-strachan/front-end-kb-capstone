@@ -211,22 +211,25 @@ export default function Departments() {
 
             <Paper sx={{ mt: 4, p: 2 }}>
                 <h4>Add New</h4>
-                <TextField
-                    id="input-new-department"
-                    helperText="Minimum three characters"
-                    label="Department Name"
-                    variant="standard"
-                    value={newDepartment}
-                    onChange={(e) => setNewDepartment(e.target.value)}
-                    sx={{ mr: 2, width: "300px" }}
-                />
-                <Button
-                    variant="contained"
-                    onClick={handleInsert}
-                    disabled={newDepartment.trim().length < 3}
-                >
-                    Insert
-                </Button>
+                <div className="btn-inline-container">
+                    <TextField
+                        id="input-new-department"
+                        helperText="Minimum three characters"
+                        label="Department Name"
+                        variant="standard"
+                        value={newDepartment}
+                        onChange={(e) => setNewDepartment(e.target.value)}
+                        sx={{ mr: 2, width: "100%" }}
+                    />
+                    <div>
+                        <Button
+                            variant="contained"
+                            onClick={handleInsert}
+                            disabled={newDepartment.trim().length < 3}
+                        >
+                            Insert
+                        </Button></div>
+                </div>
             </Paper>
         </div>
     );

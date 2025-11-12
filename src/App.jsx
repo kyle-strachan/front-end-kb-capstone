@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import DepartmentCategories from "./pages/DepartmentCategories";
 import Account from "./pages/Account";
 import Departments from "./pages/Departments";
+import Footer from "./components/Footer";
 
 function ProtectedRoute() {
   const { user } = useAuth();
@@ -21,7 +22,7 @@ function LayoutProtected() {
       <div className="p-4">
         <Outlet />
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -49,6 +50,7 @@ export default function App() {
   return (
     <div className="App">
       <AppRoutes />
+      <Footer />
     </div>
   )
 }

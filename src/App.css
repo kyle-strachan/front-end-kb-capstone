@@ -2,3 +2,21 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.btn-inline-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: rgb(94, 94, 94);
+  padding-top: 40px;
+  /* margin-bottom: 20px; */
+  padding-bottom: 20px;
+  background-color: #f7f7f7;
+  font-size: 0.85rem;
+  text-align: center;
+}
