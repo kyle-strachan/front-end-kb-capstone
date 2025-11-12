@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+// import { useAuth } from "../context/AuthContext";
 import { api } from "../api";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
@@ -15,7 +15,7 @@ import TableRow from "@mui/material/TableRow";
 import "../App.css";
 
 export default function Departments() {
-    const { user } = useAuth();
+    // const { user } = useAuth();
     const [departments, setDepartments] = useState([]);
     const [edited, setEdited] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -117,7 +117,6 @@ export default function Departments() {
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
             <h2>Configuration</h2>
-            <p>Welcome, {user?.fullName || user?.username}</p>
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>Departments</h3>

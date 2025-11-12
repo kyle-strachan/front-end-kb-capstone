@@ -1,6 +1,6 @@
 import { createRoutesFromElements, Route, useRoutes, Navigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/Navbar";
+// import Navbar from "./components/Navbar";
 import { useAuth } from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -8,19 +8,26 @@ import DepartmentCategories from "./pages/DepartmentCategories";
 import Account from "./pages/Account";
 import Departments from "./pages/Departments";
 import Footer from "./components/Footer";
+import NavBarExtended from "./components/NavBarExtended";
 
 function ProtectedRoute() {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" />;
-  return <LayoutProtected />;
+  return (
+    <LayoutProtected />
+  );
 }
 
 function LayoutProtected() {
   return (
-    <div>
-      <Navbar />
-      <div className="p-4">
-        <Outlet />
+    <div className="App">
+      <div className="content-wrapper">
+        <NavBarExtended />
+        {/* <Navbar /> */}
+        <div className="p-4">
+          <Outlet />
+        </div>
+        <Footer />
       </div>
     </div >
   );
@@ -48,9 +55,6 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <div className="App">
-      <AppRoutes />
-      <Footer />
-    </div>
+    <AppRoutes />
   )
 }

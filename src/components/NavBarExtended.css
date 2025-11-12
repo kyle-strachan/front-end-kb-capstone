@@ -1,0 +1,11 @@
+.nav-bar-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.nav-bar-account-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
