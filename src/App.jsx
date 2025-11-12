@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import DepartmentCategories from "./pages/DepartmentCategories";
 import Account from "./pages/Account";
 import Departments from "./pages/Departments";
+import Locations from "./pages/Locations";
 import Footer from "./components/Footer";
 import NavBarExtended from "./components/NavBarExtended";
 
@@ -44,6 +45,7 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/departments" element={<Departments />} />
         <Route path="/department-categories" element={<DepartmentCategories />} />
+        <Route path="/locations" element={<Locations />} />
         <Route path="/account" element={<Account />} />
 
         <Route path="/" element={<Navigate to="/dashboard" />} />
