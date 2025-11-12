@@ -127,7 +127,7 @@ export default function SystemCategories() {
             <h2>Configuration</h2>
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>Locations</h3>
+                <h3>System Categories</h3>
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
