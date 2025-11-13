@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
+import AccessRequests from "../components/AccessRequests";
 
 export default function UsersNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -62,6 +63,7 @@ export default function UsersNewEdit() {
                 const foundUser = userRes.data.users.find((a) => a._id === id);
                 if (foundUser) {
                     setUser({
+                        _id: foundUser._id,
                         username: foundUser.username || "",
                         fullName: foundUser.fullName || "",
                         location: foundUser.location || "",
@@ -117,110 +119,115 @@ export default function UsersNewEdit() {
     if (loading) return <p>Loading...</p>;
 
     return (
-        <div style={{ margin: "0 auto", padding: "1rem" }}>
-            <Paper sx={{ p: 3 }}>
-                <Typography variant="h5" sx={{ mb: 2 }}>
-                    {id ? "Edit User" : "New User"}
-                </Typography>
-                <TextField
-                    fullWidth
-                    disabled={disabled}
-                    variant="standard"
-                    label="Username"
-                    value={user.username}
-                    onChange={(e) => handleFieldChange("username", e.target.value)}
-                    sx={{ mb: 2 }}
-                />
-                <TextField
-                    fullWidth
-                    variant="standard"
-                    label="Full Name"
-                    value={user.fullName}
-                    onChange={(e) => handleFieldChange("fullName", e.target.value)}
-                    sx={{ mb: 2 }}
-                />
-                <SelectWithSearch
-                    options={departments}
-                    label="Department (provide Doc access to)"
-                    labelField="department"
-                    multiple
-                    value={departments.filter((c) => (user.department || []).includes(c._id))}
-                    onChange={(e, newValue) =>
-                        handleFieldChange(
-                            "department",
-                            Array.isArray(newValue) ? newValue.map((v) => v._id) : []
-                        )
-                    }
-                />
-
-                <SelectWithSearch
-                    options={locations}
-                    label="Location"
-                    labelField="location"
-                    value={locations.find((c) => c._id === user.location) || null}
-                    onChange={(e, newValue) =>
-                        handleFieldChange("location", newValue ? newValue._id : "")
-                    }
-                />
-
-
-                <TextField
-                    fullWidth
-                    variant="standard"
-                    label="Email"
-                    value={user.email}
-                    onChange={(e) => handleFieldChange("email", e.target.value)}
-                    sx={{ mb: 2 }}
-                />
-
-                <TextField
-                    fullWidth
-                    variant="standard"
-                    label="Position"
-                    value={user.position}
-                    onChange={(e) => handleFieldChange("position", e.target.value)}
-                    sx={{ mb: 2 }}
-                />
-
-                {/* Show isActive box only for existing users. All new users are active by default */}
-                {id && (
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={user.isActive}
-                                onChange={(e) => handleFieldChange("isActive", e.target.checked)}
-                            />
-                        }
-                        label="Active"
-                        sx={{ mt: 2 }}
+        <>
+            <div style={{ margin: "0 auto", padding: "1rem" }}>
+                <Paper sx={{ p: 3 }}>
+                    <Typography variant="h5" sx={{ mb: 2 }}>
+                        {id ? "Edit User" : "New User"}
+                    </Typography>
+                    <TextField
+                        fullWidth
+                        disabled={disabled}
+                        variant="standard"
+                        label="Username"
+                        value={user.username}
+                        onChange={(e) => handleFieldChange("username", e.target.value)}
+                        sx={{ mb: 2 }}
                     />
-                )}
-
-                {/* Show password box for new users only */}
-                {!id && (
                     <TextField
                         fullWidth
                         variant="standard"
-                        label="Temporary Password"
-                        type="password"
-                        onChange={(e) => handleFieldChange("password", e.target.value)}
+                        label="Full Name"
+                        value={user.fullName}
+                        onChange={(e) => handleFieldChange("fullName", e.target.value)}
                         sx={{ mb: 2 }}
                     />
-                )}
+                    <SelectWithSearch
+                        options={departments}
+                        label="Department (provide Doc access to)"
+                        labelField="department"
+                        multiple
+                        value={departments.filter((c) => (user.department || []).includes(c._id))}
+                        onChange={(e, newValue) =>
+                            handleFieldChange(
+                                "department",
+                                Array.isArray(newValue) ? newValue.map((v) => v._id) : []
+                            )
+                        }
+                    />
 
-                <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
-                    <Button variant="contained" onClick={handleSave}>
-                        Save
-                    </Button>
-                    <Button variant="outlined" onClick={() => navigate(-1)}>
-                        Cancel
-                    </Button>
-                </div>
+                    <SelectWithSearch
+                        options={locations}
+                        label="Location"
+                        labelField="location"
+                        value={locations.find((c) => c._id === user.location) || null}
+                        onChange={(e, newValue) =>
+                            handleFieldChange("location", newValue ? newValue._id : "")
+                        }
+                    />
 
 
-            </Paper>
-            <ToastContainer />
+                    <TextField
+                        fullWidth
+                        variant="standard"
+                        label="Email"
+                        value={user.email}
+                        onChange={(e) => handleFieldChange("email", e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
 
-        </div>
+                    <TextField
+                        fullWidth
+                        variant="standard"
+                        label="Position"
+                        value={user.position}
+                        onChange={(e) => handleFieldChange("position", e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
+
+                    {/* Show isActive box only for existing users. All new users are active by default */}
+                    {id && (
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={user.isActive}
+                                    onChange={(e) => handleFieldChange("isActive", e.target.checked)}
+                                />
+                            }
+                            label="Active"
+                            sx={{ mt: 2 }}
+                        />
+                    )}
+
+                    {/* Show password box for new users only */}
+                    {!id && (
+                        <TextField
+                            fullWidth
+                            variant="standard"
+                            label="Temporary Password"
+                            type="password"
+                            onChange={(e) => handleFieldChange("password", e.target.value)}
+                            sx={{ mb: 2 }}
+                        />
+                    )}
+
+                    <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
+                        <Button variant="contained" onClick={handleSave}>
+                            Save
+                        </Button>
+                        <Button variant="outlined" onClick={() => navigate(-1)}>
+                            Cancel
+                        </Button>
+                    </div>
+
+
+                </Paper>
+                <ToastContainer />
+
+            </div>
+            <div>
+                <AccessRequests id={user._id} fullName={user.fullName} />
+            </div>
+        </>
     );
 }
