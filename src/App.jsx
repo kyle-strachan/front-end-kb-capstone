@@ -11,6 +11,8 @@ import Locations from "./pages/Locations";
 import SystemApplications from "./pages/SystemApplications";
 import SystemApplicationsNewEdit from "./pages/SystemApplicationsNewEdit";
 import SystemCategories from "./pages/SystemCategories";
+import Users from "./pages/Users";
+import UsersNewEdit from "./pages/UsersNewEdit";
 import Footer from "./components/Footer";
 import NavBarExtended from "./components/NavBarExtended";
 import { ToastContainer, toast } from "react-toastify";
@@ -56,6 +58,10 @@ function AppRoutes() {
         <Route path="/system-applications/:id" element={<SystemApplicationsNewEdit />} />
         <Route path="/system-applications" element={<SystemApplications />} />
         <Route path="/system-categories" element={<SystemCategories />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/new" element={<UsersNewEdit />} />
+        <Route path="/users/:id" element={<UsersNewEdit />} />
+
         <Route path="/account" element={<Account />} />
 
         <Route path="/" element={<Navigate to="/dashboard" />} />
