@@ -84,6 +84,7 @@ export default function SystemApplications() {
                     <Button
                         variant="contained"
                         onClick={() => navigate("/system-applications/new")}
+                        sx={{ mb: 2 }}
                     >
                         New
                     </Button>
