@@ -41,7 +41,7 @@ export default function Users() {
             setLoading(true);
             setError(null);
             const res = await api.get("/users/");
-            if (res.data.users && res.data.users) {
+            if (res.data.users) {
                 setUsers(res.data.users);
             } else {
                 setUsers([]);
@@ -81,7 +81,7 @@ export default function Users() {
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>Users</h3>
 
-                {/* ✅ toggle to show Active / Inactive */}
+                {/* Toggle to show Active / Inactive */}
                 <FormControlLabel
                     control={
                         <Switch
