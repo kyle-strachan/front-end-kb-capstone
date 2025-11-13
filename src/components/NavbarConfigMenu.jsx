@@ -62,6 +62,9 @@ export default function NavBarConfigMenu() {
                 <MenuItem component={Link} to="/system-categories" onClick={handleClose}>
                     System Categories
                 </MenuItem>
+                <MenuItem component={Link} to="/system-applications" onClick={handleClose}>
+                    System Applications
+                </MenuItem>
                 <Divider />
                 <MenuItem component={Link} to="/users" onClick={handleClose}>
                     Users
