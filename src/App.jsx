@@ -15,7 +15,6 @@ import Users from "./pages/Users";
 import UsersNewEdit from "./pages/UsersNewEdit";
 import Footer from "./components/Footer";
 import NavBarExtended from "./components/NavBarExtended";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ProtectedRoute() {
@@ -36,7 +35,7 @@ function LayoutProtected() {
           <Outlet />
         </div>
         <Footer />
-        <ToastContainer />
+        {/* <ToastContainer /> */}
       </div>
     </div >
   );
