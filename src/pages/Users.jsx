@@ -14,6 +14,7 @@ import Switch from "@mui/material/Switch"; // ✅ added
 import FormControlLabel from "@mui/material/FormControlLabel"; // ✅ added
 import { ToastContainer } from "react-toastify";
 import "../App.css";
+import ResetPasswordForm from "../components/ResetPasswordForm";
 
 export default function Users() {
     const navigate = useNavigate();
@@ -151,6 +152,8 @@ export default function Users() {
                                             <Button onClick={() => navigate(`/users/${d._id}`)}>
                                                 Edit
                                             </Button>
+                                            {/* userReset false, will force user to reset their password upon login. */}
+                                            <ResetPasswordForm userReset={false} userIdToChange={d._id} />
                                         </TableCell>
                                     </TableRow>
                                 ))}
