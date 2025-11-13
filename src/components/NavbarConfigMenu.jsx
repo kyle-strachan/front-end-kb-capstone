@@ -52,10 +52,10 @@ export default function NavBarConfigMenu() {
                 <MenuItem component={Link} to="/locations" onClick={handleClose}>
                     Locations
                 </MenuItem>
-                <MenuItem component={Link} to="/platform-roles" onClick={handleClose}>
+                <MenuItem component={Link} to="/platform-roles" onClick={handleClose} disabled>
                     Platform Roles
                 </MenuItem>
-                <MenuItem component={Link} to="/department-categories" onClick={handleClose}>
+                <MenuItem component={Link} to="/department-categories" onClick={handleClose} disabled>
                     Department Categories
                 </MenuItem>
                 <Divider />

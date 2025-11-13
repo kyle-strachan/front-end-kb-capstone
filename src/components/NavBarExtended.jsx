@@ -43,11 +43,11 @@ export default function AccountMenu() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center', padding: '5px 10px' }}>
                 <div className="nav-bar-links">
                     <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Dashboard</Link></Typography>
+                    <Typography sx={{ padding: '0 15px' }}><Link to="/docs">Docs</Link></Typography>
                     {/* <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Configuration</Link></Typography> */}
                     <NavBarConfigMenu />
-                    <Typography sx={{ padding: '0 15px' }}><Link to="/departments">Departments</Link></Typography>
-                    <Typography sx={{ padding: '0 15px' }}><Link to="/docs">Documents</Link></Typography>
-                    <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">UAC</Link></Typography>
+                    {/* <Typography sx={{ padding: '0 15px' }}><Link to="/departments">Departments</Link></Typography> */}
+                    {/* <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">UAC</Link></Typography> */}
                 </div>
                 <div className="nav-bar-account-menu">
                     <Typography sx={{ minWidth: 100 }}>{user?.fullName || user?.username}</Typography>
