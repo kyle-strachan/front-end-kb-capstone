@@ -8,9 +8,13 @@ import DepartmentCategories from "./pages/DepartmentCategories";
 import Account from "./pages/Account";
 import Departments from "./pages/Departments";
 import Locations from "./pages/Locations";
+import SystemApplications from "./pages/SystemApplications";
+import SystemApplicationsNewEdit from "./pages/SystemApplicationsNewEdit";
 import SystemCategories from "./pages/SystemCategories";
 import Footer from "./components/Footer";
 import NavBarExtended from "./components/NavBarExtended";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ProtectedRoute() {
   const { user } = useAuth();
@@ -30,6 +34,7 @@ function LayoutProtected() {
           <Outlet />
         </div>
         <Footer />
+        <ToastContainer />
       </div>
     </div >
   );
@@ -47,6 +52,9 @@ function AppRoutes() {
         <Route path="/departments" element={<Departments />} />
         <Route path="/department-categories" element={<DepartmentCategories />} />
         <Route path="/locations" element={<Locations />} />
+        <Route path="/system-applications/new" element={<SystemApplicationsNewEdit />} />
+        <Route path="/system-applications/:id" element={<SystemApplicationsNewEdit />} />
+        <Route path="/system-applications" element={<SystemApplications />} />
         <Route path="/system-categories" element={<SystemCategories />} />
         <Route path="/account" element={<Account />} />
 
