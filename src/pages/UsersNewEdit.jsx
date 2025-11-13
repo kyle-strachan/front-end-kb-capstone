@@ -20,7 +20,7 @@ export default function UsersNewEdit() {
     const [user, setUser] = useState({
         username: "",
         fullName: "",
-        location: [],
+        location: "",
         department: [],
         email: "",
         position: "",
@@ -29,6 +29,7 @@ export default function UsersNewEdit() {
     });
     const [departments, setDepartments] = useState([]);
     const [locations, setLocations] = useState([]);
+    const [disabled, setDisabled] = useState(false); // Remove later, use !id
 
 
     function notify(message, type = "Info") {
@@ -63,14 +64,21 @@ export default function UsersNewEdit() {
                     setUser({
                         username: foundUser.username || "",
                         fullName: foundUser.fullName || "",
-                        location: Array.isArray(foundUser.location) ? foundUser.location : [],
-                        department: Array.isArray(foundUser.department) ? foundUser.department : [],
+                        location: foundUser.location || "",
+                        // department: Array.isArray(foundUser.department) ? foundUser.department : [],
+                        department: Array.isArray(foundUser.department)
+                            ? foundUser.department
+                            : foundUser.department
+                                ? [foundUser.department]
+                                : [],
                         email: foundUser.email || "",
                         position: foundUser.position || "",
                         isActive: foundUser.isActive ?? true,
                         permissions: Array.isArray(foundUser.permissions) ? foundUser.permissions : [],
 
                     });
+                    console.log('Setting disabled.')
+                    setDisabled(true);
                 } else {
                     notify("User not found.", "error");
                     navigate("/users");
@@ -114,7 +122,15 @@ export default function UsersNewEdit() {
                 <Typography variant="h5" sx={{ mb: 2 }}>
                     {id ? "Edit User" : "New User"}
                 </Typography>
-
+                <TextField
+                    fullWidth
+                    disabled={disabled}
+                    variant="standard"
+                    label="Username"
+                    value={user.username}
+                    onChange={(e) => handleFieldChange("username", e.target.value)}
+                    sx={{ mb: 2 }}
+                />
                 <TextField
                     fullWidth
                     variant="standard"
@@ -123,25 +139,17 @@ export default function UsersNewEdit() {
                     onChange={(e) => handleFieldChange("fullName", e.target.value)}
                     sx={{ mb: 2 }}
                 />
-
-                <TextField
-                    fullWidth
-                    variant="standard"
-                    label="Username"
-                    value={user.username}
-                    onChange={(e) => handleFieldChange("username", e.target.value)}
-                    sx={{ mb: 2 }}
-                />
-
                 <SelectWithSearch
                     options={departments}
-                    label="Department"
+                    label="Department (provide Doc access to)"
                     labelField="department"
-                    value={
-                        departments.find((c) => c._id === user.department) || null
-                    }
+                    multiple
+                    value={departments.filter((c) => (user.department || []).includes(c._id))}
                     onChange={(e, newValue) =>
-                        handleFieldChange("department", newValue ? newValue._id : "")
+                        handleFieldChange(
+                            "department",
+                            Array.isArray(newValue) ? newValue.map((v) => v._id) : []
+                        )
                     }
                 />
 
@@ -149,13 +157,12 @@ export default function UsersNewEdit() {
                     options={locations}
                     label="Location"
                     labelField="location"
-                    value={
-                        locations.find((c) => c._id === user.location) || null
-                    }
+                    value={locations.find((c) => c._id === user.location) || null}
                     onChange={(e, newValue) =>
                         handleFieldChange("location", newValue ? newValue._id : "")
                     }
                 />
+
 
                 <TextField
                     fullWidth
@@ -175,16 +182,31 @@ export default function UsersNewEdit() {
                     sx={{ mb: 2 }}
                 />
 
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={user.isActive}
-                            onChange={(e) => handleFieldChange("isActive", e.target.checked)}
-                        />
-                    }
-                    label="Active"
-                    sx={{ mt: 2 }}
-                />
+                {/* Show isActive box only for existing users. All new users are active by default */}
+                {id && (
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={user.isActive}
+                                onChange={(e) => handleFieldChange("isActive", e.target.checked)}
+                            />
+                        }
+                        label="Active"
+                        sx={{ mt: 2 }}
+                    />
+                )}
+
+                {/* Show password box for new users only */}
+                {!id && (
+                    <TextField
+                        fullWidth
+                        variant="standard"
+                        label="Temporary Password"
+                        type="password"
+                        onChange={(e) => handleFieldChange("password", e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
+                )}
 
                 <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
                     <Button variant="contained" onClick={handleSave}>
@@ -194,6 +216,8 @@ export default function UsersNewEdit() {
                         Cancel
                     </Button>
                 </div>
+
+
             </Paper>
             <ToastContainer />
 

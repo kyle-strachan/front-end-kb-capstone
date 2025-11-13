@@ -10,7 +10,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { ToastContainer, toast } from "react-toastify";
+import Switch from "@mui/material/Switch"; // ✅ added
+import FormControlLabel from "@mui/material/FormControlLabel"; // ✅ added
+import { ToastContainer } from "react-toastify";
 import "../App.css";
 
 export default function Users() {
@@ -21,6 +23,9 @@ export default function Users() {
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    // ✅ new state for Active/Inactive toggle
+    const [showActive, setShowActive] = useState(true);
 
     // function notify(message, type = "Info") {
     //     if (type === "success") {
@@ -65,12 +70,29 @@ export default function Users() {
 
     if (error) return <p>{error}</p>;
 
+    // ✅ apply toggle filter (no API calls, just client-side)
+    const filteredUsers = users.filter((u) => u.isActive === showActive);
+
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
             <h2>Configuration</h2>
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>Users</h3>
+
+                {/* ✅ toggle to show Active / Inactive */}
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={showActive}
+                            onChange={(e) => setShowActive(e.target.checked)}
+                            color="primary"
+                        />
+                    }
+                    label={showActive ? "Showing Active Users" : "Showing Inactive Users"}
+                    sx={{ mb: 1 }}
+                />
+
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
@@ -87,7 +109,6 @@ export default function Users() {
                         New
                     </Button>
                 </div>
-
 
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
@@ -107,7 +128,7 @@ export default function Users() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {users
+                            {filteredUsers
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((d) => (
                                     <TableRow
@@ -140,7 +161,7 @@ export default function Users() {
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={users.length}
+                    count={filteredUsers.length} // ✅ pagination uses filtered count
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
