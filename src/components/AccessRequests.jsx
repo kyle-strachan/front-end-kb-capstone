@@ -1,0 +1,139 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api } from "../api";
+import {
+    Paper,
+    TextField,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    Table,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Typography,
+} from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import SelectWithSearch from "./SelectWithSearch";
+
+export default function AccessRequests({ id, fullName }) {
+
+    //Move into props when finished
+    // const id = "69151960e4845c8271880479";
+    // const fullName = "Pink Floyd"
+
+    const navigate = useNavigate();
+    const [accessRequests, setAccessRequests] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [tableNote, setTableNote] = useState(null)
+    // const [page, setPage] = useState(0);
+    // const [rowsPerPage, setRowsPerPage] = useState(10);
+    // const [showActive, setShowActive] = useState(true);
+
+    // function notify(message, type = "Info") {
+    //     if (type === "success") {
+    //         toast.success(message);
+    //     } else {
+    //         toast.error(message);
+    //     }
+    // }
+
+    async function fetchAccessRequests() {
+        try {
+            setTableNote(null);
+            setLoading(true);
+            setError(null);
+            const res = await api.get("/uac/access-requests", {
+                params: { userId: id }
+            });
+
+            // Continue to display table headers if results are empty, for more consistent UI. 404 downed on back-end too.
+            setAccessRequests(res.data.accessRequests || []);
+            if (accessRequests.length === 0) {
+                setTableNote("No pending requests");
+            }
+
+        } catch (error) {
+            console.error("Failed to fetch access requests:", error.message);
+            setError("Could not load access requests.");
+            setAccessRequests([]);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchAccessRequests();
+    }, []);
+
+    function handleRefresh() {
+        fetchAccessRequests();
+    }
+
+    // Block module if error during rendering.
+    if (error) return <p>{error}</p>;
+
+    return (
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                    Pending Access Requests for {fullName}
+                </Typography>
+
+                <div className="cta-btn-container">
+                    <Button
+                        variant="contained"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={() => navigate("/users/new")}
+                        sx={{ mb: 2 }}
+                    >
+                        New
+                    </Button>
+                </div>
+
+                <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
+                    <Table
+                        stickyHeader
+                        aria-label="users table"
+                        sx={{ minWidth: 650, width: "100%" }}
+                    >
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Full Name</TableCell>
+                                <TableCell>System Name</TableCell>
+                                <TableCell>Request Type</TableCell>
+                                <TableCell>Requested By</TableCell>
+                                <TableCell>Requested At</TableCell>
+                                <TableCell>Actions</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {accessRequests.map((r) => (
+                                <TableRow key={r._id} hover>
+                                    <TableCell>{r.userId?.fullName}</TableCell>
+                                    <TableCell>{r.applicationId?.system}</TableCell>
+                                    <TableCell>{r.requestType}</TableCell>
+                                    <TableCell>{r.requestedBy?.fullName}</TableCell>
+                                    <TableCell>{new Date(r.requestedAt).toLocaleString()}</TableCell>
+                                    <TableCell>{/* actions later */}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                {tableNote ? <Typography sx={{ mb: 2, p: 1 }}>{tableNote}</Typography> : ""}
+            </Paper>
+            <ToastContainer />
+        </div>
+    );
+}
