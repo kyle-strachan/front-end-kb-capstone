@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import DepartmentCategories from "./pages/DepartmentCategories";
 import Account from "./pages/Account";
 import Departments from "./pages/Departments";
+import Docs from "./pages/Docs";
 import Locations from "./pages/Locations";
 import SystemApplications from "./pages/SystemApplications";
 import SystemApplicationsNewEdit from "./pages/SystemApplicationsNewEdit";
@@ -53,6 +54,7 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/departments" element={<Departments />} />
         <Route path="/department-categories" element={<DepartmentCategories />} />
+        <Route path="/docs" element={<Docs />} />
         <Route path="/locations" element={<Locations />} />
         <Route path="/system-applications/new" element={<SystemApplicationsNewEdit />} />
         <Route path="/system-applications/:id" element={<SystemApplicationsNewEdit />} />
