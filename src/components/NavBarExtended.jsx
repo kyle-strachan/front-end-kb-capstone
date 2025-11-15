@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
 import "./NavBarExtended.css";
 import NavBarConfigMenu from "../components/NavbarConfigMenu";
+import NavBarUacMenu from './NavBarUacMenu';
 
 export default function AccountMenu() {
     const { user, logout } = useAuth();
@@ -46,6 +47,7 @@ export default function AccountMenu() {
                     <Typography sx={{ padding: '0 15px' }}><Link to="/docs">Docs</Link></Typography>
                     {/* <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Configuration</Link></Typography> */}
                     <NavBarConfigMenu />
+                    <NavBarUacMenu />
                     {/* <Typography sx={{ padding: '0 15px' }}><Link to="/departments">Departments</Link></Typography> */}
                     {/* <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">UAC</Link></Typography> */}
                 </div>
