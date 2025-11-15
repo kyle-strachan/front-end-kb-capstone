@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import {
     Paper,
@@ -11,27 +11,17 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
-import TransferList from "../components/SystemsTransferList";
+import ApplicationsTransferList from "../components/ApplicationsTransferList";
 
 export default function AccessRequestNew() {
-    const { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
-
     const [loading, setLoading] = useState(true);
-    const [systemApp, setSystemApp] = useState({
-        system: "",
-        isActive: true,
-    });
-    const [systemApplications, setSystemApplications] = useState([]);
-    const [selectedSystems, setSelectedSystems] = useState([]);
-    const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
-    const [request, setRequest] = useState({
-        userId: [],
-        systemIds: [],
-        requestNote: "",
-    });
-
+    const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [systemApplications, setSystemApplications] = useState([]);
+    const [selectedApplications, setSelectedApplications] = useState([]);
+    const [requestNote, setRequestNote] = useState("");
 
     function notify(message, type = "Info") {
         if (type === "success") {
@@ -41,6 +31,7 @@ export default function AccessRequestNew() {
         }
     }
 
+    // Required to populate user list
     async function fetchUsers() {
         try {
             setLoading(true);
@@ -64,6 +55,7 @@ export default function AccessRequestNew() {
         fetchUsers();
     }, []);
 
+    // Required to populate system apps
     async function fetchSystemApplications() {
         try {
             setLoading(true);
@@ -87,26 +79,39 @@ export default function AccessRequestNew() {
         fetchSystemApplications();
     }, []);
 
-    function handleFieldChange(field, value) {
-        setSystemApp((prev) => ({ ...prev, [field]: value }));
-    }
-
-    async function handleRequest() {
+    async function handleSubmit() {
+        // setLoading(true);
         try {
-            if (id) {
-                // Edit
-                await api.put(`/config/system-applications/${id}`, systemApp);
-                notify("System application updated successfully.", "success");
-            } else {
-                // New
-                await api.post(`/config/system-applications`, systemApp);
-                notify("System application created successfully.", "success");
+            if (!selectedUser) {
+                notify("Request not submitted. No user selected.", "error");
+                return;
             }
-            // navigate("/system-applications");
-            setTimeout(() => navigate("/system-applications"), 1200);
+
+            const request = {
+                userId: selectedUser._id,
+                applicationId: selectedApplications,
+                requestNote,
+            }
+
+            const response = await api.post(`/uac/access-requests`, request);
+            if (response.data.results.created.length === 0) {
+                notify("No successful requests. Duplicate requests or requests where the user already has access are ignored. Review user's assignments in Configuration > Users.", "error");
+                return;
+            }
+            if (response.data.results.alreadyRequested.length > 0 || response.data.results.alreadyActive.length > 0) {
+                notify("Some duplicate requests or requests where the user already has access were ignored. Review user's assignments in Configuration > Users.", "error");
+                return;
+            }
+            notify("All requests submitted successfully.", "success");
+            return;
         } catch (error) {
             console.error("Save failed:", error.message);
             notify("Failed to save changes.", "error");
+        } finally {
+            // Reset form
+            setSelectedUser(null);
+            setSelectedApplications([]);
+            setRequestNote("");
         }
     }
 
@@ -117,27 +122,21 @@ export default function AccessRequestNew() {
         <div style={{ margin: "0 auto", padding: "1rem" }}>
             <Paper sx={{ p: 3 }}>
                 <Typography variant="h5" sx={{ mb: 2 }}>
-                    {id ? "Edit System Application" : "New System Application"}
+                    Request Application Access
                 </Typography>
-
 
                 <SelectWithSearch
                     options={users}
                     label="Select User"
                     labelField="fullName"
-                    multiple
-                    value={users.filter((u) => systemApp.userId?.includes(u._id))}
-                    onChange={(e, newValue) =>
-                        handleFieldChange(
-                            "userId",
-                            newValue.map((v) => v._id)
-                        )
-                    }
-
+                    value={selectedUser}
+                    onChange={(event, val) => {
+                        setSelectedUser(val)
+                    }}
                 />
 
                 <Typography>Request Systems</Typography>
-                <TransferList systems={systemApplications} selected={selectedSystems} onChange={setSelectedSystems} />
+                <ApplicationsTransferList systems={systemApplications} selected={selectedApplications} onChange={setSelectedApplications} />
 
                 <TextField
                     fullWidth
@@ -145,22 +144,19 @@ export default function AccessRequestNew() {
                     minRows={3}
                     variant="outlined"
                     label="Request Notes"
-                    value={request.requestNote}
+                    value={requestNote}
                     onChange={(e) =>
-                        setRequest((prev) => ({
-                            ...prev,
-                            requestNote: e.target.value,
-                        }))
+                        setRequestNote(e.target.value)
                     }
                     sx={{ mt: 2 }}
                 />
 
 
                 <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
-                    <Button variant="contained" onClick={handleRequest}>
-                        Request
+                    <Button variant="contained" onClick={handleSubmit}>
+                        Submit
                     </Button>
-                    <Button variant="outlined" onClick={() => navigate(-1)}>
+                    <Button variant="outlined" onClick={() => navigate("/dashboard")}>
                         Cancel
                     </Button>
                 </div>

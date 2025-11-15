@@ -22,29 +22,16 @@ function union(a, b) {
     return [...a, ...not(b, a)];
 }
 
-export default function SystemsTransferList({ systems, selected, onChange }) {
+export default function ApplicationsTransferList({ systems, selected, onChange }) {
 
     const [checked, setChecked] = React.useState([]);
     const [left, setLeft] = React.useState(systems);
     const [right, setRight] = React.useState(selected);
 
-    // const moveRight = () => {
-    //     const updated = [...right, ...checkedItems];
-    //     setRight(updated);
-    //     onChange(updated); // <- send to parent
-    // };
-
-    // const moveLeft = () => {
-    //     const updated = right.filter((id) => !checkedItems.includes(id));
-    //     setRight(updated);
-    //     onChange(updated); // <- send to parent
-    // };
-
     React.useEffect(() => {
         setLeft(systems);
         setRight(systems.filter(s => selected.includes(s._id)));
     }, [systems, selected]);
-
 
     const leftChecked = intersection(checked, left);
     const rightChecked = intersection(checked, right);
@@ -73,15 +60,29 @@ export default function SystemsTransferList({ systems, selected, onChange }) {
     };
 
     const handleCheckedRight = () => {
-        setRight(right.concat(leftChecked));
-        setLeft(not(left, leftChecked));
-        setChecked(not(checked, leftChecked));
+        const newRight = right.concat(leftChecked);
+        const newLeft = not(left, leftChecked);
+        const newChecked = not(checked, leftChecked);
+
+        setRight(newRight);
+        setLeft(newLeft);
+        setChecked(newChecked);
+
+        // 🔥 Send updated IDs to parent
+        onChange(newRight.map(item => item._id));
     };
 
     const handleCheckedLeft = () => {
-        setLeft(left.concat(rightChecked));
-        setRight(not(right, rightChecked));
-        setChecked(not(checked, rightChecked));
+        const newRight = not(right, rightChecked);
+        const newLeft = left.concat(rightChecked);
+        const newChecked = not(checked, rightChecked);
+
+        setRight(newRight);
+        setLeft(newLeft);
+        setChecked(newChecked);
+
+        // 🔥 Send updated IDs to parent
+        onChange(newRight.map(item => item._id));
     };
 
     const customList = (title, items) => (
@@ -117,11 +118,11 @@ export default function SystemsTransferList({ systems, selected, onChange }) {
                 role="list"
             >
                 {items.map((value) => {
-                    const labelId = `transfer-list-all-item-${value}-label`;
+                    const labelId = `transfer-list-all-item-${value._id}-label`;
 
                     return (
                         <ListItemButton
-                            key={value}
+                            key={value._id}
                             role="listitem"
                             onClick={handleToggle(value)}
                         >
@@ -136,7 +137,6 @@ export default function SystemsTransferList({ systems, selected, onChange }) {
                                 />
                             </ListItemIcon>
                             <ListItemText primary={value.system} />
-
                         </ListItemButton>
                     );
                 })}
