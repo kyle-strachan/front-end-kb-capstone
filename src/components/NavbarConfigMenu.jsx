@@ -65,13 +65,7 @@ export default function NavBarConfigMenu() {
                 <MenuItem component={Link} to="/system-applications" onClick={handleClose}>
                     System Applications
                 </MenuItem>
-                <Divider />
-                <MenuItem component={Link} to="/users" onClick={handleClose}>
-                    Users
-                </MenuItem>
-                <MenuItem component={Link} to="/access-request" onClick={handleClose}>
-                    Application Access Request
-                </MenuItem>
+
             </Menu>
         </div>
     );

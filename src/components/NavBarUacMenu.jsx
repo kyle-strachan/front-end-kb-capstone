@@ -47,11 +47,18 @@ export default function NavBarUacMenu() {
                 }}
             >
                 <MenuItem component={Link} to="/access-requests" onClick={handleClose}>
-                    Access Requests
+                    Manage Access
+                </MenuItem>
+                <MenuItem component={Link} to="/access-requests" onClick={handleClose}>
+                    Manage Access Requests
                 </MenuItem>
 
                 <MenuItem component={Link} to="/access-request" onClick={handleClose}>
-                    Application Access Request
+                    New Application Request
+                </MenuItem>
+                <Divider />
+                <MenuItem component={Link} to="/users" onClick={handleClose}>
+                    Users
                 </MenuItem>
             </Menu>
         </div>
