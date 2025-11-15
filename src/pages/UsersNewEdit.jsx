@@ -226,7 +226,7 @@ export default function UsersNewEdit() {
 
             </div>
             <div>
-                <AccessAssignments id={user._id} fullName={user.fullName} />
+                <AccessAssignments id={user._id} fullName={user.fullName} notify={notify} />
             </div>
             <div>
                 <AccessRequests id={user._id} fullName={user.fullName} />

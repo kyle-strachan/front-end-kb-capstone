@@ -19,7 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "./SelectWithSearch";
 import CustomDialogYesNo from "./CustomDialogYesNo";
 
-export default function AccessAssignments({ id, fullName }) {
+export default function AccessAssignments({ id, fullName, notify }) {
 
     // const navigate = useNavigate();
     const [accessAssignments, setAccessAssignments] = useState([]);
@@ -27,13 +27,13 @@ export default function AccessAssignments({ id, fullName }) {
     const [error, setError] = useState(null);
     const [tableNote, setTableNote] = useState(null)
 
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
+    // function notify(message, type = "Info") {
+    //     if (type === "success") {
+    //         toast.success(message);
+    //     } else {
+    //         toast.error(message);
+    //     }
+    // }
 
     async function fetchAccessAssignments() {
         try {
@@ -83,6 +83,8 @@ export default function AccessAssignments({ id, fullName }) {
             }
         } catch (error) {
             notify(`Revocation request not submitted. ${error}`, "error");
+        } finally {
+            fetchAccessAssignments();
         }
     }
 
@@ -154,7 +156,7 @@ export default function AccessAssignments({ id, fullName }) {
                 </TableContainer>
                 {tableNote ? <Typography sx={{ mb: 2, p: 1 }}>{tableNote}</Typography> : ""}
             </Paper>
-            <ToastContainer />
+            {/* <ToastContainer /> */}
 
         </div>
     );
