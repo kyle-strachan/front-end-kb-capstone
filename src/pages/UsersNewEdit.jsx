@@ -12,6 +12,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
 import AccessRequests from "../components/AccessRequests";
+import AccessAssignments from "../components/AccessAssignments";
 
 export default function UsersNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -79,7 +80,6 @@ export default function UsersNewEdit() {
                         permissions: Array.isArray(foundUser.permissions) ? foundUser.permissions : [],
 
                     });
-                    console.log('Setting disabled.')
                     setDisabled(true);
                 } else {
                     notify("User not found.", "error");
@@ -224,6 +224,9 @@ export default function UsersNewEdit() {
                 </Paper>
                 <ToastContainer />
 
+            </div>
+            <div>
+                <AccessAssignments id={user._id} fullName={user.fullName} />
             </div>
             <div>
                 <AccessRequests id={user._id} fullName={user.fullName} />

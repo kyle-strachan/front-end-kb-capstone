@@ -51,10 +51,16 @@ export default function AccessRequests({ id, fullName }) {
             });
 
             // Continue to display table headers if results are empty, for more consistent UI. 404 downed on back-end too.
-            setAccessRequests(res.data.accessRequests || []);
-            if (accessRequests.length === 0) {
+
+            const items = res.data.accessRequests || [];
+            setAccessRequests(items);
+
+            if (items.length === 0) {
                 setTableNote("No pending requests");
+            } else {
+                setTableNote("");
             }
+
 
         } catch (error) {
             console.error("Failed to fetch access requests:", error.message);

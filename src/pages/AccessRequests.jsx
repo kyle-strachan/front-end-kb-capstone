@@ -33,9 +33,9 @@ export default function AccessRequests() {
         try {
             setLoading(true);
             setError(null);
-            const res = await api.get("/uac/access-requests", {
-                params: { status: "New" }
-            });
+            const res = await api.get("/uac/access-requests",
+                { params: { status: "New" } }
+            );
 
             if (res.data.accessRequests) {
                 setAccessRequests(res.data.accessRequests);
@@ -60,14 +60,19 @@ export default function AccessRequests() {
         fetchAccessRequests();
     }
 
-    function handleApprove() {
-
-        notify("Approval complete.", "success")
-
-    }
-
-    function handleReject() {
-        notify("Rejection complete.", "success")
+    async function handleApproveOrReject(id, action) {
+        try {
+            console.log(id, action);
+            const res = await api.patch(`/uac/access-requests/${id}`, { action });
+            if (res.status !== 200) {
+                notify(res.data?.message || "Error updating request", "error")
+            } else {
+                notify("Access request updated completed successfully.", "success")
+            }
+        } catch (error) {
+            notify(`Access request not completed. ${error}`, "error")
+            console.log(error);
+        }
     }
 
     const handleChangePage = (_, newPage) => setPage(newPage);
@@ -135,10 +140,10 @@ export default function AccessRequests() {
                                             {d.requestedBy.fullName}/{new Date(d.requestedAt).toLocaleString()}
                                         </TableCell>
                                         <TableCell>
-                                            <Button onClick={() => handleApprove(d._id)}>
+                                            <Button onClick={() => handleApproveOrReject(d._id, "Approved")}>
                                                 Approve
                                             </Button>
-                                            <Button onClick={() => handleReject(d._id)}>
+                                            <Button onClick={() => handleApproveOrReject(d._id, "Rejected")}>
                                                 Reject
                                             </Button>
                                         </TableCell>
