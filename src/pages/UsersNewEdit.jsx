@@ -17,7 +17,6 @@ import AccessAssignments from "../components/AccessAssignments";
 export default function UsersNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
-
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState({
         username: "",
@@ -226,24 +225,17 @@ export default function UsersNewEdit() {
                             Save
                         </Button>
                         <Button variant="outlined" onClick={() => navigate(-1)}>
-                            Cancel
+                            {id ? "Close" : "Cancel"}
                         </Button>
-                        <Button variant="outlined" color="error" onClick={handleTerminate}>
+                        {id && (<Button variant="outlined" color="error" onClick={handleTerminate}>
                             Terminate
-                        </Button>
+                        </Button>)}
                     </div>
-
-
                 </Paper>
                 <ToastContainer />
-
             </div>
-            <div>
-                <AccessAssignments id={user._id} fullName={user.fullName} notify={notify} />
-            </div>
-            <div>
-                <AccessRequests id={user._id} fullName={user.fullName} />
-            </div>
+            {id && (<div><AccessAssignments id={user._id} fullName={user.fullName} notify={notify} /></div>)}
+            {id && (<div><AccessRequests id={user._id} fullName={user.fullName} /></div>)}
         </>
     );
 }
