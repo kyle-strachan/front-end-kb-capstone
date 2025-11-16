@@ -98,6 +98,28 @@ export default function UsersNewEdit() {
     }
 
     async function handleSave() {
+        // Validate form
+        if (user.username.trim().length < 3) {
+            notify("A username must have a minimum of 3 characters.", "error");
+            return;
+        }
+        if (user.fullName.trim().length < 3) {
+            notify("Full name must have a minimum of 3 characters.", "error");
+            return;
+        }
+        if (user.department.length === 0) {
+            notify("At least one department is required.", "error");
+            return;
+        }
+        if (user.location.length === 0) {
+            notify("A location is required.", "error");
+            return;
+        }
+        if (user.position.length === 0) {
+            notify("A position is required.", "error");
+            return;
+        }
+
         try {
             if (id) {
                 // Edit
@@ -110,8 +132,9 @@ export default function UsersNewEdit() {
             }
             setTimeout(() => navigate("/users"), 1200);
         } catch (error) {
-            console.error("Save failed:", error.message);
-            notify("Failed to save changes.", "error");
+            const backendMessage = error.response?.data?.message
+            console.error("Save failed:", backendMessage);
+            notify(`Failed to save changes. ${backendMessage}`, "error");
         }
     }
 
@@ -173,6 +196,7 @@ export default function UsersNewEdit() {
                         onChange={(e, newValue) =>
                             handleFieldChange("location", newValue ? newValue._id : "")
                         }
+                        required
                     />
 
 
