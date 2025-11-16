@@ -116,6 +116,16 @@ export default function UsersNewEdit() {
         }
     }
 
+    async function handleTerminate() {
+        try {
+            await api.patch(`/users/${id}`);
+            notify(`User terminated successfully`, "success");
+            fetchUsers();
+        } catch (error) {
+            notify(`User terminated failed: ${error}`, "error");
+        }
+    }
+
     if (loading) return <p>Loading...</p>;
 
     return (
@@ -217,6 +227,9 @@ export default function UsersNewEdit() {
                         </Button>
                         <Button variant="outlined" onClick={() => navigate(-1)}>
                             Cancel
+                        </Button>
+                        <Button variant="outlined" color="error" onClick={handleTerminate}>
+                            Terminate
                         </Button>
                     </div>
 
