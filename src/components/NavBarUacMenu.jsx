@@ -46,8 +46,8 @@ export default function NavBarUacMenu() {
                     list: { "aria-labelledby": "config-button" },
                 }}
             >
-                <MenuItem component={Link} to="/access-requests" onClick={handleClose}>
-                    Manage Access
+                <MenuItem component={Link} to="/access-overview" onClick={handleClose}>
+                    Access Overview
                 </MenuItem>
                 <MenuItem component={Link} to="/access-requests" onClick={handleClose}>
                     Manage Access Requests
