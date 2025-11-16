@@ -47,7 +47,7 @@ export default function AccessRequests({ id, fullName }) {
             setLoading(true);
             setError(null);
             const res = await api.get("/uac/access-requests", {
-                params: { userId: id }
+                params: { userId: id, status: "New" }
             });
 
             // Continue to display table headers if results are empty, for more consistent UI. 404 downed on back-end too.
@@ -118,9 +118,10 @@ export default function AccessRequests({ id, fullName }) {
                                 <TableCell>Full Name</TableCell>
                                 <TableCell>System Name</TableCell>
                                 <TableCell>Request Type</TableCell>
+                                <TableCell>Status</TableCell>
                                 <TableCell>Requested By</TableCell>
                                 <TableCell>Requested At</TableCell>
-                                <TableCell>Actions</TableCell>
+                                {/* <TableCell>Actions</TableCell> */}
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -129,6 +130,7 @@ export default function AccessRequests({ id, fullName }) {
                                     <TableCell>{r.userId?.fullName}</TableCell>
                                     <TableCell>{r.applicationId?.system}</TableCell>
                                     <TableCell>{r.requestType}</TableCell>
+                                    <TableCell>{r.status}</TableCell>
                                     <TableCell>{r.requestedBy?.fullName}</TableCell>
                                     <TableCell>{new Date(r.requestedAt).toLocaleString()}</TableCell>
                                     <TableCell>{/* actions later */}</TableCell>
