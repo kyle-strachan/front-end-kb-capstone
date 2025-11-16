@@ -16,6 +16,7 @@ import Users from "./pages/Users";
 import UsersNewEdit from "./pages/UsersNewEdit";
 import AccessRequests from "./pages/AccessRequests";
 import AccessRequestsNew from "./pages/AccessRequestsNew";
+import AccessOverview from "./pages/AccessOverview";
 import Footer from "./components/Footer";
 import NavBarExtended from "./components/NavBarExtended";
 import "react-toastify/dist/ReactToastify.css";
@@ -64,6 +65,7 @@ function AppRoutes() {
         <Route path="/users" element={<Users />} />
         <Route path="/users/new" element={<UsersNewEdit />} />
         <Route path="/users/:id" element={<UsersNewEdit />} />
+        <Route path="/access-overview" element={<AccessOverview />} />
         <Route path="/access-request" element={<AccessRequestsNew />} />
         <Route path="/access-requests" element={<AccessRequests />} />
         <Route path="/account" element={<Account />} />
