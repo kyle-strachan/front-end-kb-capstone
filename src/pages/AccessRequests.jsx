@@ -72,6 +72,8 @@ export default function AccessRequests() {
         } catch (error) {
             notify(`Access request not completed. ${error}`, "error")
             console.log(error);
+        } finally {
+            fetchAccessRequests();
         }
     }
 
