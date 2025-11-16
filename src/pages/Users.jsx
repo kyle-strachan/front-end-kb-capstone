@@ -152,7 +152,7 @@ export default function Users() {
                                             {d.fullName}
                                         </TableCell>
                                         <TableCell>
-                                            {d.username}
+                                            {d.username.toUpperCase()}
                                         </TableCell>
                                         <TableCell>
                                             {d.position}
