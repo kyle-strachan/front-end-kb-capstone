@@ -32,3 +32,13 @@ footer {
   font-size: 0.85rem;
   text-align: center;
 }
+
+.login-box {
+  background-color: blue;
+}
+
+.login-screen {
+  background-image: url('./images/login-bg.webp');
+  /* background-repeat: no-repeat; */
+  background-size: cover;
+}

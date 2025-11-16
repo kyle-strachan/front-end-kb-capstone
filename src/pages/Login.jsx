@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
+import {
+    Paper,
+    TextField,
+    Button,
+    Typography,
+    Box
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -17,21 +25,48 @@ export default function Login() {
 
     return (
         <div className="login-screen">
-            <form onSubmit={handleSubmit}>
-                <h2>Login</h2>
-                <input
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit">Login</button>
-            </form>
+            <Paper
+                variant="elevation"
+                sx={{ width: 300, padding: "32px 24px", textAlign: "center" }}
+            >
+                {/* Padlock Icon */}
+                <LockOutlinedIcon sx={{ fontSize: 40, mb: 1 }} />
+
+                {/* Title */}
+                <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
+                    LobbyLock
+                </Typography>
+
+                <form onSubmit={handleSubmit}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <TextField
+                            label="Username"
+                            variant="outlined"
+                            fullWidth
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+
+                        <TextField
+                            type="password"
+                            label="Password"
+                            variant="outlined"
+                            fullWidth
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            sx={{ mt: 1 }}
+                        >
+                            Login
+                        </Button>
+                    </Box>
+                </form>
+            </Paper>
         </div>
     );
 }
