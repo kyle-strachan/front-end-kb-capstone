@@ -134,10 +134,7 @@ export default function Users() {
                                 <TableCell>Full Name</TableCell>
                                 <TableCell>Username</TableCell>
                                 <TableCell>Position</TableCell>
-                                {/* <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                                    ID (dev only)
-                                </TableCell> */}
-                                <TableCell>Actions</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -157,15 +154,14 @@ export default function Users() {
                                         <TableCell>
                                             {d.position}
                                         </TableCell>
-                                        {/* <TableCell>
-                                            {d._id}
-                                        </TableCell> */}
                                         <TableCell>
-                                            <Button onClick={() => navigate(`/users/${d._id}`)}>
-                                                Edit
-                                            </Button>
-                                            {/* userReset false, will force user to reset their password upon login. */}
-                                            <ResetPasswordForm userReset={false} userIdToChange={d._id} />
+                                            <div className="cta-btn-container">
+                                                <Button variant="outlined" onClick={() => navigate(`/users/${d._id}`)}>
+                                                    Edit
+                                                </Button>
+                                                {/* userReset false, will force user to reset their password upon login. */}
+                                                <ResetPasswordForm userReset={false} userIdToChange={d._id} />
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}

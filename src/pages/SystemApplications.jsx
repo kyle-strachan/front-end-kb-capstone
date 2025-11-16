@@ -101,10 +101,10 @@ export default function SystemApplications() {
                             <TableRow>
                                 <TableCell>System Application Name</TableCell>
                                 <TableCell>Category</TableCell>
-                                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                                {/* <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
                                     ID (dev only)
-                                </TableCell>
-                                <TableCell>Actions</TableCell>
+                                </TableCell> */}
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -122,15 +122,17 @@ export default function SystemApplications() {
                                             {systemCategories.find((c) => c._id === d.category)?.category || 'Undefined'}
 
                                         </TableCell>
-                                        <TableCell
+                                        {/* <TableCell
                                             sx={{ display: { xs: "none", sm: "table-cell" } }}
                                         >
                                             {d._id}
-                                        </TableCell>
+                                        </TableCell> */}
                                         <TableCell>
-                                            <Button onClick={() => navigate(`/system-applications/${d._id}`)}>
-                                                Edit
-                                            </Button>
+                                            <div className="cta-btn-container">
+                                                <Button variant="outlined" onClick={() => navigate(`/system-applications/${d._id}`)}>
+                                                    Edit
+                                                </Button>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}
