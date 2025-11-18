@@ -8,6 +8,7 @@ import Account from "./pages/Account";
 import Departments from "./pages/Departments";
 import DocsCategories from "./pages/DocsCategories";
 import Docs from "./pages/Docs";
+import DocsNewEdit from "./pages/DocsNewEdit";
 import Locations from "./pages/Locations";
 import SystemApplications from "./pages/SystemApplications";
 import SystemApplicationsNewEdit from "./pages/SystemApplicationsNewEdit";
@@ -58,6 +59,7 @@ function AppRoutes() {
         <Route path="/departments" element={<Departments />} />
         <Route path="/docs-categories" element={<DocsCategories />} />
         <Route path="/docs" element={<Docs />} />
+        <Route path="/docs/new" element={<DocsNewEdit />} />
         <Route path="/locations" element={<Locations />} />
         <Route path="/system-applications/new" element={<SystemApplicationsNewEdit />} />
         <Route path="/system-applications/:id" element={<SystemApplicationsNewEdit />} />
@@ -71,6 +73,7 @@ function AppRoutes() {
         <Route path="/access-requests" element={<AccessRequests />} />
         <Route path="/permissions" element={<Permissions />} />
         <Route path="/account" element={<Account />} />
+
 
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Route>

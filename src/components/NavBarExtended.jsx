@@ -17,6 +17,7 @@ import { useAuth } from '../context/AuthContext';
 import "./NavBarExtended.css";
 import NavBarConfigMenu from "../components/NavbarConfigMenu";
 import NavBarUacMenu from './NavBarUacMenu';
+import NavBarDocsMenu from './NavBarDocsMenu';
 
 export default function AccountMenu() {
     const { user, logout } = useAuth();
@@ -44,7 +45,8 @@ export default function AccountMenu() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center', padding: '5px 10px' }}>
                 <div className="nav-bar-links">
                     <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Dashboard</Link></Typography>
-                    <Typography sx={{ padding: '0 15px' }}><Link to="/docs">Docs</Link></Typography>
+                    <NavBarDocsMenu />
+                    {/* <Typography sx={{ padding: '0 15px' }}><Link to="/docs">Docs</Link></Typography> */}
                     {/* <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Configuration</Link></Typography> */}
                     <NavBarConfigMenu />
                     <NavBarUacMenu />
