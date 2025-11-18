@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import { useAuth } from "../context/AuthContext";
 import { api } from "../api";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
@@ -13,7 +12,6 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import SelectWithSearch from "../components/SelectWithSearch";
-
 import "../App.css";
 import { ToastContainer, toast } from 'react-toastify';
 
