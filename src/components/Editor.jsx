@@ -40,7 +40,6 @@ ClassicEditor.builtinPlugins = [
 ClassicEditor.defaultConfig = {
     licenseKey: 'GPL',
     removePlugins: ['LicenseBanner'],
-
     toolbar: [
         'undo', 'redo', '|',
         'heading', '|',
@@ -49,7 +48,6 @@ ClassicEditor.defaultConfig = {
         'bulletedList', 'numberedList', '|',
         'link', 'insertImage', 'insertTable',
     ],
-
     heading: {
         options: [
             { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
@@ -61,7 +59,6 @@ ClassicEditor.defaultConfig = {
             { model: 'heading6', view: 'h6', title: 'Heading 6' }
         ]
     },
-
     table: {
         contentToolbar: [
             'tableColumn',
@@ -69,14 +66,13 @@ ClassicEditor.defaultConfig = {
             'mergeTableCells'
         ]
     },
-
     image: {
         toolbar: [
             'imageTextAlternative',
             'imageStyle:full',
             'imageStyle:side'
         ]
-    }
+    },
 };
 
 export default function Editor({ value, onChange }) {
