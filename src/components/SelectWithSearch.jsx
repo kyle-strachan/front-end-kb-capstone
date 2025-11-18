@@ -17,7 +17,7 @@ export default function SelectWithSearch({
             value={value}
             onChange={onChange}
             renderInput={(params) => (
-                <TextField {...params} label={label} placeholder="Search..." variant="standard" />
+                <TextField {...params} label={label} placeholder="Search..." variant="outlined" />
             )}
             size="small"
             fullWidth
