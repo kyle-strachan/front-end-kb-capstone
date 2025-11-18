@@ -124,7 +124,30 @@ export default function SystemCategories() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>Configuration</h2>
+            <h2>System Categories</h2>
+
+            <Paper sx={{ mb: 4, p: 2 }}>
+                <h4>Add New</h4>
+                <div className="btn-inline-container">
+                    <TextField
+                        id="input-new-system-category"
+                        helperText="Minimum three characters"
+                        label="System Category Name"
+                        variant="standard"
+                        value={newSystemCategory}
+                        onChange={(e) => setNewSystemCategory(e.target.value)}
+                        sx={{ mr: 2, width: "100%" }}
+                    />
+                    <div>
+                        <Button
+                            variant="contained"
+                            onClick={handleInsert}
+                            disabled={newSystemCategory.trim().length < 3}
+                        >
+                            Insert
+                        </Button></div>
+                </div>
+            </Paper>
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>System Categories</h3>
@@ -216,28 +239,7 @@ export default function SystemCategories() {
                 />
             </Paper>
 
-            <Paper sx={{ mt: 4, p: 2 }}>
-                <h4>Add New</h4>
-                <div className="btn-inline-container">
-                    <TextField
-                        id="input-new-system-category"
-                        helperText="Minimum three characters"
-                        label="System Category Name"
-                        variant="standard"
-                        value={newSystemCategory}
-                        onChange={(e) => setNewSystemCategory(e.target.value)}
-                        sx={{ mr: 2, width: "100%" }}
-                    />
-                    <div>
-                        <Button
-                            variant="contained"
-                            onClick={handleInsert}
-                            disabled={newSystemCategory.trim().length < 3}
-                        >
-                            Insert
-                        </Button></div>
-                </div>
-            </Paper>
+
             <ToastContainer />
         </div>
     );
