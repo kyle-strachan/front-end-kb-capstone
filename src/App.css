@@ -8,6 +8,13 @@
   gap: 10px;
 }
 
+.field-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
 .cta-btn-container {
   display: flex;
   justify-content: flex-end;
@@ -41,4 +48,9 @@ footer {
   background-image: url('./images/login-bg.webp');
   /* background-repeat: no-repeat; */
   background-size: cover;
+}
+
+/* Editor */
+.ck.ck-editor__editable_inline {
+  min-height: 300px !important;
 }
