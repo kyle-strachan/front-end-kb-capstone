@@ -55,8 +55,9 @@ export default function NavBarConfigMenu() {
                 <MenuItem component={Link} to="/platform-roles" onClick={handleClose} disabled>
                     Platform Roles
                 </MenuItem>
-                <MenuItem component={Link} to="/department-categories" onClick={handleClose} disabled>
-                    Department Categories
+                <Divider />
+                <MenuItem component={Link} to="/docs-categories" onClick={handleClose} >
+                    Document Categories
                 </MenuItem>
                 <Divider />
                 <MenuItem component={Link} to="/system-categories" onClick={handleClose}>

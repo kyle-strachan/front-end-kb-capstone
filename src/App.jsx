@@ -4,9 +4,9 @@ import { Outlet } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import DepartmentCategories from "./pages/DepartmentCategories";
 import Account from "./pages/Account";
 import Departments from "./pages/Departments";
+import DocsCategories from "./pages/DocsCategories";
 import Docs from "./pages/Docs";
 import Locations from "./pages/Locations";
 import SystemApplications from "./pages/SystemApplications";
@@ -56,7 +56,7 @@ function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/departments" element={<Departments />} />
-        <Route path="/department-categories" element={<DepartmentCategories />} />
+        <Route path="/docs-categories" element={<DocsCategories />} />
         <Route path="/docs" element={<Docs />} />
         <Route path="/locations" element={<Locations />} />
         <Route path="/system-applications/new" element={<SystemApplicationsNewEdit />} />
