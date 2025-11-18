@@ -9,6 +9,7 @@ import Departments from "./pages/Departments";
 import DocsCategories from "./pages/DocsCategories";
 import Docs from "./pages/Docs";
 import DocsNewEdit from "./pages/DocsNewEdit";
+import DocsView from "./pages/DocsView";
 import Locations from "./pages/Locations";
 import SystemApplications from "./pages/SystemApplications";
 import SystemApplicationsNewEdit from "./pages/SystemApplicationsNewEdit";
@@ -73,6 +74,7 @@ function AppRoutes() {
         <Route path="/access-requests" element={<AccessRequests />} />
         <Route path="/permissions" element={<Permissions />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/docs/:id" element={<DocsView />} />
 
 
         <Route path="/" element={<Navigate to="/dashboard" />} />
