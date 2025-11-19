@@ -60,6 +60,7 @@ function AppRoutes() {
         <Route path="/departments" element={<Departments />} />
         <Route path="/docs-categories" element={<DocsCategories />} />
         <Route path="/docs" element={<Docs />} />
+        <Route path="/docs/:id" element={<DocsView />} />
         <Route path="/docs/new" element={<DocsNewEdit />} />
         <Route path="/locations" element={<Locations />} />
         <Route path="/system-applications/new" element={<SystemApplicationsNewEdit />} />
@@ -74,7 +75,6 @@ function AppRoutes() {
         <Route path="/access-requests" element={<AccessRequests />} />
         <Route path="/permissions" element={<Permissions />} />
         <Route path="/account" element={<Account />} />
-        <Route path="/docs/:id" element={<DocsView />} />
 
 
         <Route path="/" element={<Navigate to="/dashboard" />} />

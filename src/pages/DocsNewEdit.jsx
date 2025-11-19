@@ -120,7 +120,6 @@ export default function DocsNewEdit() {
                         value={docDescription}
                         multiline
                         rows={3}
-                        defaultValue=""
                         onChange={(e) => setDocDescription(e.target.value)}
                     />
                     <SelectWithSearch

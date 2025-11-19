@@ -6,6 +6,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Paper from "@mui/material/Paper";
 import { ToastContainer, toast } from 'react-toastify';
+import DocExplorer from "../components/DocExplorer";
 
 
 export default function Dashboard() {
@@ -13,17 +14,26 @@ export default function Dashboard() {
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
             <h2>Dashboard</h2>
+            <div style={{ display: "flex", gap: "1rem", width: "100%" }}>
+                <Paper style={{ width: "300px" }}>
+                    <DocExplorer />
+                </Paper>
+                <div>
+                    <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
+                        <h3>Departments</h3>
+                        <button onClick={notify}>Notify!</button>
+                        <h4>Add New</h4>
+                    </Paper>
 
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>Departments</h3>
-            </Paper>
+                </div>
+            </div>
 
-            <button onClick={notify}>Notify!</button>
+
+
             <ToastContainer />
 
             <Paper sx={{ mt: 4, p: 2 }}>
-                <h4>Add New</h4>
-
+                Body text
             </Paper>
         </div>
     );

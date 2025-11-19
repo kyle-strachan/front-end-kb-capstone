@@ -13,6 +13,8 @@ import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
 import AccessRequests from "../components/AccessRequests";
 import AccessAssignments from "../components/AccessAssignments";
+import DOMPurify from "dompurify";
+import parse from "html-react-parser";
 
 export default function DocsView() {
     const { id } = useParams(); // will be undefined for "New"
@@ -32,6 +34,7 @@ export default function DocsView() {
     // const [locations, setLocations] = useState([]);
     // const [disabled, setDisabled] = useState(false);
     const [doc, setDoc] = useState(null);
+    const [cleanHtml, setCleanHtml] = useState("");
 
     function notify(message, type = "Info") {
         if (type === "success") {
@@ -49,8 +52,9 @@ export default function DocsView() {
         setLoading(true);
         try {
             const res = await api.get(`/docs/${id}`);
-            console.log(res.data.doc);
+            // console.log(res.data.doc);
             setDoc(res.data.doc);
+            setCleanHtml(DOMPurify.sanitize(res.data.doc.body));
         } catch (err) {
             console.error("Failed to fetch document:", err.message);
             // setError("Could not load document.");
@@ -120,14 +124,25 @@ export default function DocsView() {
         <>
             <div style={{ margin: "0 auto", padding: "1rem" }}>
                 <Paper sx={{ p: 3 }}>
-                    <Typography variant="h4" sx={{ mb: 2 }}>
-                        {doc.title}
-                    </Typography>
+                    <div className="space-between-container">
+                        <Typography variant="h4" sx={{ mb: 2 }}>
+                            {doc.title}
+                        </Typography>
+                        <div className="cta-btn-container">
+                            <Button variant="outlined" onClick={() => navigate(-1)}>
+                                Edit
+                            </Button>
+                            <Button variant="contained" onClick={() => navigate(-1)}>
+                                Close
+                            </Button>
+                        </div>
+                    </div>
+
                     <Typography sx={{ mb: 2 }}>
                         {doc.description}
                     </Typography>
                     <Typography sx={{ mb: 2 }}>
-                        {doc.body}
+                        {parse(cleanHtml)}
                     </Typography>
 
 
