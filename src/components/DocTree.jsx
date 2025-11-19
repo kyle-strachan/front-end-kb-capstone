@@ -24,42 +24,7 @@ import { TreeItemProvider } from "@mui/x-tree-view/TreeItemProvider";
 import { TreeItemDragAndDropOverlay } from "@mui/x-tree-view/TreeItemDragAndDropOverlay";
 import { useTreeItemModel } from "@mui/x-tree-view/hooks";
 import { api } from "../api";
-
-// Only kept ITEMS as a fallback or for debugging; not used by default.
-// const ITEMS = [
-//   {
-//     id: "1",
-//     label: "Documents",
-//     children: [
-//       {
-//         id: "1.1",
-//         label: "Company",
-//         children: [
-//           { id: "1.1.1", label: "Invoice", fileType: "pdf" },
-//           { id: "1.1.2", label: "Meeting notes", fileType: "doc" },
-//           { id: "1.1.3", label: "Tasks list", fileType: "doc" },
-//           { id: "1.1.4", label: "Equipment", fileType: "pdf" },
-//           { id: "1.1.5", label: "Video conference", fileType: "video" },
-//         ],
-//       },
-//       { id: "1.2", label: "Personal", fileType: "folder" },
-//       { id: "1.3", label: "Group photo", fileType: "image" },
-//     ],
-//   },
-//   {
-//     id: "2",
-//     label: "Front Office",
-//     fileType: "pinned",
-//     children: [
-//       { id: "2.1", label: "End of Day", fileType: "folder" },
-//       { id: "2.2", label: "Daily Tasks", fileType: "folder" },
-//       { id: "2.3", label: "Rates & Promotions", fileType: "folder" },
-//       { id: "2.4", label: "Emergency", fileType: "pdf" },
-//     ],
-//   },
-//   { id: "3", label: "History", fileType: "folder" },
-//   { id: "4", label: "Trash", fileType: "trash" },
-// ];
+import { useNavigate } from "react-router-dom";
 
 function DotIcon() {
   return (
@@ -143,8 +108,10 @@ const TreeItemContent = styled("div")(({ theme }) => ({
   },
 }));
 
+// Keep collapse from overflowing during animation
 const CustomCollapse = styled(Collapse)({
   padding: 0,
+  overflow: "hidden !important",
 });
 
 const AnimatedCollapse = animated(CustomCollapse);
@@ -213,6 +180,7 @@ const getIconFromFileType = (fileType) => {
 
 const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
   const { id, itemId, label, disabled, children, ...other } = props;
+  const navigate = useNavigate();
 
   const {
     getContextProviderProps,
@@ -247,6 +215,16 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
             {...getLabelProps({
               icon,
               expandable: status.expandable && status.expanded,
+              onClick: (e) => {
+                // Folders: let click bubble → expand/collapse
+                if (status.expandable) return;
+
+                // Docs: prevent expand + navigate
+                e.stopPropagation();
+                if (item.fileType) {
+                  navigate(`/docs/edit/${itemId}`);
+                }
+              },
             })}
           />
           <TreeItemDragAndDropOverlay {...getDragAndDropOverlayProps()} />
@@ -257,15 +235,14 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
   );
 });
 
-
-export default function DocExplorer() {
+export default function DocTree() {
   const [items, setItems] = React.useState([]);
 
   React.useEffect(() => {
     const fetchDocs = async () => {
       try {
         const res = await api.get("/docs/tree");
-        setItems(res.data.items);   // backend must return { items: [] }
+        setItems(res.data.items); // backend returns { items: [...] }
       } catch (error) {
         console.error("Failed to load docs tree:", error);
       }
@@ -280,10 +257,8 @@ export default function DocExplorer() {
       defaultExpandedItems={["1", "1.1"]}
       defaultSelectedItems="1.1"
       sx={{
-        height: "fit-content",
-        flexGrow: 1,
         maxWidth: 400,
-        overflowY: "auto",
+        overflow: "visible", // no internal scrollbars
       }}
       slots={{ item: CustomTreeItem }}
       itemChildrenIndentation={24}
