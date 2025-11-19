@@ -60,8 +60,9 @@ function AppRoutes() {
         <Route path="/departments" element={<Departments />} />
         <Route path="/docs-categories" element={<DocsCategories />} />
         <Route path="/docs" element={<Docs />} />
-        <Route path="/docs/:id" element={<DocsView />} />
         <Route path="/docs/new" element={<DocsNewEdit />} />
+        <Route path="/docs/edit/:id" element={<DocsNewEdit />} />
+        <Route path="/docs/view/:id" element={<DocsView />} />
         <Route path="/locations" element={<Locations />} />
         <Route path="/system-applications/new" element={<SystemApplicationsNewEdit />} />
         <Route path="/system-applications/:id" element={<SystemApplicationsNewEdit />} />

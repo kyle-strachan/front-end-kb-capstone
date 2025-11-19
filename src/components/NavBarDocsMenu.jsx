@@ -51,7 +51,7 @@ export default function NavBarDocsMenu() {
                 </MenuItem><MenuItem component={Link} to="/docs/new" onClick={handleClose}>
                     New Document
                 </MenuItem>
-                <MenuItem component={Link} to="/docs/691ce8452f0e2fe0b6a98c11" onClick={handleClose}>
+                <MenuItem component={Link} to="/docs/view/691ce8452f0e2fe0b6a98c11" onClick={handleClose}>
                     Sample GET Document
                 </MenuItem>
             </Menu>

@@ -1,6 +1,6 @@
 import Editor from "../components/Editor"
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     Paper,
     TextField,
@@ -13,8 +13,12 @@ import {
 import { api } from "../api";
 import SelectWithSearch from "../components/SelectWithSearch";
 import { ToastContainer, toast } from 'react-toastify';
+import DOMPurify from "dompurify";
+import parse from "html-react-parser";
 
 export default function DocsNewEdit() {
+    const { id } = useParams(); // will be undefined for "New"
+    const [doc, setDoc] = useState(null);
     const [docTitle, setDocTitle] = useState("");
     const [docDescription, setDocDescription] = useState("");
     const [docIsPublic, setDocIsPublic] = useState(false);
@@ -24,6 +28,7 @@ export default function DocsNewEdit() {
     const [docsCategories, setDocsCategories] = useState([]);
     const [newDocsCategoryId, setDocsCategoryId] = useState(null);
     const navigate = useNavigate()
+    const [cleanHtml, setCleanHtml] = useState("");
 
     function notify(message, type = "Info") {
         if (type === "success") {
@@ -76,8 +81,31 @@ export default function DocsNewEdit() {
         }
     }
 
+    async function fetchExistingDoc() {
+        // id will be present if in edit mode.
+        if (id) {
+            console.log('We are in edit mode');
+            // setLoading(true);
+            try {
+                const res = await api.get(`/docs/${id}`);
+                console.log(res.data.doc);
+                setDoc(res.data.doc);
+                setCleanHtml(DOMPurify.sanitize(res.data.doc.body));
+            } catch (err) {
+                console.error("Failed to fetch document:", err.message);
+                // setError("Could not load document.");
+            } finally {
+                // setLoading(false);
+            }
+        } else {
+            console.log('We are in new mode');
+        }
+    }
+
+
     useEffect(() => {
         fetchDepartments();
+        fetchExistingDoc();
     }, []);
 
     useEffect(() => {
@@ -108,16 +136,20 @@ export default function DocsNewEdit() {
         }
     }
 
+    if (id && !doc) {
+        return <div>Loading…</div>;
+    }
+
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h2>New Document</h2>
+                <h2>{id ? "Edit Document" : "New Document"}</h2>
                 <div className="field-container">
-                    <TextField id="doc-title" label="Document Title" variant="outlined" value={docTitle} onChange={(e) => setDocTitle(e.target.value)} />
+                    <TextField id="doc-title" label="Document Title" variant="outlined" value={id ? doc.title : docTitle} onChange={(e) => setDocTitle(e.target.value)} />
                     <TextField
                         id="docDescription"
                         label="Short Description"
-                        value={docDescription}
+                        value={id ? doc.description : docDescription}
                         multiline
                         rows={3}
                         onChange={(e) => setDocDescription(e.target.value)}
@@ -126,7 +158,7 @@ export default function DocsNewEdit() {
                         options={departments}
                         label="Department"
                         labelField="department"
-                        value={newDepartmentId}
+                        value={id ? doc.department : newDepartmentId}
                         onChange={(e, newValue) =>
                             setNewDepartmentId(newValue)
                         }
@@ -136,18 +168,18 @@ export default function DocsNewEdit() {
                         options={docsCategories}
                         label="Category"
                         labelField="category"
-                        value={newDocsCategoryId}
+                        value={id ? doc.docsCategory ?? null : newDocsCategoryId}
                         onChange={(e, newValue) =>
                             setDocsCategoryId(newValue)
                         }
                         required
                     />
-                    <FormControlLabel control={<Switch />} label="Show to All Users" onChange={(e) => setDocIsPublic(e.target.checked)} />
+                    <FormControlLabel control={<Switch />} label="Show to All Users" value={id ? doc.isPublic : false} onChange={(e) => setDocIsPublic(e.target.checked)} />
                 </div>
-                <Editor value={docBody} onChange={handleEditorChange} />
+                <Editor value={id ? doc.body : docBody} onChange={handleEditorChange} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
                     <Button variant="contained" onClick={handleSave}>
-                        Submit
+                        {id ? "Update" : "Insert"}
                     </Button>
                     <Button variant="outlined" onClick={() => navigate(-1)}>
                         Cancel
