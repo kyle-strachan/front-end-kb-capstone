@@ -4,7 +4,12 @@ import { api } from "../api";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    // Attempt to load from local storage
+    const [user, setUser] = useState(() => {
+        const stored = localStorage.getItem("user");
+        return stored ? JSON.parse(stored) : null;
+    });
+
     const [loading, setLoading] = useState(true);
 
     const login = async (username, password) => {
@@ -24,18 +29,29 @@ export const AuthProvider = ({ children }) => {
         } catch (err) {
             console.error("Logout failed:", err.message);
         } finally {
+            // Clear stored user on logout
+            localStorage.removeItem("user");
             setUser(null);
         }
     };
 
-    // Auto-login check on mount
+    // Persist user to storage after loading is done
+    useEffect(() => {
+        if (loading) return; // Must wait until user is loaded
+
+        if (user) {
+            localStorage.setItem("user", JSON.stringify(user));
+        }
+    }, [user, loading]);
+
+    // Auto-login check
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await api.get("/auth/me"); // your backend /me route
-                setUser(res.data.user);
+                const res = await api.get("/auth/me");
+                setUser(res.data.user); // refresh from server if provided
             } catch {
-                setUser(null);
+                // LocalStorage keeps the last known user during refresh, fallthrough if auto-login fails
             } finally {
                 setLoading(false);
             }
@@ -52,5 +68,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
