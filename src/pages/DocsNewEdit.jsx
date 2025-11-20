@@ -65,7 +65,7 @@ export default function DocsNewEdit() {
                 const res = await api.get("/config/docs-categories", {
                     params: { departmentId: newDepartmentId._id }
                 });
-                console.log(res);
+                // console.log(res);
                 if (Array.isArray(res.data.docsCategories)) {
                     setDocsCategories(res.data.docsCategories);
                 } else {
@@ -85,11 +85,11 @@ export default function DocsNewEdit() {
     async function fetchExistingDoc() {
         // id will be present if in edit mode.
         if (id) {
-            console.log('We are in edit mode');
+            // console.log('We are in edit mode');
             // setLoading(true);
             try {
                 const res = await api.get(`/docs/${id}`);
-                console.log(res.data.doc);
+                // console.log(res.data.doc);
                 setDoc(res.data.doc);
                 setCleanHtml(DOMPurify.sanitize(res.data.doc.body));
             } catch (err) {
@@ -99,7 +99,7 @@ export default function DocsNewEdit() {
                 // setLoading(false);
             }
         } else {
-            console.log('We are in new mode');
+            // console.log('We are in new mode');
         }
     }
 
@@ -157,12 +157,30 @@ export default function DocsNewEdit() {
             }
             fetchExistingDoc();
             notify("Document saved successfully.", "success")
-            console.log(res);
-            console.log(`/docs/${res.data.docId}`);
+            // console.log(res);
+            // console.log(`/docs/${res.data.docId}`);
         } catch (error) {
             console.log('Unable to post new document', error);
         }
     }
+
+    async function handleUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const res = await api.post(`/docs/${id}/upload-image`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        const imageUrl = res.data.url;
+
+        // Insert markdown or HTML into your editor
+        setDocBody(prev => `${prev}\n\n![image](${imageUrl})`);
+    }
+
 
     if (id && !doc) {
         return <div>Loading…</div>;
@@ -214,6 +232,13 @@ export default function DocsNewEdit() {
                         Cancel
                     </Button>
                 </div>
+            </Paper>
+            <Paper>
+                <Button variant="contained" component="label">
+                    Upload Image
+                    <input type="file" hidden onChange={handleUpload} />
+                </Button>
+
             </Paper>
             {/* <pre style={{ marginTop: "20px", background: "#f5f5f5", padding: "10px" }}>
                 {docBody}
