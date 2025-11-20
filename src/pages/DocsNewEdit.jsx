@@ -27,6 +27,7 @@ export default function DocsNewEdit() {
     const [newDepartmentId, setNewDepartmentId] = useState(null);
     const [docsCategories, setDocsCategories] = useState([]);
     const [newDocsCategoryId, setDocsCategoryId] = useState(null);
+    const [docIsArchived, setDocIsArchived] = useState(false);
     const navigate = useNavigate()
     const [cleanHtml, setCleanHtml] = useState("");
 
@@ -114,23 +115,50 @@ export default function DocsNewEdit() {
         }
     }, [newDepartmentId]);
 
-    async function handleSave() {
+    useEffect(() => {
+        // Required to set edit mode values, otherwise update will send null
+        if (doc) {
+            setDocTitle(doc.title ?? "");
+            setDocDescription(doc.description ?? "");
+            setDocBody(doc.body ?? "");
+            setDocIsPublic(doc.isPublic ?? false);
+            setDocIsArchived(doc.isArchived ?? false);
+            setNewDepartmentId(doc.department ?? null);
+            setDocsCategoryId(doc.docsCategory ?? null);
+        }
+    }, [doc]);
+
+
+    async function handleSave(mode) {
+        // Validate all fields
+        let res = null;
+
         try {
-            const res = await api.post("/docs/", {
-                title: docTitle,
-                description: docDescription,
-                body: docBody,
-                department: newDepartmentId?._id,
-                isPublic: docIsPublic,
-                docsCategory: newDocsCategoryId?._id,
-            });
-            setDocTitle("");
-            setDocDescription("");
-            setDocBody("");
-            notify("Document successfully created", "success")
+            if (mode === "new") {
+                res = await api.post(`/docs/`, {
+                    title: docTitle,
+                    description: docDescription,
+                    body: docBody,
+                    department: newDepartmentId?._id,
+                    isPublic: docIsPublic,
+                    docsCategory: newDocsCategoryId?._id,
+                    isArchived: docIsArchived,
+                });
+            } else {
+                res = await api.patch(`/docs/edit/${id}`, {
+                    title: docTitle,
+                    description: docDescription,
+                    body: docBody,
+                    department: newDepartmentId?._id,
+                    isPublic: docIsPublic,
+                    docsCategory: newDocsCategoryId?._id,
+                    isArchived: docIsArchived,
+                });
+            }
+            fetchExistingDoc();
+            notify("Document saved successfully.", "success")
             console.log(res);
             console.log(`/docs/${res.data.docId}`);
-            // navigate(`/docs/${res.data.docId}`);
         } catch (error) {
             console.log('Unable to post new document', error);
         }
@@ -175,10 +203,11 @@ export default function DocsNewEdit() {
                         required
                     />
                     <FormControlLabel control={<Switch />} label="Show to All Users" value={id ? doc.isPublic : false} onChange={(e) => setDocIsPublic(e.target.checked)} />
+                    <FormControlLabel control={<Switch />} label="Archive" value={id ? doc.isArchived : false} onChange={(e) => setDocIsArchived(e.target.checked)} />
                 </div>
                 <Editor value={id ? doc.body : docBody} onChange={handleEditorChange} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
-                    <Button variant="contained" onClick={handleSave}>
+                    <Button variant="contained" onClick={() => handleSave(id ? "edit" : "new")}>
                         {id ? "Update" : "Insert"}
                     </Button>
                     <Button variant="outlined" onClick={() => navigate(-1)}>
