@@ -25,7 +25,8 @@ import NavBarExtended from "./components/NavBarExtended";
 import "react-toastify/dist/ReactToastify.css";
 
 function ProtectedRoute() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth()
+  if (loading) return "Logging in";
   if (!user) return <Navigate to="/login" />;
   return (
     <LayoutProtected />
@@ -76,9 +77,8 @@ function AppRoutes() {
         <Route path="/access-requests" element={<AccessRequests />} />
         <Route path="/permissions" element={<Permissions />} />
         <Route path="/account" element={<Account />} />
-
-
         <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
       </Route>
     </>
   );
