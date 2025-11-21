@@ -223,7 +223,7 @@ export default function DocsNewEdit() {
                     <FormControlLabel control={<Switch />} label="Show to All Users" value={id ? doc.isPublic : false} onChange={(e) => setDocIsPublic(e.target.checked)} />
                     <FormControlLabel control={<Switch />} label="Archive" value={id ? doc.isArchived : false} onChange={(e) => setDocIsArchived(e.target.checked)} />
                 </div>
-                <Editor value={id ? doc.body : docBody} onChange={handleEditorChange} />
+                <Editor value={id ? doc.body : docBody} onChange={handleEditorChange} docId={id} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
                     <Button variant="contained" onClick={() => handleSave(id ? "edit" : "new")}>
                         {id ? "Update" : "Insert"}
