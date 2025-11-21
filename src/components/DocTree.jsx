@@ -222,7 +222,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
                 // Docs: prevent expand + navigate
                 e.stopPropagation();
                 if (item.fileType) {
-                  navigate(`/docs/edit/${itemId}`);
+                  navigate(`/docs/view/${itemId}`);
                 }
               },
             })}
