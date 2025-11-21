@@ -137,6 +137,11 @@ export default function Editor({ value, onChange, docId }) {
                 UploadPlugin(editor, docId);
             }}
 
+            // Keep propagating content back up into React state
+            onChange={(event, editor) => {
+                onChange(editor.getData());
+            }}
+
         />
     );
 }
