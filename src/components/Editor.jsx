@@ -16,8 +16,46 @@ import {
     TableToolbar
 } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
+import { api } from '../api';
 
+// =============================
+// 1. Custom Upload Adapter
+// =============================
+
+class CustomUploadAdapter {
+    constructor(loader, docId) {
+        this.loader = loader;
+        this.docId = docId;
+    }
+
+    upload() {
+        return this.loader.file.then(file => {
+            const formData = new FormData();
+            formData.append("image", file);
+
+            return api.post(
+                `${import.meta.env.VITE_API_URL}/docs/${this.docId}/upload-image`,
+                formData,
+                { withCredentials: true }
+            )
+                .then(res => ({ default: res.data.url }));
+        });
+    }
+}
+
+// =============================
+// 2. Plugin that registers adapter
+// =============================
+
+function UploadPlugin(editor, docId) {
+    editor.plugins.get("FileRepository").createUploadAdapter = loader => {
+        return new CustomUploadAdapter(loader, docId);
+    };
+}
+
+// =============================
 // Editor build
+// =============================
 
 class ClassicEditor extends ClassicEditorBase { }
 
@@ -75,15 +113,30 @@ ClassicEditor.defaultConfig = {
     },
 };
 
-export default function Editor({ value, onChange }) {
+export default function Editor({ value, onChange, docId }) {
     return (
         <CKEditor
             editor={ClassicEditor}
             data={value}
-            onChange={(event, editor) => {
-                onChange(editor.getData());
+            onReady={(editor) => {
+
+                if (!docId) {
+                    const uploadCommand = editor.commands.get('imageUpload');
+                    if (uploadCommand) {
+                        uploadCommand.forceDisabled('no-doc');
+                    }
+                    return;
+                }
+
+                // Enable command and register adapter
+                const uploadCommand = editor.commands.get('imageUpload');
+                if (uploadCommand) {
+                    uploadCommand.clearForceDisabled('no-doc');
+                }
+
+                UploadPlugin(editor, docId);
             }}
-        // disableTwoWayDataBinding
+
         />
     );
 }
