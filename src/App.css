@@ -45,7 +45,8 @@ footer {
 }
 
 .login-screen {
-  background-image: url('./images/login-bg.webp');
+  background-image: url('/images/login-bg.webp');
+  /* Must be absolute otherwise causes conflict with React router upon logout. */
   /* background-repeat: no-repeat; */
   background-size: cover;
 }
