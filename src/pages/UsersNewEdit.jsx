@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
 import AccessRequests from "../components/AccessRequests";
 import AccessAssignments from "../components/AccessAssignments";
+import CustomDialogYesNo from "../components/CustomDialogYesNo";
 
 export default function UsersNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -130,7 +131,8 @@ export default function UsersNewEdit() {
                 await api.post(`/users`, user);
                 notify("User created successfully.", "success");
             }
-            setTimeout(() => navigate("/users"), 1200);
+            // setTimeout(() => navigate("/users"), 1200);
+            fetchUsers();
         } catch (error) {
             const backendMessage = error.response?.data?.message
             console.error("Save failed:", backendMessage);
@@ -219,7 +221,7 @@ export default function UsersNewEdit() {
                     />
 
                     {/* Show isActive box only for existing users. All new users are active by default */}
-                    {id && (
+                    {/* {id && (
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -230,7 +232,8 @@ export default function UsersNewEdit() {
                             label="Active"
                             sx={{ mt: 2 }}
                         />
-                    )}
+                    )} */}
+                    {id && (<Typography>Status: {user.isActive ? "Active" : "Terminated"}</Typography>)}
 
                     {/* Show password box for new users only */}
                     {!id && (
@@ -245,15 +248,27 @@ export default function UsersNewEdit() {
                     )}
 
                     <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
+                        {id && user.isActive === "false" && (<CustomDialogYesNo
+                            buttonLabel={"Reactivate"}
+                            dialogTitle={"Confirm Reactivation"}
+                            dialogContent={`Are you sure you wish to reactivate ${user?.fullName}? Any previous granted access to software must be requested again.`}
+                            dialogueYesAction={handleSave}
+                        />)}
                         <Button variant="contained" onClick={handleSave}>
-                            Save
+                            {id && user.isActive === false ? "Reactivate" : "Save"}
                         </Button>
                         <Button variant="outlined" onClick={() => navigate(-1)}>
                             {id ? "Close" : "Cancel"}
                         </Button>
-                        {id && (<Button variant="outlined" color="error" onClick={handleTerminate}>
+                        {id && user?.isActive && (<CustomDialogYesNo
+                            buttonLabel={"Terminate"}
+                            dialogTitle={"Confirm Termination"}
+                            dialogContent={`Are you sure you wish to terminate ${user?.fullName}? Terminate access requests will be sent to all admins.`}
+                            dialogueYesAction={handleTerminate}
+                        />)}
+                        {/* {id && (<Button variant="outlined" color="error" onClick={handleTerminate}>
                             Terminate
-                        </Button>)}
+                        </Button>)} */}
                     </div>
                 </Paper>
                 <ToastContainer />

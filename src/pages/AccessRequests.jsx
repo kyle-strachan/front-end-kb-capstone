@@ -12,6 +12,9 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { ToastContainer, toast } from "react-toastify";
 import "../App.css";
+import CustomDialogYesNo from "../components/CustomDialogYesNo";
+import { Typography } from "@mui/material";
+
 
 export default function AccessRequests() {
     const navigate = useNavigate();
@@ -62,16 +65,11 @@ export default function AccessRequests() {
 
     async function handleApproveOrReject(id, action) {
         try {
-            console.log(id, action);
             const res = await api.patch(`/uac/access-requests/${id}`, { action });
-            if (res.status !== 200) {
-                notify(res.data?.message || "Error updating request", "error")
-            } else {
-                notify("Access request updated completed successfully.", "success")
-            }
+            notify(res.data?.message || "Access request updated completed successfully.", "success")
         } catch (error) {
-            notify(`Access request not completed. ${error}`, "error")
-            console.log(error);
+            const backendMessage = error.response?.data?.message;
+            notify(`Access request not completed. ${backendMessage}`, "error")
         } finally {
             fetchAccessRequests();
         }
@@ -119,9 +117,10 @@ export default function AccessRequests() {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Full Name</TableCell>
-                                <TableCell>Application ID</TableCell>
+                                <TableCell>Application</TableCell>
+                                <TableCell>Request Type</TableCell>
                                 <TableCell>Requested By/At</TableCell>
-                                <TableCell>Actions</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -139,15 +138,36 @@ export default function AccessRequests() {
                                             {d.applicationId.system}
                                         </TableCell>
                                         <TableCell>
+                                            {/* {d.requestType === "Revoke" ? <Typography color="red">{d.requestType}</Typography> : d.requestType} */}
+                                            {d.requestType === "Revoke"
+                                                ? <span style={{ color: "red" }}>{d.requestType}</span>
+                                                : d.requestType}
+
+                                        </TableCell>
+                                        <TableCell>
                                             {d.requestedBy.fullName}/{new Date(d.requestedAt).toLocaleString()}
                                         </TableCell>
                                         <TableCell>
-                                            <Button onClick={() => handleApproveOrReject(d._id, "Approved")}>
-                                                Approve
-                                            </Button>
-                                            <Button onClick={() => handleApproveOrReject(d._id, "Rejected")}>
-                                                Reject
-                                            </Button>
+                                            <div className="cta-btn-container">
+                                                <CustomDialogYesNo
+                                                    buttonLabel={"Approve"}
+                                                    dialogTitle={"Confirm Approval"}
+                                                    dialogContent={`Has ${d.userId?.fullName} been setup in ${d.applicationId.system} and you wish to confirm the approval?`}
+                                                    dialogueYesAction={() => handleApproveOrReject(d._id, "Approved")}
+                                                />
+                                                <CustomDialogYesNo
+                                                    buttonLabel={"Reject"}
+                                                    dialogTitle={"Confirm Rejection"}
+                                                    dialogContent={`You are rejecting the request for ${d.userId?.fullName} to access ${d.applicationId.system}. Do you wish to continue?`}
+                                                    dialogueYesAction={() => handleApproveOrReject(d._id, "Rejected")}
+                                                />
+                                                {/* <Button variant="outlined" onClick={() => handleApproveOrReject(d._id, "Approved")}>
+                                                    Approve
+                                                </Button> */}
+                                                {/* <Button variant="outlined" onClick={() => handleApproveOrReject(d._id, "Rejected")}>
+                                                    Reject
+                                                </Button> */}
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}

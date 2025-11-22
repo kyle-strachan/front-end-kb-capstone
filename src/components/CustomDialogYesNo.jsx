@@ -37,10 +37,10 @@ export default function CustomDialogYesNo({ buttonLabel, dialogTitle, dialogCont
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>No</Button>
                     <Button onClick={() => { dialogueYesAction(); handleClose() }} autoFocus>
                         Yes
                     </Button>
+                    <Button onClick={handleClose}>No</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>

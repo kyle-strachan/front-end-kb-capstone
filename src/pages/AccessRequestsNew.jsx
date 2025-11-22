@@ -154,10 +154,10 @@ export default function AccessRequestNew() {
 
                 <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
                     <Button variant="contained" onClick={handleSubmit}>
-                        Submit
+                        Request
                     </Button>
                     <Button variant="outlined" onClick={() => navigate("/dashboard")}>
-                        Cancel
+                        Close
                     </Button>
                 </div>
             </Paper>

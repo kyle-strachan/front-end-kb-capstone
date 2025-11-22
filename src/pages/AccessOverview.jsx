@@ -100,7 +100,7 @@ export default function Users() {
                         </Button>
                         <Button
                             variant="contained"
-                            onClick={() => navigate("/users/new")}
+                            onClick={() => navigate("/access-request")}
                             sx={{ mb: 2 }}
                         >
                             New Access Request
