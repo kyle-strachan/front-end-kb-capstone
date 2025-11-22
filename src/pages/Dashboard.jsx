@@ -7,6 +7,7 @@ import '@fontsource/roboto/700.css';
 import Paper from "@mui/material/Paper";
 import { ToastContainer, toast } from 'react-toastify';
 import DocTree from "../components/DocTree";
+import RequestsOverview from '../components/RequestsOverview';
 
 export default function Dashboard() {
     const notify = () => toast("This is a notification");
@@ -28,6 +29,7 @@ export default function Dashboard() {
                         <button onClick={notify}>Notify!</button>
                         <h4>Add New</h4>
                     </Paper>
+                    <RequestsOverview />
                     <Paper sx={{ mt: 4, p: 2 }}>
                         Body text
                     </Paper>
