@@ -14,6 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 export default function DocsNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
+    const [docId, setDocId] = useState(id);
     const [doc, setDoc] = useState(null);
     const [docTitle, setDocTitle] = useState("");
     const [docDescription, setDocDescription] = useState("");
@@ -131,7 +132,7 @@ export default function DocsNewEdit() {
 
         try {
             if (mode === "new") {
-                await api.post(`/docs/`, {
+                const res = await api.post(`/docs/`, {
                     title: docTitle,
                     description: docDescription,
                     body: normalizedBody,
@@ -140,6 +141,10 @@ export default function DocsNewEdit() {
                     docsCategory: newDocsCategoryId?._id,
                     isArchived: docIsArchived,
                 });
+                console.log(res);
+                console.log(res.data.docId);
+                setDocId(res.data.docId);
+
             } else {
                 await api.patch(`/docs/edit/${id}`, {
                     title: docTitle,
@@ -181,7 +186,7 @@ export default function DocsNewEdit() {
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h2>{id ? "Edit Document" : "New Document"}</h2>
+                <h2>{docId ? "Edit Document" : "New Document"}</h2>
                 <div className="field-container">
                     <TextField id="doc-title" label="Document Title" variant="outlined" value={docTitle} onChange={(e) => setDocTitle(e.target.value)} />
                     <TextField
@@ -211,13 +216,13 @@ export default function DocsNewEdit() {
                     <FormControlLabel control={<Switch />} label="Show to All Users" checked={docIsPublic} onChange={(e) => setDocIsPublic(e.target.checked)} />
                     <FormControlLabel control={<Switch />} label="Archive" checked={docIsArchived} onChange={(e) => setDocIsArchived(e.target.checked)} />
                 </div>
-                <Editor value={docBody} onChange={handleEditorChange} docId={id} />
+                <Editor key={docId || "new"} value={docBody} onChange={handleEditorChange} docId={docId} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
                     <Button variant="contained" onClick={() => handleSave(id ? "edit" : "new")}>
-                        {id ? "Update" : "Insert"}
+                        {docId ? "Update" : "Insert"}
                     </Button>
-                    <Button variant="outlined" onClick={() => navigate(-1)}>
-                        Cancel
+                    <Button variant="outlined" onClick={() => navigate(docId ? `/docs/view/${docId}` : -1)}>
+                        {docId ? "Close" : "Cancel"}
                     </Button>
                 </div>
             </Paper>
