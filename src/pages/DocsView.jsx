@@ -20,20 +20,33 @@ export default function DocsView() {
         fetchSingleDoc();
     }, []);
 
+    async function resolveKeysToUrls(html) {
+        const regex = /wasabi-key:([^"]+)/g;
+        let replaced = html;
+        let match;
+
+        while ((match = regex.exec(html)) !== null) {
+            const key = match[1];
+            const res = await api.get(`/docs/${id}/sign-url`, { params: { key } });
+            replaced = replaced.replace(`wasabi-key:${key}`, res.data.url);
+        }
+
+        return replaced;
+    }
+
     async function fetchSingleDoc() {
         setLoading(true);
         try {
             const res = await api.get(`/docs/${id}`);
-            // console.log(res.data.doc);
+            const rawHtml = res.data.doc.body;
+            const resolvedHtml = await resolveKeysToUrls(rawHtml);
             setDoc(res.data.doc);
-            setCleanHtml(DOMPurify.sanitize(res.data.doc.body));
-        } catch (err) {
-            console.error("Failed to fetch document:", err.message);
-            // setError("Could not load document.");
+            setCleanHtml(DOMPurify.sanitize(resolvedHtml));
         } finally {
             setLoading(false);
         }
     }
+
 
     if (loading) return <p>Loading...</p>;
 

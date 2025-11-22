@@ -38,9 +38,14 @@ class CustomUploadAdapter {
                 formData,
                 { withCredentials: true }
             )
-                .then(res => ({ default: res.data.url }));
+                .then(res => {
+                    // Show signed URL in editor for preview
+                    return { default: res.data.url };
+                });
+
         });
     }
+
 }
 
 // =============================

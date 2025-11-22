@@ -128,27 +128,34 @@ export default function DocsNewEdit() {
         }
     }, [doc]);
 
+    function normalizeDocBody(body) {
+        // Replace any signed URL with a wasabi-key marker
+        return body.replace(/<img[^>]+src="[^"]*\/(documents\/[^"]+\.webp)"[^>]*>/g,
+            (match, key) => {
+                return `<img src="wasabi-key:${key}">`;
+            });
+    }
+
 
     async function handleSave(mode) {
-        // Validate all fields
-        let res = null;
+        const normalizedBody = normalizeDocBody(docBody);
 
         try {
             if (mode === "new") {
-                res = await api.post(`/docs/`, {
+                await api.post(`/docs/`, {
                     title: docTitle,
                     description: docDescription,
-                    body: docBody,
+                    body: normalizedBody,   // <-- use normalizedBody
                     department: newDepartmentId?._id,
                     isPublic: docIsPublic,
                     docsCategory: newDocsCategoryId?._id,
                     isArchived: docIsArchived,
                 });
             } else {
-                res = await api.patch(`/docs/edit/${id}`, {
+                await api.patch(`/docs/edit/${id}`, {
                     title: docTitle,
                     description: docDescription,
-                    body: docBody,
+                    body: normalizedBody,   // <-- use normalizedBody
                     department: newDepartmentId?._id,
                     isPublic: docIsPublic,
                     docsCategory: newDocsCategoryId?._id,
@@ -156,13 +163,12 @@ export default function DocsNewEdit() {
                 });
             }
             fetchExistingDoc();
-            notify("Document saved successfully.", "success")
-            // console.log(res);
-            // console.log(`/docs/${res.data.docId}`);
+            notify("Document saved successfully.", "success");
         } catch (error) {
-            console.log('Unable to post new document', error);
+            console.log('Unable to save document', error);
         }
     }
+
 
     async function handleUpload(e) {
         const file = e.target.files[0];
