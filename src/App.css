@@ -55,3 +55,12 @@ footer {
 .ck.ck-editor__editable_inline {
   min-height: 300px !important;
 }
+
+/* Search results */
+.docs-search-result {
+  width: 100%;
+}
+
+.docs-search-result:hover {
+  background-color: rgb(236, 241, 235);
+}
