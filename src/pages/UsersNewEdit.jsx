@@ -162,7 +162,7 @@ export default function UsersNewEdit() {
                     <TextField
                         fullWidth
                         disabled={disabled}
-                        variant="standard"
+                        variant="outlined"
                         label="Username"
                         value={user.username}
                         onChange={(e) => handleFieldChange("username", e.target.value)}
@@ -170,7 +170,7 @@ export default function UsersNewEdit() {
                     />
                     <TextField
                         fullWidth
-                        variant="standard"
+                        variant="outlined"
                         label="Full Name"
                         value={user.fullName}
                         onChange={(e) => handleFieldChange("fullName", e.target.value)}
@@ -204,7 +204,7 @@ export default function UsersNewEdit() {
 
                     <TextField
                         fullWidth
-                        variant="standard"
+                        variant="outlined"
                         label="Email"
                         value={user.email}
                         onChange={(e) => handleFieldChange("email", e.target.value)}
@@ -213,7 +213,7 @@ export default function UsersNewEdit() {
 
                     <TextField
                         fullWidth
-                        variant="standard"
+                        variant="outlined"
                         label="Position"
                         value={user.position}
                         onChange={(e) => handleFieldChange("position", e.target.value)}
@@ -248,15 +248,18 @@ export default function UsersNewEdit() {
                     )}
 
                     <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
-                        {id && user.isActive === "false" && (<CustomDialogYesNo
+                        {id && user.isActive === false && (<CustomDialogYesNo
+                            variant="contained"
                             buttonLabel={"Reactivate"}
                             dialogTitle={"Confirm Reactivation"}
                             dialogContent={`Are you sure you wish to reactivate ${user?.fullName}? Any previous granted access to software must be requested again.`}
                             dialogueYesAction={handleSave}
                         />)}
-                        <Button variant="contained" onClick={handleSave}>
-                            {id && user.isActive === false ? "Reactivate" : "Save"}
-                        </Button>
+                        {id && user.isActive === true && (
+                            <Button variant="contained" onClick={handleSave}>
+                                {id && user.isActive === false ? "Reactivate" : "Save"}
+                            </Button>
+                        )}
                         <Button variant="outlined" onClick={() => navigate(-1)}>
                             {id ? "Close" : "Cancel"}
                         </Button>
