@@ -21,6 +21,7 @@ export default function SelectWithSearch({
             )}
             size="small"
             fullWidth
+            sx={{ mb: 2 }}
         />
     );
 }
