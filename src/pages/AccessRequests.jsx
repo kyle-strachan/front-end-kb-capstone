@@ -13,8 +13,6 @@ import TableRow from "@mui/material/TableRow";
 import { ToastContainer, toast } from "react-toastify";
 import "../App.css";
 import CustomDialogYesNo from "../components/CustomDialogYesNo";
-import { Typography } from "@mui/material";
-
 
 export default function AccessRequests() {
     const navigate = useNavigate();
@@ -69,7 +67,19 @@ export default function AccessRequests() {
             notify(res.data?.message || "Access request updated completed successfully.", "success")
         } catch (error) {
             const backendMessage = error.response?.data?.message;
-            notify(`Access request not completed. ${backendMessage}`, "error")
+            notify(`${backendMessage}` || `Access request not completed.`, "error");
+        } finally {
+            fetchAccessRequests();
+        }
+    }
+
+    async function handleConfirmRevocation(id) {
+        try {
+            const res = await api.post(`uac/access-assignments/confirm-revoke/${id}`);
+            notify(res.data?.message || "Access confirmed as revoked.", "success")
+        } catch (error) {
+            const backendMessage = error.response?.data?.message;
+            notify(`${backendMessage}` || `Access request not completed`, "error")
         } finally {
             fetchAccessRequests();
         }
@@ -149,24 +159,22 @@ export default function AccessRequests() {
                                         </TableCell>
                                         <TableCell>
                                             <div className="cta-btn-container">
-                                                <CustomDialogYesNo
+                                                {d.requestType === "Revoke" ? (<CustomDialogYesNo
+                                                    buttonLabel={"Confirm Revocation"}
+                                                    dialogTitle={"Confirm Revocation"}
+                                                    dialogContent={`Has ${d.userId?.fullName} been completely removed from ${d.applicationId.system}?`}
+                                                    dialogueYesAction={() => handleConfirmRevocation(d._id)}
+                                                />) : (<><CustomDialogYesNo
                                                     buttonLabel={"Approve"}
                                                     dialogTitle={"Confirm Approval"}
                                                     dialogContent={`Has ${d.userId?.fullName} been setup in ${d.applicationId.system} and you wish to confirm the approval?`}
                                                     dialogueYesAction={() => handleApproveOrReject(d._id, "Approved")}
-                                                />
-                                                <CustomDialogYesNo
-                                                    buttonLabel={"Reject"}
-                                                    dialogTitle={"Confirm Rejection"}
-                                                    dialogContent={`You are rejecting the request for ${d.userId?.fullName} to access ${d.applicationId.system}. Do you wish to continue?`}
-                                                    dialogueYesAction={() => handleApproveOrReject(d._id, "Rejected")}
-                                                />
-                                                {/* <Button variant="outlined" onClick={() => handleApproveOrReject(d._id, "Approved")}>
-                                                    Approve
-                                                </Button> */}
-                                                {/* <Button variant="outlined" onClick={() => handleApproveOrReject(d._id, "Rejected")}>
-                                                    Reject
-                                                </Button> */}
+                                                /><CustomDialogYesNo
+                                                        buttonLabel={"Reject"}
+                                                        dialogTitle={"Confirm Rejection"}
+                                                        dialogContent={`You are rejecting the request for ${d.userId?.fullName} to access ${d.applicationId.system}. Do you wish to continue?`}
+                                                        dialogueYesAction={() => handleApproveOrReject(d._id, "Rejected")}
+                                                    /></>)}
                                             </div>
                                         </TableCell>
                                     </TableRow>
