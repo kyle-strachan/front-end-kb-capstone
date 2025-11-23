@@ -32,7 +32,7 @@ export default function Docs() {
             setLoading(true);
             setError(null);
             const res = await api.get("/docs");
-            console.log(res.data.docs);
+            // console.log(res.data.docs);
             if (res.data.docs) {
                 setDocs(res.data.docs);
             } else {
