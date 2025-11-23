@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import {
     Paper,
-    TextField,
     Button,
-    Checkbox,
-    FormControlLabel,
     Table,
     TableContainer,
     TableHead,
@@ -15,25 +11,13 @@ import {
     TableBody,
     Typography,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
-import SelectWithSearch from "./SelectWithSearch";
 import CustomDialogYesNo from "./CustomDialogYesNo";
 
 export default function AccessAssignments({ id, fullName, notify }) {
-
-    // const navigate = useNavigate();
     const [accessAssignments, setAccessAssignments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [tableNote, setTableNote] = useState(null)
-
-    // function notify(message, type = "Info") {
-    //     if (type === "success") {
-    //         toast.success(message);
-    //     } else {
-    //         toast.error(message);
-    //     }
-    // }
 
     async function fetchAccessAssignments() {
         try {
@@ -107,13 +91,6 @@ export default function AccessAssignments({ id, fullName, notify }) {
                     >
                         {loading === true ? "Loading" : "Refresh"}
                     </Button>
-                    {/* <Button
-                        variant="contained"
-                        onClick={() => navigate("/users/new")}
-                        sx={{ mb: 2 }}
-                    >
-                        New
-                    </Button> */}
                 </div>
 
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
@@ -128,7 +105,8 @@ export default function AccessAssignments({ id, fullName, notify }) {
                                 <TableCell>System Name</TableCell>
                                 <TableCell>Active Since</TableCell>
                                 <TableCell>Completed By</TableCell>
-                                <TableCell>Actions</TableCell>
+                                {/* Leave action header blank */}
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -139,15 +117,16 @@ export default function AccessAssignments({ id, fullName, notify }) {
                                     <TableCell>{new Date(d.activeAt).toLocaleString()}</TableCell>
                                     <TableCell>{d.completedBy?.fullName}</TableCell>
                                     <TableCell>
-                                        {d.pendingRevocation ? <Button variant="outlined" disabled>
-                                            Pending Revocation
-                                        </Button> : <CustomDialogYesNo
-                                            buttonLabel={"Revoke"}
-                                            dialogTitle={"Confirm Revocation"}
-                                            dialogContent={`A request to revoke ${d.userId?.fullName}'s access to ${d.applicationId?.system} will be created. Do you wish to continue?`}
-                                            dialogueYesAction={() => handleRevoke(d._id)}
-                                        />}
-
+                                        <div className="cta-btn-container">
+                                            {d.pendingRevocation ? <Button variant="outlined" disabled>
+                                                Pending Revocation
+                                            </Button> : <CustomDialogYesNo
+                                                buttonLabel={"Revoke"}
+                                                dialogTitle={"Confirm Revocation"}
+                                                dialogContent={`A request to revoke ${d.userId?.fullName}'s access to ${d.applicationId?.system} will be created. Do you wish to continue?`}
+                                                dialogueYesAction={() => handleRevoke(d._id)}
+                                            />}
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}
