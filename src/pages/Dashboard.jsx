@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import { ToastContainer, toast } from 'react-toastify';
 import DocTree from "../components/DocTree";
 import RequestsOverview from '../components/RequestsOverview';
+import { DocSearch } from '../components/DocSearch';
 
 export default function Dashboard() {
     const notify = () => toast("This is a notification");
@@ -16,6 +17,9 @@ export default function Dashboard() {
             <h2>Dashboard</h2>
             <div style={{ display: "flex", gap: "1rem", width: "100%" }}>
                 <div>
+                    <Paper style={{ width: "300px" }}>
+                        <DocSearch />
+                    </Paper>
                     <Paper style={{ width: "300px" }}>
                         <DocTree />
                     </Paper>
