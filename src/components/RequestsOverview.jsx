@@ -3,10 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import {
     Paper,
-    TextField,
     Button,
-    Checkbox,
-    FormControlLabel,
     Table,
     TableContainer,
     TableHead,
@@ -16,7 +13,6 @@ import {
     Typography,
 } from "@mui/material";
 import { ToastContainer } from "react-toastify";
-import SelectWithSearch from "./SelectWithSearch";
 import KeyOffOutlinedIcon from '@mui/icons-material/KeyOffOutlined';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
@@ -44,7 +40,6 @@ export default function RequestsOverview({ id, fullName }) {
             const items = res.data.toActionRequests || [];
             setAccessRequests(items);
             setRequestTotal(res.data.total);
-            console.log(res.data.total);
 
             if (items.length === 0) {
                 setTableNote("No pending requests");
@@ -80,10 +75,6 @@ export default function RequestsOverview({ id, fullName }) {
                 <Typography variant="h6" sx={{ mb: 2 }}>
                     Action Required
                 </Typography>
-
-                {/* <span class="material-symbols-outlined">
-                    key_off
-                </span> */}
                 <PendingOutlinedIcon sx={{ fontSize: 75, color: "#EAAA00", fontVariationSettings: `"wght" 100, "OUTLINE" 0`, }} />
                 <KeyOutlinedIcon sx={{ fontSize: 75, color: "#00B388", fontVariationSettings: `"wght" 100, "OUTLINE" 0`, }} />
                 <KeyOffOutlinedIcon sx={{ fontSize: 75, color: "#E03C31", fontVariationSettings: `"wght" 100, "OUTLINE" 0`, }} />
