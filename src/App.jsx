@@ -1,6 +1,5 @@
 import { createRoutesFromElements, Route, useRoutes, Navigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-// import Navbar from "./components/Navbar";
 import { useAuth } from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -39,13 +38,11 @@ function LayoutProtected() {
     <div className="App">
       <div className="content-wrapper">
         <NavBarExtended />
-        {/* <Navbar /> */}
         <div className="p-4">
           <Outlet />
         </div>
-        <Footer />
-        {/* <ToastContainer /> */}
       </div>
+      <Footer />
     </div >
   );
 }
