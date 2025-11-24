@@ -69,9 +69,9 @@ export default function RequestsOverview({ id, fullName }) {
     if (error) return <p>{error}</p>;
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
 
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px", mb: "1rem" }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>
                     Action Required
                 </Typography>

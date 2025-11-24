@@ -8,8 +8,6 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Paper from '@mui/material/Paper';
 import { Link } from "react-router-dom";
@@ -41,21 +39,19 @@ export default function AccountMenu() {
                 boxSizing: 'border-box',
             }}
         >
-
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center', padding: '5px 10px' }}>
-                <div className="nav-bar-links">
-                    <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Dashboard</Link></Typography>
-                    <NavBarDocsMenu />
-                    {/* <Typography sx={{ padding: '0 15px' }}><Link to="/docs">Docs</Link></Typography> */}
-                    {/* <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Configuration</Link></Typography> */}
-                    <NavBarConfigMenu />
-                    <NavBarUacMenu />
-                    {/* <Typography sx={{ padding: '0 15px' }}><Link to="/departments">Departments</Link></Typography> */}
-                    {/* <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">UAC</Link></Typography> */}
+                <div style={{ display: "flex" }}>
+                    <img style={{ padding: "5px" }} src="/images/ll-logo.png" />
+                    <div className="nav-bar-links">
+                        <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Dashboard</Link></Typography>
+                        <NavBarDocsMenu />
+                        <NavBarConfigMenu />
+                        <NavBarUacMenu />
+                    </div>
                 </div>
                 <div className="nav-bar-account-menu">
                     <Typography sx={{ minWidth: 100 }}>{user?.fullName || user?.username}</Typography>
-                    <Tooltip title="Account settings">
+                    <Tooltip title="Account Settings">
                         <IconButton
                             onClick={handleClick}
                             size="small"
@@ -64,7 +60,7 @@ export default function AccountMenu() {
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                         >
-                            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                            <Avatar sx={{ width: 32, height: 32 }} />
                         </IconButton>
                     </Tooltip>
                 </div>
@@ -108,25 +104,10 @@ export default function AccountMenu() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={handleClose}>
-                    <Avatar /> Profile
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <Avatar /> My account
+                <MenuItem component={Link} to="/account" onClick={handleClose}>
+                    <Avatar /> My Account
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                    </ListItemIcon>
-                    Add another account
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Settings
-                </MenuItem>
                 <MenuItem onClick={() => {
                     handleClose();
                     logout();
