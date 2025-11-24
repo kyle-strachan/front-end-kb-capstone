@@ -26,22 +26,22 @@ import { useTreeItemModel } from "@mui/x-tree-view/hooks";
 import { api } from "../api";
 import { useNavigate } from "react-router-dom";
 
-function DotIcon() {
-  return (
-    <Box
-      sx={{
-        width: 6,
-        height: 6,
-        borderRadius: "70%",
-        bgcolor: "warning.main",
-        display: "inline-block",
-        verticalAlign: "middle",
-        zIndex: 1,
-        mx: 1,
-      }}
-    />
-  );
-}
+// function DotIcon() {
+//   return (
+//     <Box
+//       sx={{
+//         width: 6,
+//         height: 6,
+//         borderRadius: "10%",
+//         bgcolor: "warning.main",
+//         display: "inline-block",
+//         verticalAlign: "middle",
+//         zIndex: 1,
+//         mx: 1,
+//       }}
+//     />
+//   );
+// }
 
 const TreeItemRoot = styled("li")(({ theme }) => ({
   listStyle: "none",
@@ -129,8 +129,8 @@ function TransitionComponent(props) {
 
 const TreeItemLabelText = styled(Typography)({
   color: "inherit",
-  fontFamily: "General Sans",
-  fontWeight: 500,
+  // fontFamily: "General Sans",
+  // fontWeight: 500,
 });
 
 function CustomLabel({ icon: Icon, expandable, children, ...other }) {
@@ -147,12 +147,13 @@ function CustomLabel({ icon: Icon, expandable, children, ...other }) {
           component={Icon}
           className="labelIcon"
           color="inherit"
-          sx={{ mr: 1, fontSize: "1.2rem" }}
+          sx={{ mr: 1, fontSize: "1.8rem" }}
         />
       )}
 
       <TreeItemLabelText variant="body2">{children}</TreeItemLabelText>
-      {expandable && <DotIcon />}
+      {/* {expandable && <DotIcon />} */}
+
     </TreeItemLabel>
   );
 }
@@ -204,7 +205,8 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
   }
 
   return (
-    <TreeItemProvider {...getContextProviderProps()}>
+    // <div style={{ marginBottom: "1rem" }}>
+    <TreeItemProvider {...getContextProviderProps()} >
       <TreeItemRoot {...getRootProps(other)}>
         <TreeItemContent {...getContentProps()}>
           <TreeItemIconContainer {...getIconContainerProps()}>
@@ -232,6 +234,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
         {children && <TransitionComponent {...getGroupTransitionProps()} />}
       </TreeItemRoot>
     </TreeItemProvider>
+    // </div>
   );
 });
 
