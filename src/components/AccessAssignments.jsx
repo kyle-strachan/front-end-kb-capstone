@@ -58,7 +58,7 @@ export default function AccessAssignments({ id, fullName, notify }) {
 
     async function handleRevoke(id) {
         try {
-            const res = await api.post(`/uac/access-assignments/revoke`, { ids: [id] });
+            const res = await api.post(`/uac/access-requests/revoke`, { ids: [id] });
             if (res.status === 200) {
                 notify("Revocation request submitted successfully.", "success");
 
