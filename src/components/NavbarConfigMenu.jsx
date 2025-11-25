@@ -27,7 +27,7 @@ export default function NavBarConfigMenu() {
                 onClick={handleClick}
                 sx={{
                     textTransform: "none",       // match Typography
-                    color: "rgb(100,108,255)",             // use parent text colour
+                    color: "rgba(255, 255, 255, 1)",             // use parent text colour
                     fontSize: "inherit",          // match surrounding text size
                     fontWeight: 500,        // optional, for consistency
                     padding: "0 15px",            // match your Typography padding

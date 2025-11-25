@@ -33,17 +33,18 @@ export default function AccountMenu() {
 
         <Paper
             sx={{
-                backgroundColor: 'rgba(255, 255, 255, 1)',
+                backgroundColor: 'rgba(58, 58, 58, 1)',
                 m: 2,
                 width: 'calc(100% - 32px)', // subtract both 16px margins
                 boxSizing: 'border-box',
+                color: "white",
             }}
         >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center', padding: '5px 10px' }}>
                 <div style={{ display: "flex" }}>
-                    <img style={{ padding: "5px" }} src="/images/ll-logo.png" />
+                    <img style={{ padding: "5px 10px", width: "40px" }} src="/logo-white.svg" />
                     <div className="nav-bar-links">
-                        <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard">Dashboard</Link></Typography>
+                        <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard" style={{ color: "inherit", textDecoration: "none" }}>Dashboard</Link></Typography>
                         <NavBarDocsMenu />
                         <NavBarConfigMenu />
                         <NavBarUacMenu />

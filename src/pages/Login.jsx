@@ -30,7 +30,8 @@ export default function Login() {
                 sx={{ width: 300, padding: "32px 24px", textAlign: "center" }}
             >
                 {/* Padlock Icon */}
-                <LockOutlinedIcon sx={{ fontSize: 40, mb: 1 }} />
+                {/* <LockOutlinedIcon sx={{ fontSize: 40, mb: 1 }} /> */}
+                <img src="/logo-black.svg" width="40px" />
 
                 {/* Title */}
                 <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
