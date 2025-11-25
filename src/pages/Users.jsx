@@ -72,9 +72,9 @@ export default function Users() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>Configuration</h2>
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
+                <h2>Configuration</h2>
                 <h3>Users</h3>
 
                 <div className="space-between-container">
