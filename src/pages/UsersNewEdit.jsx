@@ -5,9 +5,8 @@ import {
     Paper,
     TextField,
     Button,
-    Checkbox,
-    FormControlLabel,
     Typography,
+    Autocomplete,
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
@@ -16,7 +15,7 @@ import AccessAssignments from "../components/AccessAssignments";
 import CustomDialogYesNo from "../components/CustomDialogYesNo";
 
 export default function UsersNewEdit() {
-    const { id } = useParams(); // will be undefined for "New"
+    let { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState({
@@ -27,12 +26,18 @@ export default function UsersNewEdit() {
         email: "",
         position: "",
         isActive: true,
-        permissions: [],
+        roles: [],
     });
     const [departments, setDepartments] = useState([]);
     const [locations, setLocations] = useState([]);
     const [disabled, setDisabled] = useState(false); // Remove later, use !id
-
+    const roleOptions = [
+        { label: "Viewer", value: "User" },
+        { label: "Supervisor", value: "Supervisor" },
+        { label: "Manager", value: "Manager" },
+        { label: "Human Resources", value: "HumanResources" },
+        { label: "Administrator", value: "SystemAdmin" },
+    ];
 
     function notify(message, type = "Info") {
         if (type === "success") {
@@ -44,7 +49,7 @@ export default function UsersNewEdit() {
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [id]);
 
     async function fetchUsers() {
         try {
@@ -67,6 +72,7 @@ export default function UsersNewEdit() {
                         _id: foundUser._id,
                         username: foundUser.username || "",
                         fullName: foundUser.fullName || "",
+                        roles: foundUser.roles || "",
                         location: foundUser.location || "",
                         // department: Array.isArray(foundUser.department) ? foundUser.department : [],
                         department: Array.isArray(foundUser.department)
@@ -128,10 +134,12 @@ export default function UsersNewEdit() {
                 notify("User updated successfully.", "success");
             } else {
                 // New
-                await api.post(`/users`, user);
+                const res = await api.post(`/users`, user);
+                // console.log(res);
+                setUser(prev => ({ ...prev, _id: res.data.newId }));
+                navigate(`/users/${res.data.newId}`);
                 notify("User created successfully.", "success");
             }
-            // setTimeout(() => navigate("/users"), 1200);
             fetchUsers();
         } catch (error) {
             const backendMessage = error.response?.data?.message
@@ -176,6 +184,32 @@ export default function UsersNewEdit() {
                         onChange={(e) => handleFieldChange("fullName", e.target.value)}
                         sx={{ mb: 2 }}
                     />
+
+                    <Autocomplete
+                        multiple
+                        options={roleOptions}
+                        getOptionLabel={(option) => option.label}
+                        value={roleOptions.filter((opt) => (user.roles || []).includes(opt.value))}
+                        onChange={(e, newValue) =>
+                            handleFieldChange(
+                                "roles",
+                                newValue.map((v) => v.value)
+                            )
+                        }
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Roles"
+                                placeholder="Select roles…"
+                                variant="outlined"
+                            />
+                        )}
+                        size="small"
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+
+
                     <SelectWithSearch
                         options={departments}
                         label="Department (provide Doc access to)"
@@ -200,7 +234,6 @@ export default function UsersNewEdit() {
                         }
                         required
                     />
-
 
                     <TextField
                         fullWidth
@@ -260,7 +293,12 @@ export default function UsersNewEdit() {
                                 {id && user.isActive === false ? "Reactivate" : "Save"}
                             </Button>
                         )}
-                        <Button variant="outlined" onClick={() => navigate(-1)}>
+                        {!id && (
+                            <Button variant="contained" onClick={handleSave}>
+                                Insert
+                            </Button>
+                        )}
+                        <Button variant="outlined" onClick={() => navigate("/users")}>
                             {id ? "Close" : "Cancel"}
                         </Button>
                         {id && user?.isActive && (<CustomDialogYesNo
