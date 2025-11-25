@@ -3,10 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import {
     Paper,
-    TextField,
     Button,
-    Checkbox,
-    FormControlLabel,
     Table,
     TableContainer,
     TableHead,
@@ -15,31 +12,14 @@ import {
     TableBody,
     Typography,
 } from "@mui/material";
-import { ToastContainer } from "react-toastify";
-import SelectWithSearch from "./SelectWithSearch";
 
 export default function AccessRequests({ id, fullName }) {
-
-    //Move into props when finished
-    // const id = "69151960e4845c8271880479";
-    // const fullName = "Pink Floyd"
 
     const navigate = useNavigate();
     const [accessRequests, setAccessRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [tableNote, setTableNote] = useState(null)
-    // const [page, setPage] = useState(0);
-    // const [rowsPerPage, setRowsPerPage] = useState(10);
-    // const [showActive, setShowActive] = useState(true);
-
-    // function notify(message, type = "Info") {
-    //     if (type === "success") {
-    //         toast.success(message);
-    //     } else {
-    //         toast.error(message);
-    //     }
-    // }
 
     async function fetchAccessRequests() {
         try {
@@ -141,7 +121,6 @@ export default function AccessRequests({ id, fullName }) {
                 </TableContainer>
                 {tableNote ? <Typography sx={{ mb: 2, p: 1 }}>{tableNote}</Typography> : ""}
             </Paper>
-            <ToastContainer />
         </div>
     );
 }

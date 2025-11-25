@@ -135,8 +135,6 @@ export default function AccessAssignments({ id, fullName, notify }) {
                 </TableContainer>
                 {tableNote ? <Typography sx={{ mb: 2, p: 1 }}>{tableNote}</Typography> : ""}
             </Paper>
-            {/* <ToastContainer /> */}
-
         </div>
     );
 }

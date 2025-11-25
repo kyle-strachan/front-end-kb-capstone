@@ -12,7 +12,6 @@ import {
     TableBody,
     Typography,
 } from "@mui/material";
-import { ToastContainer } from "react-toastify";
 import KeyOffOutlinedIcon from '@mui/icons-material/KeyOffOutlined';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
@@ -133,7 +132,6 @@ export default function RequestsOverview({ id, fullName }) {
                 </TableContainer>
                 {tableNote ? <Typography sx={{ mb: 2, p: 1 }}>{tableNote}</Typography> : ""}
             </Paper>
-            <ToastContainer />
         </div>
     );
 }

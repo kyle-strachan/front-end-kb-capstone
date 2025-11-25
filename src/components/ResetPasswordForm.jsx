@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { api } from "../api";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function ResetPasswordForm({ userReset, userIdToChange }) {
     const [open, setOpen] = React.useState(false);
@@ -89,7 +89,6 @@ export default function ResetPasswordForm({ userReset, userIdToChange }) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <ToastContainer />
         </React.Fragment>
     );
 }

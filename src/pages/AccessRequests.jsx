@@ -40,7 +40,7 @@ export default function AccessRequests() {
 
             if (res.data.accessRequests) {
                 setAccessRequests(res.data.accessRequests);
-                console.log(res.data.accessRequests);
+                // console.log(res.data.accessRequests);
             } else {
                 setAccessRequests([]);
                 setError(res.data.message || "No pending access requests found.");
