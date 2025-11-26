@@ -2,7 +2,6 @@ import { useAuth } from "../context/AuthContext";
 import { Paper, Typography, Button, TextField } from "@mui/material"
 import InputTextPassword from "../components/InputTextPassword"
 import { useState } from "react";
-import { useEffect } from "react";
 import { api } from "../api";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -11,7 +10,6 @@ export default function Account() {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPassword2, setNewPassword2] = useState("");
-    // const [passwordMatch, setPasswordMatch] = useState(false);
 
     function notify(message, type = "Info") {
         if (type === "success") {
@@ -35,14 +33,6 @@ export default function Account() {
             notify(message, "error");
         }
     }
-
-    // useEffect(() => {
-    //     if (newPassword === newPassword2) {
-    //         setPasswordMatch(true);
-    //     } else {
-    //         setPasswordMatch(false);
-    //     }
-    // }, [newPassword, newPassword2]);
 
     return (
         <>
