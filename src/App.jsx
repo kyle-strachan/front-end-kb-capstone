@@ -1,5 +1,4 @@
-import { createRoutesFromElements, Route, useRoutes, Navigate } from "react-router-dom";
-import { Outlet } from "react-router-dom";
+import { createRoutesFromElements, Route, useRoutes, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -25,8 +24,15 @@ import "react-toastify/dist/ReactToastify.css";
 
 function ProtectedRoute() {
   const { user, loading } = useAuth()
+  const location = useLocation();
+
   if (loading) return "Logging in";
   if (!user) return <Navigate to="/login" />;
+
+  // Force password change, but don't redirect if already on /account
+  if (user.passwordMustChange && location.pathname !== "/account") {
+    return <Navigate to="/account" replace />;
+  }
   return (
     <LayoutProtected />
   );
