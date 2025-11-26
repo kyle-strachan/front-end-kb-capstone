@@ -21,7 +21,7 @@ export default function Account() {
 
     async function handleUpdatePassword() {
         try {
-            const res = await api.patch("/auth/change-password");
+            const res = await api.patch("/auth/change-password", { newPassword }); //Add new password only.
             if (res.status === 200) {
                 notify("Password changed successfully.", "success");
             } else {
@@ -53,6 +53,8 @@ export default function Account() {
                     <Typography variant="h6" sx={{ mb: 2 }}>
                         Change Password
                     </Typography>
+                    {user.passwordMustChange === true && (<div className="cta-notice">Password must be changed to continue.</div>)}
+
                     <InputTextPassword value={(e) => setCurrentPassword(e.target.value)} label="Current Password" />
                     <InputTextPassword value={(e) => setNewPassword(e.target.value)} label="New Password" />
                     <InputTextPassword value={(e) => setNewPassword2(e.target.value)} label="Confirm New Password" />
