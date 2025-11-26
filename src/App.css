@@ -64,3 +64,11 @@ footer {
 .docs-search-result:hover {
   background-color: rgb(236, 241, 235);
 }
+
+/* Change password block */
+.cta-notice {
+  background-color: #ffe9e7;
+  border-left: 2px solid #E03C31;
+  padding: 5px 10px;
+  margin-bottom: 1rem;
+}
