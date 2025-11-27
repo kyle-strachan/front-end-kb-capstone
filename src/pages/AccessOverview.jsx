@@ -14,10 +14,11 @@ import TableRow from "@mui/material/TableRow";
 import { ToastContainer } from "react-toastify";
 import "../App.css";
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function Users() {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -31,10 +32,14 @@ export default function Users() {
         setTableNote("");
         try {
             const res = await api.get("/uac/access-assignments")
+            // if (res.status !== 200) {
+            //     console.log(res.status);
+            // }
             if (res.data.assignments) {
                 setAccessAssignments(res.data.assignments);
             }
         } catch (error) {
+            // console.log("Error!");
             setTableNote("No access assignments found.");
         } finally {
             setLoading(false);
@@ -61,7 +66,7 @@ export default function Users() {
     const filteredAccessAssignments = accessAssignments.filter((d) => {
         const term = searchTerm.toLowerCase();
         return (
-            d.userId.fullName.toLowerCase().includes(term) ||
+            d.userId?.fullName.toLowerCase().includes(term) ||
             d.applicationId.system.toLowerCase().includes(term)
         );
     });
@@ -127,10 +132,10 @@ export default function Users() {
                                         hover
                                     >
                                         <TableCell>
-                                            {d.userId.fullName}
+                                            {d.userId?.fullName}
                                         </TableCell>
                                         <TableCell>
-                                            {d.userId.position}
+                                            {d.userId?.position}
                                         </TableCell>
                                         <TableCell>
                                             {d.applicationId.system}
