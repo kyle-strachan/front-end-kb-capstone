@@ -16,6 +16,7 @@ import "./NavBarExtended.css";
 import NavBarConfigMenu from "../components/NavbarConfigMenu";
 import NavBarUacMenu from './NavBarUacMenu';
 import NavBarDocsMenu from './NavBarDocsMenu';
+import NavDrawerMobile from './NavDrawerMobile';
 
 export default function AccountMenu() {
     const { user, logout } = useAuth();
@@ -40,30 +41,35 @@ export default function AccountMenu() {
                 color: "white",
             }}
         >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center', padding: '5px 10px' }}>
+            <Box sx={{ height: "50px", display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center', padding: '5px 10px' }}>
                 <div style={{ display: "flex" }}>
                     <img style={{ padding: "5px 10px", width: "40px" }} src="/logo-white.svg" />
                     <div className="nav-bar-links">
                         <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard" style={{ color: "inherit", textDecoration: "none" }}>Dashboard</Link></Typography>
                         <NavBarDocsMenu />
-                        <NavBarConfigMenu />
                         <NavBarUacMenu />
+                        <NavBarConfigMenu />
                     </div>
                 </div>
-                <div className="nav-bar-account-menu">
-                    <Typography sx={{ minWidth: 100 }}>{user?.fullName || user?.username}</Typography>
-                    <Tooltip title="Account Settings">
-                        <IconButton
-                            onClick={handleClick}
-                            size="small"
-                            sx={{ ml: 2 }}
-                            aria-controls={open ? 'account-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                        >
-                            <Avatar sx={{ width: 32, height: 32 }} />
-                        </IconButton>
-                    </Tooltip>
+                <div>
+                    <div className="nav-bar-account-menu">
+                        <Typography sx={{ minWidth: 100 }}>{user?.fullName || user?.username}</Typography>
+                        <Tooltip title="Account Settings">
+                            <IconButton
+                                onClick={handleClick}
+                                size="small"
+                                sx={{ ml: 2 }}
+                                aria-controls={open ? 'account-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                            >
+                                <Avatar sx={{ width: 32, height: 32 }} />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                    <div className="nav-bar-mobile-menu">
+                        <NavDrawerMobile />
+                    </div>
                 </div>
             </Box>
 

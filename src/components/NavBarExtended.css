@@ -4,8 +4,30 @@
     align-items: center;
 }
 
+@media (max-width: 768px) {
+    .nav-bar-links {
+        display: none;
+    }
+}
+
 .nav-bar-account-menu {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+@media (max-width: 768px) {
+    .nav-bar-account-menu {
+        display: none;
+    }
+}
+
+.nav-bar-mobile-menu {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .nav-bar-mobile-menu {
+        display: flex;
+    }
 }

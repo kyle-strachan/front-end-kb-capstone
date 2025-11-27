@@ -54,7 +54,7 @@ export default function NavBarUacMenu() {
                 </MenuItem>
 
                 <MenuItem component={Link} to="/access-request" onClick={handleClose}>
-                    New Application Request
+                    New Access Request
                 </MenuItem>
                 <Divider />
                 <MenuItem component={Link} to="/users" onClick={handleClose}>
