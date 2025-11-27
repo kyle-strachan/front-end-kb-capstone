@@ -1,4 +1,3 @@
-// pages/DocsSearchResults.jsx
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
@@ -11,8 +10,7 @@ import {
     Pagination,
 } from "@mui/material";
 import { api } from "../api";
-import DOMPurify from "dompurify";
-
+// import DOMPurify from "dompurify";
 
 export default function DocsSearchResults() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -26,7 +24,6 @@ export default function DocsSearchResults() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // wrap async call inside useEffect
         const fetchResults = async () => {
             if (!q) return;
             setLoading(true);
