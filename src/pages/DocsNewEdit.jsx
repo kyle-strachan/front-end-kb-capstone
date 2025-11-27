@@ -12,6 +12,7 @@ import { api } from "../api";
 import SelectWithSearch from "../components/SelectWithSearch";
 import { ToastContainer, toast } from 'react-toastify';
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function DocsNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -27,6 +28,7 @@ export default function DocsNewEdit() {
     const [newDocsCategoryId, setDocsCategoryId] = useState(null);
     const [docIsArchived, setDocIsArchived] = useState(false);
     const navigate = useNavigate();
+    const { loading, setLoading } = useLoading();
 
     function notify(message, type = "Info") {
         if (type === "success") toast.success(message);

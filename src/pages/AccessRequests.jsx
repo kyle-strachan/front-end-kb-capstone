@@ -14,11 +14,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "../App.css";
 import CustomDialogYesNo from "../components/CustomDialogYesNo";
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function AccessRequests() {
     const navigate = useNavigate();
     const [accessRequests, setAccessRequests] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);

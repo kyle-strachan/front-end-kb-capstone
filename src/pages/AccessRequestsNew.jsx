@@ -11,10 +11,11 @@ import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
 import ApplicationsTransferList from "../components/ApplicationsTransferList";
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function AccessRequestNew() {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);

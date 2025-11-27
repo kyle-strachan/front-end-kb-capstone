@@ -10,7 +10,7 @@ import {
     Pagination,
 } from "@mui/material";
 import { api } from "../api";
-// import DOMPurify from "dompurify";
+import { useLoading } from "../context/LoadingContext";
 
 export default function DocsSearchResults() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -20,7 +20,7 @@ export default function DocsSearchResults() {
 
     const [results, setResults] = useState([]);
     const [total, setTotal] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const { loading, setLoading } = useLoading();
     const [error, setError] = useState(null);
 
     useEffect(() => {

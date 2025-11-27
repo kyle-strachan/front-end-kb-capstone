@@ -15,11 +15,12 @@ import TableRow from "@mui/material/TableRow";
 import "../App.css";
 import { ToastContainer, toast } from 'react-toastify';
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function Departments() {
     const [departments, setDepartments] = useState([]);
     const [edited, setEdited] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [newDepartment, setNewDepartment] = useState("");
     const [page, setPage] = useState(0);

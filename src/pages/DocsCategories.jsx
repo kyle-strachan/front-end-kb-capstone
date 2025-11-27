@@ -15,11 +15,12 @@ import SelectWithSearch from "../components/SelectWithSearch";
 import "../App.css";
 import { ToastContainer, toast } from 'react-toastify';
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function DocsCategories() {
     const [docsCategories, setDocsCategories] = useState([]);
     const [edited, setEdited] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [newDocsCategory, setNewDocsCategory] = useState("");
     const [page, setPage] = useState(0);

@@ -13,12 +13,13 @@ import TableRow from "@mui/material/TableRow";
 import { ToastContainer, } from "react-toastify";
 import "../App.css";
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function SystemApplications() {
     const navigate = useNavigate();
     const [systemApplications, setSystemApplications] = useState([]);
     const [systemCategories, setSystemCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);

@@ -8,11 +8,12 @@ import {
     Typography,
     Box
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useLoading } from "../context/LoadingContext";
 
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const { loading, setLoading } = useLoading();
     const { login } = useAuth();
     const navigate = useNavigate();
 

@@ -7,8 +7,10 @@ import DocTree from "../components/DocTree";
 import RequestsOverview from '../components/RequestsOverview';
 import DocSearch from '../components/DocSearchBox';
 import PlaceholderAmenityRequest from '../components/PlaceholderAmenityRequest';
+import { useLoading } from "../context/LoadingContext";
 
 export default function Dashboard() {
+    const { loading, setLoading } = useLoading();
     return (
         <div style={{ maxWidth: "1280px", height: "vh", margin: "0 auto", padding: "1rem" }}>
             {/* <h2>Dashboard</h2> */}

@@ -8,11 +8,12 @@ import {
 } from "@mui/material";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
+import { useLoading } from "../context/LoadingContext";
 
 export default function DocsView() {
     const { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
     const [doc, setDoc] = useState(null);
     const [cleanHtml, setCleanHtml] = useState("");
 

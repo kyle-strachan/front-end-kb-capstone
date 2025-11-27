@@ -13,11 +13,12 @@ import SelectWithSearch from "../components/SelectWithSearch";
 import AccessRequests from "../components/AccessRequests";
 import AccessAssignments from "../components/AccessAssignments";
 import CustomDialogYesNo from "../components/CustomDialogYesNo";
+import { useLoading } from "../context/LoadingContext";
 
 export default function UsersNewEdit() {
     let { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
     const [user, setUser] = useState({
         username: "",
         fullName: "",

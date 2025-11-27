@@ -5,13 +5,16 @@ import App from "./App";
 import "./index.css";
 import { AuthProvider } from "./context/AuthContext";
 import ThemeProviderContext from "./context/ThemeContext";
+import { LoadingProvider } from "./context/LoadingContext";
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <ThemeProviderContext>
-          <App />
+          <LoadingProvider>
+            <App />
+          </LoadingProvider>
         </ThemeProviderContext>
       </AuthProvider>
     </BrowserRouter>

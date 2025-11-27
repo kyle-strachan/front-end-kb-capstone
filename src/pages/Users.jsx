@@ -17,11 +17,12 @@ import { ToastContainer } from "react-toastify";
 import "../App.css";
 import ResetPasswordForm from "../components/ResetPasswordForm";
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function Users() {
     const navigate = useNavigate();
+    const { loading, setLoading } = useLoading();
     const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);

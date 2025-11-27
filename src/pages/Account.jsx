@@ -5,12 +5,14 @@ import { useState } from "react";
 import { api } from "../api";
 import { ToastContainer, toast } from "react-toastify";
 import PageTitle from "../components/PageTitle";
+import { useLoading } from "../context/LoadingContext";
 
 export default function Account() {
     const { user, refreshUser } = useAuth();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPassword2, setNewPassword2] = useState("");
+    const { loading, setLoading } = useLoading();
 
     function notify(message, type = "Info") {
         if (type === "success") {

@@ -21,6 +21,7 @@ import AccessOverview from "./pages/AccessOverview";
 import Footer from "./components/Footer";
 import NavBarExtended from "./components/NavBarExtended";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function ProtectedRoute() {
   const { user, loading } = useAuth()
@@ -90,6 +91,9 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <AppRoutes />
+    <>
+      <LoadingSpinner />
+      <AppRoutes />
+    </>
   )
 }
