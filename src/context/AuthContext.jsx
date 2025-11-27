@@ -35,6 +35,16 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // Allows passwordMustChange to be updated when a user first logs in and clears the redirect condition - called from Account.jsx
+    const refreshUser = async () => {
+        try {
+            const res = await api.get("/auth/me");
+            setUser(res.data.user);
+        } catch (err) {
+            console.error("Failed to refresh user:", err.message);
+        }
+    };
+
     // Persist user to storage after loading is done
     useEffect(() => {
         if (loading) return; // Must wait until user is loaded
