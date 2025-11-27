@@ -45,7 +45,6 @@ export default function DocsCategories() {
                 setDocsCategories([]);
                 setError(res.data.message || "No document categories found.");
             }
-            // console.log(res.data.docsCategories);
         } catch (error) {
             console.error("Failed to fetch document categories:", error.message);
             setError("Could not load document categories.");
@@ -67,7 +66,6 @@ export default function DocsCategories() {
                 setDepartments([]);
                 setError(res.data.message || "No departments found.");
             }
-            console.log(`Departments`, res.data.departments);
         } catch (err) {
             console.error("Failed to fetch departments:", err.message);
             setError("Could not load departments.");

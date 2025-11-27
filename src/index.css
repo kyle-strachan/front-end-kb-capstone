@@ -25,6 +25,7 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: #f7f7f7;
+  background-image: url("images/bg.webp");
 }
 
 /* this controls width and centring */
