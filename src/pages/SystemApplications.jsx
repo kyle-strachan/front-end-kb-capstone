@@ -12,6 +12,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { ToastContainer, } from "react-toastify";
 import "../App.css";
+import PageTitle from "../components/PageTitle";
 
 export default function SystemApplications() {
     const navigate = useNavigate();
@@ -69,7 +70,7 @@ export default function SystemApplications() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>Configuration</h2>
+            <PageTitle title="System Applications" />
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>System Applications</h3>
@@ -101,9 +102,6 @@ export default function SystemApplications() {
                             <TableRow>
                                 <TableCell>System Application Name</TableCell>
                                 <TableCell>Category</TableCell>
-                                {/* <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                                    ID (dev only)
-                                </TableCell> */}
                                 <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
@@ -122,11 +120,6 @@ export default function SystemApplications() {
                                             {systemCategories.find((c) => c._id === d.category)?.category || 'Undefined'}
 
                                         </TableCell>
-                                        {/* <TableCell
-                                            sx={{ display: { xs: "none", sm: "table-cell" } }}
-                                        >
-                                            {d._id}
-                                        </TableCell> */}
                                         <TableCell>
                                             <div className="cta-btn-container">
                                                 <Button variant="outlined" onClick={() => navigate(`/system-applications/${d._id}`)}>
