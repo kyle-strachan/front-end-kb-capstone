@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import Button from "@mui/material/Button";
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,7 +15,7 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { ToastContainer } from "react-toastify";
 import "../App.css";
-import ResetPasswordForm from "../components/ResetPasswordForm";
+import PageTitle from "../components/PageTitle";
 
 export default function Docs() {
     const navigate = useNavigate();
@@ -32,7 +32,6 @@ export default function Docs() {
             setLoading(true);
             setError(null);
             const res = await api.get("/docs");
-            // console.log(res.data.docs);
             if (res.data.docs) {
                 setDocs(res.data.docs);
             } else {
@@ -73,16 +72,20 @@ export default function Docs() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>Docs</h2>
-
+            <PageTitle title="Manage Documents" />
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>Search</h3>
+                <h2>Manage Documents</h2>
+
+                <Typography variant="subtitle1" gutterBottom sx={{ mb: "2rem" }}>
+                    Manage all documents that will be shown to Viewer users. Archive documents to remove from the Document Tree view and Search results.
+                </Typography>
+                {/* <h3>Search</h3> */}
 
                 <div className="space-between-container">
                     <div className="filter-container">
 
                         <TextField
-                            label="Search"
+                            label="Filter"
                             variant="standard"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -99,7 +102,7 @@ export default function Docs() {
                                     color="primary"
                                 />
                             }
-                            label={showActive ? "Showing Active Users" : "Showing Inactive Users"}
+                            label={showActive ? "Showing Active Documents" : "Showing Archived Documents"}
                             sx={{ mb: 1 }}
                         />
 
@@ -109,17 +112,17 @@ export default function Docs() {
                     <div className="cta-btn-container">
                         <Button
                             variant="contained"
-                            onClick={handleRefresh}
-                            sx={{ mb: 2 }}
-                        >
-                            {loading === true ? "Loading" : "Refresh"}
-                        </Button>
-                        <Button
-                            variant="contained"
                             onClick={() => navigate("/docs/new")}
                             sx={{ mb: 2 }}
                         >
                             New
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            onClick={handleRefresh}
+                            sx={{ mb: 2 }}
+                        >
+                            {loading === true ? "Loading" : "Refresh"}
                         </Button>
                     </div>
                 </div>
@@ -161,7 +164,7 @@ export default function Docs() {
                                         </TableCell>
                                         <TableCell>
                                             <div className="cta-btn-container">
-                                                <Button variant="outlined" onClick={() => navigate(`/docs/${d._id}`)}>
+                                                <Button variant="outlined" onClick={() => navigate(`/docs/view/${d._id}`)}>
                                                     View
                                                 </Button>
                                             </div>
