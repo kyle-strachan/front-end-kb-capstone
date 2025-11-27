@@ -11,6 +11,7 @@ import {
 import { api } from "../api";
 import SelectWithSearch from "../components/SelectWithSearch";
 import { ToastContainer, toast } from 'react-toastify';
+import PageTitle from "../components/PageTitle";
 
 export default function DocsNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -164,20 +165,20 @@ export default function DocsNewEdit() {
     }
 
     // Minimal change: insert HTML img with signed URL; normalizer will convert it to wasabi-key on save
-    async function handleUpload(e) {
-        const file = e.target.files[0];
-        if (!file) return;
+    // async function handleUpload(e) {
+    //     const file = e.target.files[0];
+    //     if (!file) return;
 
-        const formData = new FormData();
-        formData.append("image", file);
+    //     const formData = new FormData();
+    //     formData.append("image", file);
 
-        const res = await api.post(`/docs/${id}/upload-image`, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-        });
+    //     const res = await api.post(`/docs/${id}/upload-image`, formData, {
+    //         headers: { "Content-Type": "multipart/form-data" },
+    //     });
 
-        const imageUrl = res.data.url;
-        setDocBody(prev => `${prev}\n\n<img src="${imageUrl}" alt="image">`);
-    }
+    //     const imageUrl = res.data.url;
+    //     setDocBody(prev => `${prev}\n\n<img src="${imageUrl}" alt="image">`);
+    // }
 
     if (id && !doc) {
         return <div>Loading…</div>;
@@ -185,6 +186,7 @@ export default function DocsNewEdit() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+            <PageTitle title={docId ? "Edit Document" : "New Document"} />
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h2>{docId ? "Edit Document" : "New Document"}</h2>
                 <div className="field-container">
@@ -226,12 +228,12 @@ export default function DocsNewEdit() {
                     </Button>
                 </div>
             </Paper>
-            <Paper sx={{ p: 2, mt: 2 }}>
+            {/* <Paper sx={{ p: 2, mt: 2 }}>
                 <Button variant="contained" component="label">
                     Upload Image
                     <input type="file" hidden onChange={handleUpload} />
                 </Button>
-            </Paper>
+            </Paper> */}
             <ToastContainer />
         </div>
     );
