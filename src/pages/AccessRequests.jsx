@@ -13,6 +13,7 @@ import TableRow from "@mui/material/TableRow";
 import { ToastContainer, toast } from "react-toastify";
 import "../App.css";
 import CustomDialogYesNo from "../components/CustomDialogYesNo";
+import PageTitle from "../components/PageTitle";
 
 export default function AccessRequests() {
     const navigate = useNavigate();
@@ -96,7 +97,7 @@ export default function AccessRequests() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>User Access Requests</h2>
+            <PageTitle title="Pending Access Requests" />
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>Pending Requests</h3>

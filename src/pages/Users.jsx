@@ -16,6 +16,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ToastContainer } from "react-toastify";
 import "../App.css";
 import ResetPasswordForm from "../components/ResetPasswordForm";
+import PageTitle from "../components/PageTitle";
 
 export default function Users() {
     const navigate = useNavigate();
@@ -72,10 +73,9 @@ export default function Users() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-
+            <PageTitle title="Manage Users" />
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h2>Configuration</h2>
-                <h3>Users</h3>
+                <h2>Users</h2>
 
                 <div className="space-between-container">
                     <div className="filter-container">

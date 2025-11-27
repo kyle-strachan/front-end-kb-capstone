@@ -14,6 +14,7 @@ import TableRow from "@mui/material/TableRow";
 import SelectWithSearch from "../components/SelectWithSearch";
 import "../App.css";
 import { ToastContainer, toast } from 'react-toastify';
+import PageTitle from "../components/PageTitle";
 
 export default function DocsCategories() {
     const [docsCategories, setDocsCategories] = useState([]);
@@ -157,7 +158,7 @@ export default function DocsCategories() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>Document Categories</h2>
+            <PageTitle title="Configure Document Categories" />
 
             <Paper sx={{ mb: 4, p: 2 }}>
                 <h4>Add New</h4>
@@ -166,7 +167,7 @@ export default function DocsCategories() {
                         id="input-new-doc-category"
                         helperText="Minimum three characters"
                         label="Category Name"
-                        variant="standard"
+                        variant="outlined"
                         value={newDocsCategory}
                         onChange={(e) => setNewDocsCategory(e.target.value)}
                         sx={{ mr: 2, width: "100%" }}

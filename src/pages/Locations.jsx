@@ -14,6 +14,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import "../App.css";
 import { ToastContainer, toast } from 'react-toastify';
+import PageTitle from "../components/PageTitle";
 
 export default function Locations() {
     const [locations, setLocations] = useState([]);
@@ -124,7 +125,29 @@ export default function Locations() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>Configuration</h2>
+            <PageTitle title="Configure Locations" />
+            <Paper sx={{ mb: 4, p: 2 }}>
+                <h3>Add New</h3>
+                <div className="btn-inline-container">
+                    <TextField
+                        id="input-new-location"
+                        helperText="Minimum three characters"
+                        label="Location Name"
+                        variant="standard"
+                        value={newLocation}
+                        onChange={(e) => setNewLocation(e.target.value)}
+                        sx={{ mr: 2, width: "100%" }}
+                    />
+                    <div>
+                        <Button
+                            variant="contained"
+                            onClick={handleInsert}
+                            disabled={newLocation.trim().length < 3}
+                        >
+                            Insert
+                        </Button></div>
+                </div>
+            </Paper>
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>Locations</h3>
@@ -216,28 +239,6 @@ export default function Locations() {
                 />
             </Paper>
 
-            <Paper sx={{ mt: 4, p: 2 }}>
-                <h4>Add New</h4>
-                <div className="btn-inline-container">
-                    <TextField
-                        id="input-new-location"
-                        helperText="Minimum three characters"
-                        label="Location Name"
-                        variant="standard"
-                        value={newLocation}
-                        onChange={(e) => setNewLocation(e.target.value)}
-                        sx={{ mr: 2, width: "100%" }}
-                    />
-                    <div>
-                        <Button
-                            variant="contained"
-                            onClick={handleInsert}
-                            disabled={newLocation.trim().length < 3}
-                        >
-                            Insert
-                        </Button></div>
-                </div>
-            </Paper>
             <ToastContainer />
         </div>
     );

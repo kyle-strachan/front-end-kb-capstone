@@ -5,13 +5,12 @@ import {
     Paper,
     TextField,
     Button,
-    Checkbox,
-    FormControlLabel,
     Typography,
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
 import ApplicationsTransferList from "../components/ApplicationsTransferList";
+import PageTitle from "../components/PageTitle";
 
 export default function AccessRequestNew() {
     const navigate = useNavigate();
@@ -120,6 +119,7 @@ export default function AccessRequestNew() {
 
     return (
         <div style={{ margin: "0 auto", padding: "1rem" }}>
+            <PageTitle title="New Access Request" />
             <Paper sx={{ p: 3 }}>
                 <Typography variant="h5" sx={{ mb: 2 }}>
                     Request Application Access

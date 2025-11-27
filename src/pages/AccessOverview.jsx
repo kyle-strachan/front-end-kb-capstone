@@ -11,20 +11,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { ToastContainer } from "react-toastify";
 import "../App.css";
-import ResetPasswordForm from "../components/ResetPasswordForm";
+import PageTitle from "../components/PageTitle";
 
 export default function Users() {
     const navigate = useNavigate();
-    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [showActive, setShowActive] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [tableNote, setTableNote] = useState(null)
 
@@ -72,7 +68,7 @@ export default function Users() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>Access Overview</h2>
+            <PageTitle title="Access Overview" />
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>Current Assignments</h3>

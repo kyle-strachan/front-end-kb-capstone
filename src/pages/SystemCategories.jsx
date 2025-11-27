@@ -14,6 +14,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import "../App.css";
 import { ToastContainer, toast } from 'react-toastify';
+import PageTitle from "../components/PageTitle";
 
 export default function SystemCategories() {
     const [systemCategories, setSystemCategories] = useState([]);
@@ -124,10 +125,10 @@ export default function SystemCategories() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>System Categories</h2>
+            <PageTitle title="System Categories" />
 
             <Paper sx={{ mb: 4, p: 2 }}>
-                <h4>Add New</h4>
+                <h3>Add New</h3>
                 <div className="btn-inline-container">
                     <TextField
                         id="input-new-system-category"
@@ -172,9 +173,6 @@ export default function SystemCategories() {
                         <TableHead>
                             <TableRow>
                                 <TableCell>System Category Name</TableCell>
-                                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                                    ID (dev only)
-                                </TableCell>
                                 <TableCell>Active</TableCell>
                             </TableRow>
                         </TableHead>
@@ -204,11 +202,6 @@ export default function SystemCategories() {
                                                 }
                                                 fullWidth
                                             />
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{ display: { xs: "none", sm: "table-cell" } }}
-                                        >
-                                            {d._id}
                                         </TableCell>
                                         <TableCell>
                                             <Checkbox

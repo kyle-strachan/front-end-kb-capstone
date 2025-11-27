@@ -14,6 +14,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import "../App.css";
 import { ToastContainer, toast } from 'react-toastify';
+import PageTitle from "../components/PageTitle";
 
 export default function Departments() {
     const [departments, setDepartments] = useState([]);
@@ -124,7 +125,7 @@ export default function Departments() {
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
-            <h2>Configuration</h2>
+            <PageTitle title="Configure Departments" />
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <h3>Departments</h3>
@@ -144,14 +145,11 @@ export default function Departments() {
                     <Table
                         stickyHeader
                         aria-label="departments table"
-                        sx={{ minWidth: 650, width: "100%" }}
+                        sx={{ minWidth: 395, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
                                 <TableCell>Department Name</TableCell>
-                                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                                    ID (dev only)
-                                </TableCell>
                                 <TableCell>Active</TableCell>
                             </TableRow>
                         </TableHead>
@@ -181,11 +179,6 @@ export default function Departments() {
                                                 }
                                                 fullWidth
                                             />
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{ display: { xs: "none", sm: "table-cell" } }}
-                                        >
-                                            {dept._id}
                                         </TableCell>
                                         <TableCell>
                                             <Checkbox
