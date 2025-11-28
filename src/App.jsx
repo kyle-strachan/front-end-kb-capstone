@@ -22,6 +22,7 @@ import Footer from "./components/Footer";
 import NavBarExtended from "./components/NavBarExtended";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingSpinner from "./components/LoadingSpinner";
+import { ToastContainer } from 'react-toastify';
 
 function ProtectedRoute() {
   const { user, loading } = useAuth()
@@ -94,6 +95,7 @@ export default function App() {
     <>
       <LoadingSpinner />
       <AppRoutes />
+      <ToastContainer />
     </>
   )
 }

@@ -3,9 +3,9 @@ import { Paper, Typography, Button, TextField } from "@mui/material"
 import InputTextPassword from "../components/InputTextPassword"
 import { useState } from "react";
 import { api } from "../api";
-import { ToastContainer, toast } from "react-toastify";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function Account() {
     const { user, refreshUser } = useAuth();
@@ -13,17 +13,6 @@ export default function Account() {
     const [newPassword, setNewPassword] = useState("");
     const [newPassword2, setNewPassword2] = useState("");
     const { loading, setLoading } = useLoading();
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-            setCurrentPassword("");
-            setNewPassword("");
-            setNewPassword2("");
-        }
-    }
 
     async function handleUpdatePassword() {
         try {
@@ -39,6 +28,10 @@ export default function Account() {
             const message =
                 error.response?.data?.message || error.message || "Unknown error";
             notify(message, "error");
+        } finally {
+            setCurrentPassword("");
+            setNewPassword("");
+            setNewPassword2("");
         }
     }
 
@@ -73,7 +66,6 @@ export default function Account() {
                     Change Password
                 </Button>
             </Paper>
-            <ToastContainer />
         </div>
     );
 }

@@ -10,7 +10,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { ToastContainer, } from "react-toastify";
 import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
@@ -23,14 +22,6 @@ export default function SystemApplications() {
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    // function notify(message, type = "Info") {
-    //     if (type === "success") {
-    //         toast.success(message);
-    //     } else {
-    //         toast.error(message);
-    //     }
-    // }
 
     async function fetchSystemApplications() {
         try {
@@ -144,7 +135,6 @@ export default function SystemApplications() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <ToastContainer />
         </div>
     );
 }

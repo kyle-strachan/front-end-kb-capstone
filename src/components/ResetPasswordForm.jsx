@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { api } from "../api";
-import { toast } from "react-toastify";
+import notify from '../utils/toastify';
 
 export default function ResetPasswordForm({ userReset, userIdToChange }) {
     const [open, setOpen] = React.useState(false);
@@ -19,14 +19,6 @@ export default function ResetPasswordForm({ userReset, userIdToChange }) {
     const handleClose = () => {
         setOpen(false);
     };
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
 
     async function handleSubmit(event) {
         event.preventDefault();

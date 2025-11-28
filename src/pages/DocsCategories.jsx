@@ -13,9 +13,9 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import SelectWithSearch from "../components/SelectWithSearch";
 import "../App.css";
-import { ToastContainer, toast } from 'react-toastify';
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function DocsCategories() {
     const [docsCategories, setDocsCategories] = useState([]);
@@ -27,15 +27,6 @@ export default function DocsCategories() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [departments, setDepartments] = useState([]);
     const [newDepartmentId, setNewDepartmentId] = useState(null);
-
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
 
     async function fetchDocsCategories() {
         try {
@@ -293,9 +284,6 @@ export default function DocsCategories() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-
-
-            <ToastContainer />
         </div>
     );
 }

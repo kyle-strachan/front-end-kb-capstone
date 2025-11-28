@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import { useAuth } from "../context/AuthContext";
 import { api } from "../api";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
@@ -13,9 +12,9 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import "../App.css";
-import { ToastContainer, toast } from 'react-toastify';
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function SystemCategories() {
     const [systemCategories, setSystemCategories] = useState([]);
@@ -25,14 +24,6 @@ export default function SystemCategories() {
     const [newSystemCategory, setNewSystemCategory] = useState("");
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
 
     async function fetchSystemCategories() {
         try {
@@ -232,9 +223,6 @@ export default function SystemCategories() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-
-
-            <ToastContainer />
         </div>
     );
 }

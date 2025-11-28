@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { api } from "../api";
 import SelectWithSearch from "../components/SelectWithSearch";
-import { ToastContainer, toast } from 'react-toastify';
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function DocsNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -29,11 +29,6 @@ export default function DocsNewEdit() {
     const [docIsArchived, setDocIsArchived] = useState(false);
     const navigate = useNavigate();
     const { loading, setLoading } = useLoading();
-
-    function notify(message, type = "Info") {
-        if (type === "success") toast.success(message);
-        else toast.error(message);
-    }
 
     function handleEditorChange(newValue) {
         setDocBody(newValue);
@@ -236,7 +231,6 @@ export default function DocsNewEdit() {
                     <input type="file" hidden onChange={handleUpload} />
                 </Button>
             </Paper> */}
-            <ToastContainer />
         </div>
     );
 }

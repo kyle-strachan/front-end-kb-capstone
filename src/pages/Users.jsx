@@ -13,7 +13,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { ToastContainer } from "react-toastify";
 import "../App.css";
 import ResetPasswordForm from "../components/ResetPasswordForm";
 import PageTitle from "../components/PageTitle";
@@ -180,7 +179,6 @@ export default function Users() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <ToastContainer />
         </div>
     );
 }

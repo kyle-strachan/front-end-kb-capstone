@@ -7,11 +7,11 @@ import {
     Button,
     Typography,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
 import ApplicationsTransferList from "../components/ApplicationsTransferList";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function AccessRequestNew() {
     const navigate = useNavigate();
@@ -22,14 +22,6 @@ export default function AccessRequestNew() {
     const [systemApplications, setSystemApplications] = useState([]);
     const [selectedApplications, setSelectedApplications] = useState([]);
     const [requestNote, setRequestNote] = useState("");
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
 
     // Required to populate user list
     async function fetchUsers() {
@@ -162,8 +154,6 @@ export default function AccessRequestNew() {
                     </Button>
                 </div>
             </Paper>
-            <ToastContainer />
-
         </div>
     );
 }

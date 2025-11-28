@@ -10,11 +10,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { ToastContainer, toast } from "react-toastify";
 import "../App.css";
 import CustomDialogYesNo from "../components/CustomDialogYesNo";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function AccessRequests() {
     const navigate = useNavigate();
@@ -23,14 +23,6 @@ export default function AccessRequests() {
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
 
     async function fetchAccessRequests() {
         try {
@@ -195,7 +187,6 @@ export default function AccessRequests() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <ToastContainer />
         </div>
     );
 }

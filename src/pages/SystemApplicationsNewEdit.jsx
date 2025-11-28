@@ -9,9 +9,9 @@ import {
     FormControlLabel,
     Typography,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function SystemApplicationsNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -27,14 +27,6 @@ export default function SystemApplicationsNewEdit() {
     });
     const [systemCategories, setSystemCategories] = useState([]);
     const [users, setUsers] = useState([]);
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
 
     useEffect(() => {
         fetchInitialData();
@@ -186,8 +178,6 @@ export default function SystemApplicationsNewEdit() {
                     </Button>
                 </div>
             </Paper>
-            <ToastContainer />
-
         </div>
     );
 }

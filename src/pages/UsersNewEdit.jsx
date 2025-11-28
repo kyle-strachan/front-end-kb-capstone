@@ -8,12 +8,12 @@ import {
     Typography,
     Autocomplete,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
 import SelectWithSearch from "../components/SelectWithSearch";
 import AccessRequests from "../components/AccessRequests";
 import AccessAssignments from "../components/AccessAssignments";
 import CustomDialogYesNo from "../components/CustomDialogYesNo";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function UsersNewEdit() {
     let { id } = useParams(); // will be undefined for "New"
@@ -39,14 +39,6 @@ export default function UsersNewEdit() {
         { label: "Human Resources", value: "HumanResources" },
         { label: "Administrator", value: "SystemAdmin" },
     ];
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
 
     useEffect(() => {
         fetchUsers();
@@ -313,7 +305,6 @@ export default function UsersNewEdit() {
                         </Button>)} */}
                     </div>
                 </Paper>
-                <ToastContainer />
             </div>
             {id && (<div><AccessAssignments id={user._id} fullName={user.fullName} notify={notify} /></div>)}
             {id && (<div><AccessRequests id={user._id} fullName={user.fullName} /></div>)}

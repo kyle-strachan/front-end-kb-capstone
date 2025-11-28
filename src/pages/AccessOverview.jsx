@@ -24,7 +24,6 @@ export default function Users() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
     const [tableNote, setTableNote] = useState(null)
-
     const [accessAssignments, setAccessAssignments] = useState([]);
 
     async function fetchAccessAssignments() {
@@ -163,7 +162,6 @@ export default function Users() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <ToastContainer />
         </div>
     );
 }

@@ -13,9 +13,9 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import "../App.css";
-import { ToastContainer, toast } from 'react-toastify';
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import notify from "../utils/toastify";
 
 export default function Departments() {
     const [departments, setDepartments] = useState([]);
@@ -25,14 +25,6 @@ export default function Departments() {
     const [newDepartment, setNewDepartment] = useState("");
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    function notify(message, type = "Info") {
-        if (type === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-    }
 
     async function fetchDepartments() {
         try {
@@ -86,7 +78,6 @@ export default function Departments() {
             } else {
                 notify("All changes saved successfully.", "success");
                 setEdited([]);
-
             }
 
             await fetchDepartments();
@@ -232,7 +223,6 @@ export default function Departments() {
                         </Button></div>
                 </div>
             </Paper>
-            <ToastContainer />
         </div>
     );
 }
