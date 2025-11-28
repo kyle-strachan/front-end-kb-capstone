@@ -9,11 +9,13 @@ import {
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
 import { useLoading } from "../context/LoadingContext";
+import Alert from '@mui/material/Alert';
 
 export default function DocsView() {
     const { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
+    const [error, setError] = useState();
     const [doc, setDoc] = useState(null);
     const [cleanHtml, setCleanHtml] = useState("");
 
@@ -37,19 +39,23 @@ export default function DocsView() {
 
     async function fetchSingleDoc() {
         setLoading(true);
+        setError(false);
         try {
             const res = await api.get(`/docs/${id}`);
             const rawHtml = res.data.doc.body;
             const resolvedHtml = await resolveKeysToUrls(rawHtml);
             setDoc(res.data.doc);
             setCleanHtml(DOMPurify.sanitize(resolvedHtml));
+        } catch {
+            setError("Cannot load documents.")
         } finally {
             setLoading(false);
         }
     }
 
 
-    if (loading) return <p>Loading...</p>;
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
         <>
@@ -57,7 +63,7 @@ export default function DocsView() {
                 <Paper sx={{ p: 3 }}>
                     <div className="space-between-container">
                         <Typography variant="h4" sx={{ mb: 2 }}>
-                            {doc.title}
+                            {doc?.title}
                         </Typography>
                         <div className="cta-btn-container">
                             <Button variant="outlined" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
@@ -70,7 +76,7 @@ export default function DocsView() {
                     </div>
 
                     <Typography sx={{ mb: 2 }}>
-                        {doc.description}
+                        {doc?.description}
                     </Typography>
                     {parse(cleanHtml)}
                 </Paper>
