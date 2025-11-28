@@ -16,6 +16,8 @@ import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import Alert from '@mui/material/Alert';
+import { Typography } from "@mui/material";
 
 export default function DocsCategories() {
     const [docsCategories, setDocsCategories] = useState([]);
@@ -30,6 +32,8 @@ export default function DocsCategories() {
 
     async function fetchDocsCategories() {
         try {
+            setLoading(true);
+            setError(null);
             const res = await api.get("/config/docs-categories");
             if (Array.isArray(res.data.docsCategories)) {
                 setDocsCategories(res.data.docsCategories);
@@ -143,15 +147,15 @@ export default function DocsCategories() {
         setPage(0);
     };
 
-    if (loading) return <p>Loading document categories...</p>;
-    if (error) return <p>{error}</p>;
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="Configure Document Categories" />
 
-            <Paper sx={{ mb: 4, p: 2 }}>
-                <h4>Add New</h4>
+            <Paper sx={{ mb: 4, p: 3 }}>
+                <Typography variant="h2">Add New Document Category</Typography>
                 <div className="btn-inline-container">
                     <TextField
                         id="input-new-doc-category"
@@ -172,34 +176,21 @@ export default function DocsCategories() {
                         }
                         required
                     />
-
-
-                    <div>
-                        <Button
-                            variant="contained"
-                            onClick={handleInsert}
-                            disabled={(newDocsCategory.trim().length) < 3 || (newDepartmentId === null)}
-                        >
-                            Insert
-                        </Button></div>
                 </div>
+                <div className="cta-btn-container"><Button
+                    variant="contained"
+                    onClick={handleInsert}
+                    disabled={(newDocsCategory.trim().length) < 3 || (newDepartmentId === null)}
+                >
+                    Insert
+                </Button></div>
             </Paper>
 
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>Document Categories</h3>
-
-
-
-
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
+                <Typography variant="h2">Document Categories</Typography>
 
                 <div className="cta-btn-container">
-                    <Button
-                        variant="contained"
-                        onClick={handleRefresh}
-                        sx={{ mb: 2 }}
-                    >
-                        {loading === true ? "Loading" : "Refresh"}
-                    </Button>
+
                     <Button
                         variant="contained"
                         onClick={handleSave}
@@ -208,19 +199,27 @@ export default function DocsCategories() {
                     >
                         Save
                     </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
+                    </Button>
                 </div>
 
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+                        size="small"
                         aria-label="departments table"
                         sx={{ minWidth: 650, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell>Department</TableCell>
-                                <TableCell>Category Name</TableCell>
-                                <TableCell>Active</TableCell>
+                                <TableCell sx={{ width: "40%", pl: 0 }}>Department</TableCell>
+                                <TableCell sx={{ width: "60%" }}>Category Name</TableCell>
+                                <TableCell sx={{ width: 120 }}>Active</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -236,14 +235,12 @@ export default function DocsCategories() {
                                                 : "inherit",
                                         }}
                                     >
-                                        <TableCell
-                                            sx={{ display: { xs: "none", sm: "table-cell" } }}
-                                        >
+                                        <TableCell sx={{ width: "40%", pl: 0 }}>
                                             {d.departmentId.department}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: "60%" }}>
                                             <TextField
-                                                variant="standard"
+                                                variant="outlined"
                                                 value={d.category}
                                                 onChange={(e) =>
                                                     handleFieldChange(
@@ -256,7 +253,7 @@ export default function DocsCategories() {
                                             />
                                         </TableCell>
 
-                                        <TableCell>
+                                        <TableCell sx={{ width: 120 }}>
                                             <Checkbox
                                                 checked={d.isActive}
                                                 onChange={(e) =>

@@ -12,10 +12,11 @@ import ApplicationsTransferList from "../components/ApplicationsTransferList";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import Alert from '@mui/material/Alert';
 
 export default function AccessRequestNew() {
     const navigate = useNavigate();
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -107,16 +108,14 @@ export default function AccessRequestNew() {
         }
     }
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Module failure.</p>
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
         <div style={{ margin: "0 auto", padding: "1rem" }}>
             <PageTitle title="New Access Request" />
             <Paper sx={{ p: 3 }}>
-                <Typography variant="h5" sx={{ mb: 2 }}>
-                    Request Application Access
-                </Typography>
+                <Typography variant="h2">Request Application Access</Typography>
 
                 <SelectWithSearch
                     options={users}
@@ -128,10 +127,10 @@ export default function AccessRequestNew() {
                     }}
                 />
 
-                <Typography>Request Systems</Typography>
-                <ApplicationsTransferList systems={systemApplications} selected={selectedApplications} onChange={setSelectedApplications} />
+                <ApplicationsTransferList systems={systemApplications} selected={selectedApplications} onChange={setSelectedApplications} sx={{ mt: 10 }} />
 
-                <TextField
+                {/* Notes not fully implemented into UI */}
+                {/* <TextField
                     fullWidth
                     multiline
                     minRows={3}
@@ -142,7 +141,7 @@ export default function AccessRequestNew() {
                         setRequestNote(e.target.value)
                     }
                     sx={{ mt: 2 }}
-                />
+                /> */}
 
 
                 <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>

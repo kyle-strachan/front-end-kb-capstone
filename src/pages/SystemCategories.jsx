@@ -15,11 +15,13 @@ import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import { Typography } from "@mui/material";
+import Alert from '@mui/material/Alert';
 
 export default function SystemCategories() {
     const [systemCategories, setSystemCategories] = useState([]);
     const [edited, setEdited] = useState([]);
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [newSystemCategory, setNewSystemCategory] = useState("");
     const [page, setPage] = useState(0);
@@ -27,6 +29,8 @@ export default function SystemCategories() {
 
     async function fetchSystemCategories() {
         try {
+            setLoading(true);
+            setError(null);
             const res = await api.get("/config/system-categories");
             if (Array.isArray(res.data.systemCategories)) {
                 setSystemCategories(res.data.systemCategories);
@@ -112,38 +116,39 @@ export default function SystemCategories() {
         setPage(0);
     };
 
-    if (loading) return <p>Loading system categories...</p>;
-    if (error) return <p>{error}</p>;
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="System Categories" />
 
-            <Paper sx={{ mb: 4, p: 2 }}>
-                <h3>Add New</h3>
+            <Paper sx={{ mb: 4, p: 3 }}>
+                <Typography variant="h2">Add New System Category</Typography>
                 <div className="btn-inline-container">
                     <TextField
                         id="input-new-system-category"
                         helperText="Minimum three characters"
                         label="System Category Name"
-                        variant="standard"
+                        variant="outlined"
                         value={newSystemCategory}
                         onChange={(e) => setNewSystemCategory(e.target.value)}
-                        sx={{ mr: 2, width: "100%" }}
+                        sx={{ width: "100%" }}
                     />
-                    <div>
-                        <Button
-                            variant="contained"
-                            onClick={handleInsert}
-                            disabled={newSystemCategory.trim().length < 3}
-                        >
-                            Insert
-                        </Button></div>
+                </div>
+                <div className="cta-btn-container">
+                    <Button
+                        variant="contained"
+                        onClick={handleInsert}
+                        disabled={newSystemCategory.trim().length < 3}
+                    >
+                        Insert
+                    </Button>
                 </div>
             </Paper>
 
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>System Categories</h3>
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
+                <Typography variant="h2">System Categories</Typography>
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
@@ -159,13 +164,14 @@ export default function SystemCategories() {
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+                        size="small"
                         aria-label="system categories table"
                         sx={{ minWidth: 650, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell>System Category Name</TableCell>
-                                <TableCell>Active</TableCell>
+                                <TableCell sx={{ width: "100%", pl: 0 }}>System Category Name</TableCell>
+                                <TableCell sx={{ width: 120 }}>Active</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -181,9 +187,9 @@ export default function SystemCategories() {
                                                 : "inherit",
                                         }}
                                     >
-                                        <TableCell>
+                                        <TableCell sx={{ width: "100%", pl: 0 }}>
                                             <TextField
-                                                variant="standard"
+                                                variant="outlined"
                                                 value={d.category}
                                                 onChange={(e) =>
                                                     handleFieldChange(
@@ -195,7 +201,7 @@ export default function SystemCategories() {
                                                 fullWidth
                                             />
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: 120 }}>
                                             <Checkbox
                                                 checked={d.isActive}
                                                 onChange={(e) =>

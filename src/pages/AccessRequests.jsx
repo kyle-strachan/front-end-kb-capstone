@@ -15,6 +15,8 @@ import CustomDialogYesNo from "../components/CustomDialogYesNo";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import Alert from '@mui/material/Alert';
+import { Typography } from "@mui/material";
 
 export default function AccessRequests() {
     const navigate = useNavigate();
@@ -34,7 +36,6 @@ export default function AccessRequests() {
 
             if (res.data.accessRequests) {
                 setAccessRequests(res.data.accessRequests);
-                // console.log(res.data.accessRequests);
             } else {
                 setAccessRequests([]);
                 setError(res.data.message || "No pending access requests found.");
@@ -85,15 +86,15 @@ export default function AccessRequests() {
         setPage(0);
     };
 
-    if (error) return <p>{error}</p>;
-
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="Pending Access Requests" />
 
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>Pending Requests</h3>
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
+                <Typography variant="h2">Pending Access Requests</Typography>
 
                 <div className="cta-btn-container">
                     <Button
@@ -112,19 +113,20 @@ export default function AccessRequests() {
                     </Button>
                 </div>
 
-                <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
+                <TableContainer sx={{ tableLayout: "fixed", width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+                        size="small"
                         aria-label="users table"
                         sx={{ minWidth: 650, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell>Full Name</TableCell>
+                                <TableCell sx={{ pl: 0 }}>Full Name</TableCell>
                                 <TableCell>Application</TableCell>
                                 <TableCell>Request Type</TableCell>
                                 <TableCell>Requested By/At</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell sx={{ width: "200px" }}></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -135,7 +137,7 @@ export default function AccessRequests() {
                                         key={d._id}
                                         hover
                                     >
-                                        <TableCell>
+                                        <TableCell sx={{ pl: 0 }}>
                                             {d.userId?.fullName}
                                         </TableCell>
                                         <TableCell>
@@ -151,7 +153,7 @@ export default function AccessRequests() {
                                         <TableCell>
                                             {d.requestedBy?.fullName}/{new Date(d.requestedAt).toLocaleString()}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: "200px", pr: 0 }}>
                                             <div className="cta-btn-container">
                                                 {d.requestType === "Revoke" ? (<CustomDialogYesNo
                                                     buttonLabel={"Confirm Revocation"}

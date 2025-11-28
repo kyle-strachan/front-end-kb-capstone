@@ -25,7 +25,7 @@ export default function SelectWithSearch({
             renderInput={(params) => (
                 <TextField {...params} label={label} placeholder="Search..." variant="outlined" />
             )}
-            size="small"
+            // size="medium"
             fullWidth
             sx={{ mb: 2 }}
         />

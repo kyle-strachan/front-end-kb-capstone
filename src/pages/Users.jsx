@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import Button from "@mui/material/Button";
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -17,6 +17,7 @@ import "../App.css";
 import ResetPasswordForm from "../components/ResetPasswordForm";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import Alert from '@mui/material/Alert';
 
 export default function Users() {
     const navigate = useNavigate();
@@ -61,8 +62,6 @@ export default function Users() {
         setPage(0);
     };
 
-    if (error) return <p>{error}</p>;
-
     // Multiple filters
     const filteredUsers = users.filter((u) => u.isActive === showActive).filter((u) => {
         const term = searchTerm.toLowerCase(); return (
@@ -71,18 +70,21 @@ export default function Users() {
             (u.position || "").toLowerCase().includes(term));
     });
 
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
+
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="Manage Users" />
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h2>Users</h2>
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
+                <Typography variant="h2">Users</Typography>
 
                 <div className="space-between-container">
                     <div className="filter-container">
 
                         <TextField
                             label="Search"
-                            variant="standard"
+                            variant="outlined"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             sx={{ mb: 2, mr: 2, width: 300 }}
@@ -126,15 +128,16 @@ export default function Users() {
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+                        size="small"
                         aria-label="users table"
                         sx={{ minWidth: 650, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell>Full Name</TableCell>
+                                <TableCell sx={{ pl: 0 }}>Full Name</TableCell>
                                 <TableCell>Username</TableCell>
                                 <TableCell>Position</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell sx={{ pr: 0 }}></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -145,7 +148,7 @@ export default function Users() {
                                         key={d._id}
                                         hover
                                     >
-                                        <TableCell>
+                                        <TableCell sx={{ pl: 0 }}>
                                             {d.fullName}
                                         </TableCell>
                                         <TableCell>
@@ -154,7 +157,7 @@ export default function Users() {
                                         <TableCell>
                                             {d.position}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ pr: 0 }}>
                                             <div className="cta-btn-container">
                                                 <Button variant="outlined" onClick={() => navigate(`/users/${d._id}`)}>
                                                     Edit

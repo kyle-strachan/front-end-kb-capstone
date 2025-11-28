@@ -15,11 +15,13 @@ import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import { Typography } from "@mui/material";
+import Alert from '@mui/material/Alert';
 
 export default function Locations() {
     const [locations, setLocations] = useState([]);
     const [edited, setEdited] = useState([]);
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [newLocation, setNewLocation] = useState("");
     const [page, setPage] = useState(0);
@@ -27,6 +29,8 @@ export default function Locations() {
 
     async function fetchLocations() {
         try {
+            setLoading(true);
+            setError(null);
             const res = await api.get("/config/locations");
             if (Array.isArray(res.data.locations)) {
                 setLocations(res.data.locations);
@@ -79,7 +83,6 @@ export default function Locations() {
                 setEdited([]);
 
             }
-
             await fetchLocations();
         } catch (error) {
             console.error("Save failed:", error.message);
@@ -112,37 +115,39 @@ export default function Locations() {
         setPage(0);
     };
 
-    if (loading) return <p>Loading locations...</p>;
-    if (error) return <p>{error}</p>;
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
             <PageTitle title="Configure Locations" />
-            <Paper sx={{ mb: 4, p: 2 }}>
-                <h3>Add New</h3>
+            <Paper sx={{ mb: 4, p: 3 }}>
+                <Typography variant="h2">Add New Location</Typography>
                 <div className="btn-inline-container">
                     <TextField
                         id="input-new-location"
                         helperText="Minimum three characters"
                         label="Location Name"
-                        variant="standard"
+                        variant="outlined"
                         value={newLocation}
                         onChange={(e) => setNewLocation(e.target.value)}
-                        sx={{ mr: 2, width: "100%" }}
+                        sx={{ width: "100%" }}
                     />
-                    <div>
-                        <Button
-                            variant="contained"
-                            onClick={handleInsert}
-                            disabled={newLocation.trim().length < 3}
-                        >
-                            Insert
-                        </Button></div>
+                </div>
+                <div className="cta-btn-container">
+                    <Button
+                        variant="contained"
+                        onClick={handleInsert}
+                        disabled={newLocation.trim().length < 3}
+                    >
+                        Insert
+                    </Button>
                 </div>
             </Paper>
 
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>Locations</h3>
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
+                <Typography variant="h2">Locations</Typography>
+
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
@@ -158,16 +163,14 @@ export default function Locations() {
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+                        size="small"
                         aria-label="locations table"
                         sx={{ minWidth: 650, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
                                 <TableCell>Location Name</TableCell>
-                                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                                    ID (dev only)
-                                </TableCell>
-                                <TableCell>Active</TableCell>
+                                <TableCell sx={{ width: 120 }}>Active</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -183,9 +186,9 @@ export default function Locations() {
                                                 : "inherit",
                                         }}
                                     >
-                                        <TableCell>
+                                        <TableCell sx={{ width: "100%", pl: 0 }}>
                                             <TextField
-                                                variant="standard"
+                                                variant="outlined"
                                                 value={dept.location}
                                                 onChange={(e) =>
                                                     handleFieldChange(
@@ -197,12 +200,7 @@ export default function Locations() {
                                                 fullWidth
                                             />
                                         </TableCell>
-                                        <TableCell
-                                            sx={{ display: { xs: "none", sm: "table-cell" } }}
-                                        >
-                                            {dept._id}
-                                        </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: 120 }}>
                                             <Checkbox
                                                 checked={dept.isActive}
                                                 onChange={(e) =>

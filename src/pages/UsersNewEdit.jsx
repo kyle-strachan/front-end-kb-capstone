@@ -197,7 +197,7 @@ export default function UsersNewEdit() {
                                 variant="outlined"
                             />
                         )}
-                        size="small"
+                        size="medium"
                         fullWidth
                         sx={{ mb: 2 }}
                     />

@@ -13,6 +13,8 @@ import TableRow from "@mui/material/TableRow";
 import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import { Typography } from "@mui/material";
+import Alert from '@mui/material/Alert';
 
 export default function SystemApplications() {
     const navigate = useNavigate();
@@ -58,14 +60,15 @@ export default function SystemApplications() {
         setPage(0);
     };
 
-    if (error) return <p>{error}</p>;
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="System Applications" />
 
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>System Applications</h3>
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
+                <Typography variant="h2">System Applications</Typography>
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
@@ -87,14 +90,15 @@ export default function SystemApplications() {
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+                        size="small"
                         aria-label="system applications table"
                         sx={{ minWidth: 650, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell>System Application Name</TableCell>
+                                <TableCell sx={{ width: "40%", pl: 0 }}>System Application Name</TableCell>
                                 <TableCell>Category</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell sx={{ width: 120 }}></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -105,14 +109,14 @@ export default function SystemApplications() {
                                         key={d._id}
                                         hover
                                     >
-                                        <TableCell>
+                                        <TableCell sx={{ width: "40%", pl: 0 }}>
                                             {d.system}
                                         </TableCell>
                                         <TableCell>
                                             {systemCategories.find((c) => c._id === d.category)?.category || 'Undefined'}
 
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: 120, pr: 0 }}>
                                             <div className="cta-btn-container">
                                                 <Button variant="outlined" onClick={() => navigate(`/system-applications/${d._id}`)}>
                                                     Edit

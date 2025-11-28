@@ -148,7 +148,7 @@ export default function ApplicationsTransferList({ systems, selected, onChange }
         <Grid
             container
             spacing={2}
-            sx={{ justifyContent: 'center', alignItems: 'center' }}
+            sx={{ mt: 3, mb: 3 }}
         >
             <Grid>{customList('Available Applications', left)}</Grid>
             <Grid>

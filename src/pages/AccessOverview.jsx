@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import Button from "@mui/material/Button";
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,10 +11,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { ToastContainer } from "react-toastify";
 import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import Alert from '@mui/material/Alert';;
 
 export default function Users() {
     const navigate = useNavigate();
@@ -28,6 +28,7 @@ export default function Users() {
 
     async function fetchAccessAssignments() {
         setLoading(true);
+        setError(null);
         setTableNote("");
         try {
             const res = await api.get("/uac/access-assignments")
@@ -38,8 +39,8 @@ export default function Users() {
                 setAccessAssignments(res.data.assignments);
             }
         } catch (error) {
-            // console.log("Error!");
             setTableNote("No access assignments found.");
+            setError(`Could not load Access Assignments. ${error}`)
         } finally {
             setLoading(false);
         }
@@ -59,7 +60,8 @@ export default function Users() {
         setPage(0);
     };
 
-    if (error) return <p>{error}</p>;
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     // Multiple filters
     const filteredAccessAssignments = accessAssignments.filter((d) => {
@@ -71,18 +73,18 @@ export default function Users() {
     });
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="Access Overview" />
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>Current Assignments</h3>
+                <Typography variant="h2">Current Assignments</Typography>
 
                 <div className="space-between-container">
                     <div className="filter-container">
 
                         <TextField
                             label="Search Name or Application"
-                            variant="standard"
+                            variant="outlined"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             sx={{ mb: 2, mr: 2, width: 300 }}
@@ -111,15 +113,16 @@ export default function Users() {
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+                        size="small"
                         aria-label="users table"
-                        sx={{ minWidth: 650, width: "100%" }}
+                        sx={{ minWidth: 650, width: "100%", tableLayout: "fixed" }}
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell>Full Name</TableCell>
-                                <TableCell>Position</TableCell>
-                                <TableCell>Application</TableCell>
-                                <TableCell>Actions</TableCell>
+                                <TableCell sx={{ width: "calc((100% - 200px) / 3)", pl: 0 }}>Full Name</TableCell>
+                                <TableCell sx={{ width: "calc((100% - 200px) / 3)" }}>Position</TableCell>
+                                <TableCell sx={{ width: "calc((100% - 200px) / 3)" }} >Application</TableCell>
+                                <TableCell sx={{ width: "200px" }}></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -130,16 +133,16 @@ export default function Users() {
                                         key={d._id}
                                         hover
                                     >
-                                        <TableCell>
+                                        <TableCell sx={{ width: "calc((100% - 200px) / 3)", pl: 0 }}>
                                             {d.userId?.fullName}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: "calc((100% - 200px) / 3)" }}>
                                             {d.userId?.position}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: "calc((100% - 200px) / 3)" }}>
                                             {d.applicationId.system}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: "200px", pr: 0 }}>
                                             <div className="cta-btn-container">
                                                 <Button variant="outlined" onClick={() => navigate(`/users/${d.userId._id}`)}>
                                                     Manage User

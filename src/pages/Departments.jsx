@@ -16,11 +16,13 @@ import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import { Typography } from "@mui/material";
+import Alert from '@mui/material/Alert';
 
 export default function Departments() {
     const [departments, setDepartments] = useState([]);
     const [edited, setEdited] = useState([]);
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
     const [error, setError] = useState(null);
     const [newDepartment, setNewDepartment] = useState("");
     const [page, setPage] = useState(0);
@@ -28,6 +30,8 @@ export default function Departments() {
 
     async function fetchDepartments() {
         try {
+            setLoading(true);
+            setError(null);
             const res = await api.get("/config/departments");
             if (Array.isArray(res.data.departments)) {
                 setDepartments(res.data.departments);
@@ -112,15 +116,39 @@ export default function Departments() {
         setPage(0);
     };
 
-    if (loading) return <p>Loading departments...</p>;
-    if (error) return <p>{error}</p>;
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
             <PageTitle title="Configure Departments" />
 
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h3>Departments</h3>
+            <Paper sx={{ mb: 4, p: 3 }}>
+                <Typography variant="h2">Add New Department</Typography>
+                {/* <div className="btn-inline-container"> */}
+                <TextField
+                    id="input-new-department"
+                    helperText="Minimum three characters"
+                    label="Department Name"
+                    variant="outlined"
+                    value={newDepartment}
+                    onChange={(e) => setNewDepartment(e.target.value)}
+                    sx={{ mr: 2, width: "100%" }}
+                />
+                {/* </div> */}
+                <div className="cta-btn-container">
+                    <Button
+                        variant="contained"
+                        onClick={handleInsert}
+                        disabled={newDepartment.trim().length < 3}
+                    >
+                        Insert
+                    </Button>
+                </div>
+            </Paper>
+
+            <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
+                <Typography variant="h2">Departments</Typography>
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
@@ -136,13 +164,15 @@ export default function Departments() {
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+
+                        size="small"
                         aria-label="departments table"
                         sx={{ minWidth: 395, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell>Department Name</TableCell>
-                                <TableCell>Active</TableCell>
+                                <TableCell sx={{ width: "100%" }}>Department Name</TableCell>
+                                <TableCell sx={{ width: 120 }}>Active</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -158,9 +188,9 @@ export default function Departments() {
                                                 : "inherit",
                                         }}
                                     >
-                                        <TableCell>
+                                        <TableCell sx={{ width: "100%", pl: 0 }}>
                                             <TextField
-                                                variant="standard"
+                                                variant="outlined"
                                                 value={dept.department}
                                                 onChange={(e) =>
                                                     handleFieldChange(
@@ -172,7 +202,7 @@ export default function Departments() {
                                                 fullWidth
                                             />
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ width: 120 }}>
                                             <Checkbox
                                                 checked={dept.isActive}
                                                 onChange={(e) =>
@@ -199,29 +229,6 @@ export default function Departments() {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-            </Paper>
-
-            <Paper sx={{ mt: 4, p: 2 }}>
-                <h4>Add New</h4>
-                <div className="btn-inline-container">
-                    <TextField
-                        id="input-new-department"
-                        helperText="Minimum three characters"
-                        label="Department Name"
-                        variant="standard"
-                        value={newDepartment}
-                        onChange={(e) => setNewDepartment(e.target.value)}
-                        sx={{ mr: 2, width: "100%" }}
-                    />
-                    <div>
-                        <Button
-                            variant="contained"
-                            onClick={handleInsert}
-                            disabled={newDepartment.trim().length < 3}
-                        >
-                            Insert
-                        </Button></div>
-                </div>
             </Paper>
         </div>
     );

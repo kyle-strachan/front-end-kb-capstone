@@ -6,16 +6,19 @@ import { api } from "../api";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import Alert from '@mui/material/Alert';
 
 export default function Account() {
     const { user, refreshUser } = useAuth();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPassword2, setNewPassword2] = useState("");
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
+
 
     async function handleUpdatePassword() {
         try {
+            setLoading(true);
             const res = await api.patch("/auth/change-password", { newPassword }); //Add new password only.
             if (res.status === 200) {
                 notify("Password changed successfully.", "success");
@@ -32,29 +35,21 @@ export default function Account() {
             setCurrentPassword("");
             setNewPassword("");
             setNewPassword2("");
+            setLoading(false);
         }
     }
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="My Account" />
-            <Paper sx={{ p: 3, mb: "1rem" }}>
-                <Typography variant="h5" sx={{ mb: 2 }}>
-                    My Account
-                </Typography>
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                    {user.fullName}
-                </Typography>
-                <Typography sx={{ mb: 2 }}>Username: {user.username}</Typography>
-                <Typography sx={{ mb: 2 }}>Position: {user.postion}</Typography>
-                <Typography sx={{ mb: 2 }}>Email: {user.email}</Typography>
-                <Typography sx={{ mb: 2 }}>Assigned Roles: {user.roles}</Typography>
-            </Paper>
             <Paper sx={{ p: 3 }}>
+                <Typography variant="h2">{user.fullName} ({user.username})</Typography>
                 <Typography variant="h6" sx={{ mb: 2 }}>
+                </Typography>
+                <Typography variant="h3" sx={{ mb: 2 }}>
                     Change Password
                 </Typography>
-                {user.passwordMustChange === true && (<div className="cta-notice">Password must be changed to continue.</div>)}
+                {user.passwordMustChange === true && (<Alert sx={{ mb: 2 }} severity="warning">Password must be changed to continue.</Alert>)}
 
                 <InputTextPassword value={(e) => setCurrentPassword(e.target.value)} label="Current Password" />
                 <InputTextPassword value={(e) => setNewPassword(e.target.value)} label="New Password" />

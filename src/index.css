@@ -26,6 +26,7 @@
   justify-content: space-between;
   background-color: #f7f7f7;
   background-image: url("images/bg.webp");
+  /* Keep absolute to prevent conflict with React router */
 }
 
 /* this controls width and centring */
@@ -36,6 +37,12 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+.page-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 a {

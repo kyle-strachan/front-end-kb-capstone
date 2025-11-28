@@ -1,4 +1,3 @@
-// utils/toastify.js
 import { toast } from "react-toastify";
 
 export default function notify(message, type = "info") {
