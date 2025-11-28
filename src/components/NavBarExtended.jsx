@@ -43,7 +43,7 @@ export default function AccountMenu() {
         >
             <Box sx={{ height: "50px", display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center', padding: '5px 10px' }}>
                 <div style={{ display: "flex" }}>
-                    <img style={{ padding: "5px 10px", width: "40px" }} src="/logo-white.svg" />
+                    <img style={{ padding: "5px 10px", width: "40px" }} src="/logo-white-sq.svg" />
                     <div className="nav-bar-links">
                         <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard" style={{ color: "inherit", textDecoration: "none" }}>Dashboard</Link></Typography>
                         <NavBarDocsMenu />
