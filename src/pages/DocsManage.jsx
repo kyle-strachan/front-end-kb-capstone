@@ -16,6 +16,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
+import Alert from '@mui/material/Alert';
 
 export default function Docs() {
     const navigate = useNavigate();
@@ -60,8 +61,6 @@ export default function Docs() {
         setPage(0);
     };
 
-    if (error) return <p>{error}</p>;
-
     // Multiple filters
     const filteredDocs = docs.filter((d) => d.isArchived !== showActive).filter((d) => {
         const term = searchTerm.toLowerCase(); return (
@@ -70,23 +69,25 @@ export default function Docs() {
             d.title.toLowerCase().includes(term));
     });
 
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
+
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="Manage Documents" />
-            <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h2>Manage Documents</h2>
+            <Paper sx={{ width: "100%", overflow: "hidden", p: 3 }}>
+                <Typography variant="h2">All Documents</Typography>
 
                 <Typography variant="subtitle1" gutterBottom sx={{ mb: "2rem" }}>
                     Manage all documents that will be shown to Viewer users. Archive documents to remove from the Document Tree view and Search results.
                 </Typography>
-                {/* <h3>Search</h3> */}
 
                 <div className="space-between-container">
                     <div className="filter-container">
 
                         <TextField
                             label="Filter"
-                            variant="standard"
+                            variant="outlined"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             sx={{ mb: 2, mr: 2, width: 300 }}
@@ -130,16 +131,17 @@ export default function Docs() {
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
+                        size="small"
                         aria-label="docs-table"
                         sx={{ minWidth: 650, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell>Title</TableCell>
+                                <TableCell sx={{ pl: 0 }}>Title</TableCell>
                                 <TableCell>Description</TableCell>
                                 <TableCell>Department</TableCell>
                                 <TableCell>Category</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell sx={{ pr: 0 }}></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -150,7 +152,7 @@ export default function Docs() {
                                         key={d._id}
                                         hover
                                     >
-                                        <TableCell>
+                                        <TableCell sx={{ pl: 0 }}>
                                             {d.title}
                                         </TableCell>
                                         <TableCell>
@@ -162,7 +164,7 @@ export default function Docs() {
                                         <TableCell>
                                             {d.docsCategory?.category}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{ pr: 0 }}>
                                             <div className="cta-btn-container">
                                                 <Button variant="outlined" onClick={() => navigate(`/docs/view/${d._id}`)}>
                                                     View
