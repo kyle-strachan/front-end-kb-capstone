@@ -106,17 +106,17 @@ export default function AccessRequests() {
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
-                        onClick={handleRefresh}
-                        sx={{ mb: 2 }}
-                    >
-                        {loading === true ? "Loading" : "Refresh"}
-                    </Button>
-                    <Button
-                        variant="contained"
                         onClick={() => navigate("/access-request")}
                         sx={{ mb: 2 }}
                     >
                         New
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
                     </Button>
                 </div>
 
@@ -144,10 +144,10 @@ export default function AccessRequests() {
                                         hover
                                     >
                                         <TableCell>
-                                            {d.userId.fullName}
+                                            {d.userId?.fullName}
                                         </TableCell>
                                         <TableCell>
-                                            {d.applicationId.system}
+                                            {d.applicationId?.system}
                                         </TableCell>
                                         <TableCell>
                                             {/* {d.requestType === "Revoke" ? <Typography color="red">{d.requestType}</Typography> : d.requestType} */}
@@ -157,7 +157,7 @@ export default function AccessRequests() {
 
                                         </TableCell>
                                         <TableCell>
-                                            {d.requestedBy.fullName}/{new Date(d.requestedAt).toLocaleString()}
+                                            {d.requestedBy?.fullName}/{new Date(d.requestedAt).toLocaleString()}
                                         </TableCell>
                                         <TableCell>
                                             <div className="cta-btn-container">

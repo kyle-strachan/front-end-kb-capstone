@@ -78,17 +78,17 @@ export default function SystemApplications() {
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
-                        onClick={handleRefresh}
-                        sx={{ mb: 2 }}
-                    >
-                        {loading === true ? "Loading" : "Refresh"}
-                    </Button>
-                    <Button
-                        variant="contained"
                         onClick={() => navigate("/system-applications/new")}
                         sx={{ mb: 2 }}
                     >
                         New
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
                     </Button>
                 </div>
 

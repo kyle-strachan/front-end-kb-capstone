@@ -84,17 +84,17 @@ export default function RequestsOverview({ id, fullName }) {
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
-                        onClick={handleRefresh}
-                        sx={{ mb: 2 }}
-                    >
-                        {loading === true ? "Loading" : "Refresh"}
-                    </Button>
-                    <Button
-                        variant="contained"
                         onClick={() => navigate("/users/new")}
                         sx={{ mb: 2 }}
                     >
                         New
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
                     </Button>
                 </div>
 
