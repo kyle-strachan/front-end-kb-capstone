@@ -12,7 +12,6 @@ import { useLoading } from "../context/LoadingContext";
 import Alert from '@mui/material/Alert';
 import "./DocsView.css";
 
-
 export default function DocsView() {
     const { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
@@ -20,10 +19,6 @@ export default function DocsView() {
     const [error, setError] = useState();
     const [doc, setDoc] = useState(null);
     const [cleanHtml, setCleanHtml] = useState("");
-
-    useEffect(() => {
-        fetchSingleDoc();
-    }, []);
 
     async function resolveKeysToUrls(html) {
         const regex = /wasabi-key:([^"]+)/g;
@@ -55,6 +50,9 @@ export default function DocsView() {
         }
     }
 
+    useEffect(() => {
+        fetchSingleDoc();
+    }, []);
 
     if (error) return (
         <div className="page-content"><Alert severity="error">{error}</Alert></div>);
@@ -62,26 +60,29 @@ export default function DocsView() {
     return (
         <>
             <div style={{ margin: "0 auto", padding: "1rem" }}>
-                <Paper sx={{ p: 3 }}>
-                    <div className="space-between-container">
-                        <Typography variant="h4" sx={{ mb: 2 }}>
-                            {doc?.title}
-                        </Typography>
-                        <div className="cta-btn-container">
-                            <Button variant="outlined" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
-                                Edit
-                            </Button>
-                            <Button variant="contained" onClick={() => navigate(-1)}>
-                                Close
-                            </Button>
-                        </div>
-                    </div>
-
+                <Paper sx={{ p: 3, mb: 4 }}>
+                    <Typography variant="h5" sx={{ mb: 2 }}>
+                        {doc?.title}
+                    </Typography>
                     <Typography sx={{ mb: 2 }}>
                         {doc?.description}
                     </Typography>
+                </Paper>
+                <Paper sx={{ p: 3 }}>
+
                     <div className="doc-body">
                         {parse(cleanHtml)}
+                    </div>
+
+                    <Typography variant="caption" sx={{ lineHeight: "10px" }}>{doc?.department.department} &gt; {doc?.docsCategory.category}<br /></Typography>
+                    <Typography variant="caption" sx={{ lineHeight: "10px" }}>Last updated by: {doc?.lastModifiedBy.fullName} on {new Date(doc?.lastModifiedAt).toDateString()}</Typography>
+                    <div className="cta-btn-container">
+                        <Button variant="contained" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
+                            Edit
+                        </Button>
+                        {/* <Button variant="contained" onClick={() => navigate(-1)}>
+                            Close
+                        </Button> */}
                     </div>
                 </Paper>
             </div>

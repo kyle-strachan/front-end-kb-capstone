@@ -1,24 +1,57 @@
+.doc-body {
+    margin-bottom: 35px;
+}
+
 .doc-body>h1,
 .doc-body>h2,
 .doc-body>h3,
 .doc-body>h4,
 .doc-body>h5,
-.doc-body>h6 {
-    color: pink;
+.doc-body>h6,
+.ck>h1,
+.ck>h2,
+.ck>h3,
+.ck>h4,
+.ck>h5,
+.ck>h6 {
+    color: #672146;
     margin-bottom: 0.8rem;
 }
 
-.doc-body>p {
+.doc-body>h1,
+.ck>h1 {
+    font-size: 2.2rem;
+}
+
+.doc-body>p,
+.ck>p {
     margin-bottom: 2rem;
 }
 
-.doc-body>figure>img {
+.doc-body>p a,
+.ck>p a {
+    color: #97376a;
+}
+
+.doc-body>p a:hover,
+.ck>p a:hover {
+    text-decoration: underline;
+    color: #ce4a90;
+}
+
+.doc-body>figure>img,
+.ck>figure>img {
     max-width: 100%;
     height: auto;
+    padding: 5px 0;
+    border-bottom: 1px solid rgb(224, 224, 224);
+    border-top: 1px solid rgb(224, 224, 224);
 }
 
 .doc-body>ul,
-.doc-body>ol {
+.doc-body>ol,
+.ck>ul,
+.ck>ol {
     margin-left: 35px;
 }
 
@@ -35,15 +68,12 @@
     border-collapse: collapse;
     border-spacing: 0;
     table-layout: fixed;
+    margin: 35px auto;
 }
-
 
 .doc-body>figure>table tbody tr:hover {
     background-color: rgb(0, 0, 0, 0.04);
 }
-
-
-
 
 .doc-body>figure>table>thead:hover {
     background-color: #fff;
@@ -55,7 +85,6 @@
 
     /* background-color: rgb(248, 248, 248); */
 }
-
 
 .doc-body>figure>table td:first-child {
     text-align: left;
