@@ -29,7 +29,7 @@ export default function AccessRequestNew() {
         try {
             setLoading(true);
             setError(null);
-            const res = await api.get("/users/");
+            const res = await api.get("/users/active");
             if (res.data.users) {
                 setUsers(res.data.users);
             } else {
@@ -98,8 +98,7 @@ export default function AccessRequestNew() {
             notify("All requests submitted successfully.", "success");
             return;
         } catch (error) {
-            console.error("Save failed:", error.message);
-            notify("Failed to save changes.", "error");
+            notify(error.message || "Failed to save changes.", "error");
         } finally {
             // Reset form
             setSelectedUser(null);
