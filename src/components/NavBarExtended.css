@@ -31,3 +31,13 @@
         display: flex;
     }
 }
+
+.nav-bar-lobby-lock {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .nav-bar-lobby-lock {
+        display: flex;
+    }
+}

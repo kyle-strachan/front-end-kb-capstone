@@ -260,7 +260,7 @@ export default function DocTree() {
       defaultExpandedItems={["1", "1.1"]}
       defaultSelectedItems="1.1"
       sx={{
-        maxWidth: 400,
+        // maxWidth: 400,
         overflow: "visible", // no internal scrollbars
       }}
       slots={{ item: CustomTreeItem }}
