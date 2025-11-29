@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import DocTree from "../components/DocTree";
 import RequestsOverview from '../components/RequestsOverview';
 import DocSearch from '../components/DocSearchBox';
-import { useLoading } from "../context/LoadingContext";
+// import { useLoading } from "../context/LoadingContext";
 import { Typography } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import PlaceholderMaintenanceRequest from '../components/PlaceholderMaintenanceRequest';
@@ -17,16 +17,15 @@ import PlaceholderWebsiteRequest from '../components/PlaceholderWebsiteRequest';
 import PlaceholderItRequest from '../components/PlaceholderItRequest';
 
 export default function Dashboard() {
-    const { loading, setLoading } = useLoading();
+    // const { loading, setLoading } = useLoading();
     return (
         <div style={{ maxWidth: "1280px", height: "vh", margin: "0 auto", padding: "1rem" }}>
-            {/* <h2>Dashboard</h2> */}
-            <div style={{ display: "flex", flexDirection: "row", gap: "1rem", width: "100%" }}>
-                <div>
-                    <Paper style={{ width: "300px" }}>
+            <div className="dashboard-two-column">
+                <div className="dashboard-left-column">
+                    <Paper style={{ width: "100%" }}>
                         <DocSearch />
                     </Paper>
-                    <Paper style={{ width: "300px", marginBottom: "1rem" }}>
+                    <Paper style={{ width: "100%", marginBottom: "1rem" }}>
                         <DocTree />
                     </Paper>
                 </div>
