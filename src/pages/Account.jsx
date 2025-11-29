@@ -51,9 +51,9 @@ export default function Account() {
                 </Typography>
                 {user.passwordMustChange === true && (<Alert sx={{ mb: 2 }} severity="warning">Password must be changed to continue.</Alert>)}
 
-                <InputTextPassword value={(e) => setCurrentPassword(e.target.value)} label="Current Password" />
-                <InputTextPassword value={(e) => setNewPassword(e.target.value)} label="New Password" />
-                <InputTextPassword value={(e) => setNewPassword2(e.target.value)} label="Confirm New Password" />
+                <InputTextPassword id="current-password" value={(e) => setCurrentPassword(e.target.value)} label="Current Password" />
+                <InputTextPassword id="new-password" value={(e) => setNewPassword(e.target.value)} label="New Password" />
+                <InputTextPassword id="new-password-confirm" value={(e) => setNewPassword2(e.target.value)} label="Confirm New Password" />
                 {newPassword2.length > 0 && newPassword !== newPassword2 && (
                     <Typography color="error" sx={{ mb: 2 }}>New passwords do not match.</Typography>
                 )}
