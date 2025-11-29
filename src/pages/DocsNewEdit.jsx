@@ -21,7 +21,7 @@ export default function DocsNewEdit() {
     const [docTitle, setDocTitle] = useState("");
     const [docDescription, setDocDescription] = useState("");
     const [docIsPublic, setDocIsPublic] = useState(false);
-    const [docBody, setDocBody] = useState("Starting value");
+    const [docBody, setDocBody] = useState("");
     const [departments, setDepartments] = useState([]);
     const [newDepartmentId, setNewDepartmentId] = useState(null);
     const [docsCategories, setDocsCategories] = useState([]);
@@ -201,7 +201,10 @@ export default function DocsNewEdit() {
                         label="Department"
                         labelField="department"
                         value={newDepartmentId}
-                        onChange={(e, newValue) => setNewDepartmentId(newValue)}
+                        onChange={(e, newValue) => {
+                            setNewDepartmentId(newValue);
+                            setDocsCategoryId(null); // clear category only when user changes
+                        }}
                         required
                     />
                     <SelectWithSearch
