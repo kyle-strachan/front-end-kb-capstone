@@ -78,36 +78,31 @@ export default function Users() {
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <Typography variant="h2">Current Assignments</Typography>
+                <div className="cta-btn-container">
+                    <Button
+                        variant="contained"
+                        onClick={() => navigate("/access-request")}
+                        sx={{ mb: 2 }}
+                    >
+                        New Access Request
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
+                    </Button>
+                </div>
+                <div className="filter-container">
 
-                <div className="space-between-container">
-                    <div className="filter-container">
-
-                        <TextField
-                            label="Search Name or Application"
-                            variant="outlined"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            sx={{ mb: 2, mr: 2, width: 300 }}
-                        />
-                    </div>
-
-
-                    <div className="cta-btn-container">
-                        <Button
-                            variant="contained"
-                            onClick={() => navigate("/access-request")}
-                            sx={{ mb: 2 }}
-                        >
-                            New Access Request
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            onClick={handleRefresh}
-                            sx={{ mb: 2 }}
-                        >
-                            {loading === true ? "Loading" : "Refresh"}
-                        </Button>
-                    </div>
+                    <TextField
+                        label="Search Name or Application"
+                        variant="outlined"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        sx={{ mb: 2, mr: 2, width: 300 }}
+                    />
                 </div>
 
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>

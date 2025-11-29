@@ -78,51 +78,45 @@ export default function Users() {
             <PageTitle title="Manage Users" />
             <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
                 <Typography variant="h2">Users</Typography>
-
-                <div className="space-between-container">
-                    <div className="filter-container">
-
-                        <TextField
-                            label="Search"
-                            variant="outlined"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            sx={{ mb: 2, mr: 2, width: 300 }}
-                        />
-
-
-                        {/* Toggle to show Active / Inactive */}
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={showActive}
-                                    onChange={(e) => setShowActive(e.target.checked)}
-                                    color="primary"
-                                />
-                            }
-                            label={showActive ? "Showing Active Users" : "Showing Inactive Users"}
-                            sx={{ mb: 1 }}
-                        />
-
-                    </div>
+                <div className="cta-btn-container">
+                    <Button
+                        variant="contained"
+                        onClick={() => navigate("/users/new")}
+                        sx={{ mb: 2 }}
+                    >
+                        New
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
+                    </Button>
+                </div>
+                <div className="filter-container">
+                    <TextField
+                        label="Search"
+                        variant="outlined"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        sx={{ mb: 2, mr: 2, width: 300 }}
+                    />
 
 
-                    <div className="cta-btn-container">
-                        <Button
-                            variant="contained"
-                            onClick={() => navigate("/users/new")}
-                            sx={{ mb: 2 }}
-                        >
-                            New
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            onClick={handleRefresh}
-                            sx={{ mb: 2 }}
-                        >
-                            {loading === true ? "Loading" : "Refresh"}
-                        </Button>
-                    </div>
+                    {/* Toggle to show Active / Inactive */}
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={showActive}
+                                onChange={(e) => setShowActive(e.target.checked)}
+                                color="primary"
+                            />
+                        }
+                        label={showActive ? "Showing Active Users" : "Showing Inactive Users"}
+                        sx={{ mb: 1 }}
+                    />
+
                 </div>
 
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
