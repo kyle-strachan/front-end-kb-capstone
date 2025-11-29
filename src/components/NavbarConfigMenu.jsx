@@ -1,14 +1,15 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Divider from '@mui/material/Divider';
-
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function NavBarConfigMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const { user } = useAuth();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -46,7 +47,7 @@ export default function NavBarConfigMenu() {
                     list: { "aria-labelledby": "config-button" },
                 }}
             >
-                <MenuItem component={Link} to="/departments" onClick={handleClose}>
+                <MenuItem component={Link} to="/departments" onClick={handleClose} disabled={!user?.uiFlags?.enableDepartments}>
                     Departments
                 </MenuItem>
                 <MenuItem component={Link} to="/locations" onClick={handleClose}>
