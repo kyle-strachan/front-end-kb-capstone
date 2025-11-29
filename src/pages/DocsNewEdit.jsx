@@ -29,6 +29,7 @@ export default function DocsNewEdit() {
     const [docIsArchived, setDocIsArchived] = useState(false);
     const navigate = useNavigate();
     const { loading, setLoading } = useLoading();
+    const [error, setError] = useState(null);
 
     function handleEditorChange(newValue) {
         setDocBody(newValue);
@@ -36,11 +37,14 @@ export default function DocsNewEdit() {
 
     async function fetchDepartments() {
         try {
+            setLoading(true);
             const res = await api.get("/config/departments");
             if (Array.isArray(res.data.departments)) setDepartments(res.data.departments);
             else setDepartments([]);
-        } catch (err) {
-            console.error("Failed to fetch departments:", err.message);
+        } catch (error) {
+            setError("Could not load documents.", error.message);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -161,25 +165,12 @@ export default function DocsNewEdit() {
         }
     }
 
-    // Minimal change: insert HTML img with signed URL; normalizer will convert it to wasabi-key on save
-    // async function handleUpload(e) {
-    //     const file = e.target.files[0];
-    //     if (!file) return;
-
-    //     const formData = new FormData();
-    //     formData.append("image", file);
-
-    //     const res = await api.post(`/docs/${id}/upload-image`, formData, {
-    //         headers: { "Content-Type": "multipart/form-data" },
-    //     });
-
-    //     const imageUrl = res.data.url;
-    //     setDocBody(prev => `${prev}\n\n<img src="${imageUrl}" alt="image">`);
-    // }
-
     if (id && !doc) {
         return <div>Loading…</div>;
     }
+
+    if (error) return (
+        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
@@ -228,12 +219,6 @@ export default function DocsNewEdit() {
                     </Button>
                 </div>
             </Paper>
-            {/* <Paper sx={{ p: 2, mt: 2 }}>
-                <Button variant="contained" component="label">
-                    Upload Image
-                    <input type="file" hidden onChange={handleUpload} />
-                </Button>
-            </Paper> */}
         </div>
     );
 }
