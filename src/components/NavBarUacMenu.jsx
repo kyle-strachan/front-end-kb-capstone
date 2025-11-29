@@ -1,14 +1,15 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Divider from '@mui/material/Divider';
-
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function NavBarUacMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const { user } = useAuth();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -46,18 +47,18 @@ export default function NavBarUacMenu() {
                     list: { "aria-labelledby": "config-button" },
                 }}
             >
-                <MenuItem component={Link} to="/access-overview" onClick={handleClose}>
+                <MenuItem component={Link} to="/access-overview" onClick={handleClose} disabled={!user?.uiFlags?.enableAccessRequests}>
                     Access Overview
                 </MenuItem>
-                <MenuItem component={Link} to="/access-requests" onClick={handleClose}>
+                <MenuItem component={Link} to="/access-requests" onClick={handleClose} disabled={!user?.uiFlags?.enableAccessRequests}>
                     Manage Access Requests
                 </MenuItem>
 
-                <MenuItem component={Link} to="/access-request" onClick={handleClose}>
+                <MenuItem component={Link} to="/access-request" onClick={handleClose} disabled={!user?.uiFlags?.enableAccessRequests}>
                     New Access Request
                 </MenuItem>
                 <Divider />
-                <MenuItem component={Link} to="/users" onClick={handleClose}>
+                <MenuItem component={Link} to="/users" onClick={handleClose} disabled={!user?.uiFlags?.enableUsers}>
                     Users
                 </MenuItem>
             </Menu>

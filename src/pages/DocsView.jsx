@@ -9,6 +9,7 @@ import {
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
 import { useLoading } from "../context/LoadingContext";
+import { useAuth } from "../context/AuthContext";
 import Alert from '@mui/material/Alert';
 import "./DocsView.css";
 
@@ -19,6 +20,7 @@ export default function DocsView() {
     const [error, setError] = useState();
     const [doc, setDoc] = useState(null);
     const [cleanHtml, setCleanHtml] = useState("");
+    const { user } = useAuth();
 
     async function resolveKeysToUrls(html) {
         const regex = /wasabi-key:([^"]+)/g;
@@ -67,6 +69,13 @@ export default function DocsView() {
                     <Typography sx={{ mb: 2 }}>
                         {doc?.description}
                     </Typography>
+                    <div className="cta-btn-container">
+                        {user?.uiFlags?.enableDocs && (
+                            <Button variant="contained" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
+                                Edit
+                            </Button>
+                        )}
+                    </div>
                 </Paper>
                 <Paper sx={{ p: 3 }}>
 
@@ -76,14 +85,6 @@ export default function DocsView() {
 
                     <Typography variant="caption" sx={{ lineHeight: "10px" }}>{doc?.department.department} &gt; {doc?.docsCategory.category}<br /></Typography>
                     <Typography variant="caption" sx={{ lineHeight: "10px" }}>Last updated by: {doc?.lastModifiedBy.fullName} on {new Date(doc?.lastModifiedAt).toDateString()}</Typography>
-                    <div className="cta-btn-container">
-                        <Button variant="contained" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
-                            Edit
-                        </Button>
-                        {/* <Button variant="contained" onClick={() => navigate(-1)}>
-                            Close
-                        </Button> */}
-                    </div>
                 </Paper>
             </div>
         </>

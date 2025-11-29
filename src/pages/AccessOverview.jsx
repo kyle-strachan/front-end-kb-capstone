@@ -15,6 +15,7 @@ import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import Alert from '@mui/material/Alert';;
+import { useAuth } from "../context/AuthContext";
 
 export default function Users() {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function Users() {
     const [searchTerm, setSearchTerm] = useState("");
     const [tableNote, setTableNote] = useState(null)
     const [accessAssignments, setAccessAssignments] = useState([]);
+    const { user } = useAuth();
 
     async function fetchAccessAssignments() {
         setLoading(true);
@@ -139,9 +141,11 @@ export default function Users() {
                                         </TableCell>
                                         <TableCell sx={{ width: "200px", pr: 0 }}>
                                             <div className="cta-btn-container">
-                                                <Button variant="outlined" onClick={() => navigate(`/users/${d.userId._id}`)}>
-                                                    Manage User
-                                                </Button>
+                                                {user?.uiFlags?.enableUserEdit && (
+                                                    <Button variant="outlined" onClick={() => navigate(`/users/${d.userId._id}`)}>
+                                                        Manage User
+                                                    </Button>
+                                                )}
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -153,7 +157,7 @@ export default function Users() {
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={filteredAccessAssignments.length} // ✅ pagination uses filtered count
+                    count={filteredAccessAssignments.length} // Pagination uses filtered count
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

@@ -50,18 +50,14 @@ export default function NavBarConfigMenu() {
                 <MenuItem component={Link} to="/departments" onClick={handleClose} disabled={!user?.uiFlags?.enableDepartments}>
                     Departments
                 </MenuItem>
-                <MenuItem component={Link} to="/locations" onClick={handleClose}>
+                <MenuItem component={Link} to="/locations" onClick={handleClose} disabled={!user?.uiFlags?.enableLocations}>
                     Locations
                 </MenuItem>
                 <Divider />
-                <MenuItem component={Link} to="/docs-categories" onClick={handleClose} >
-                    Document Categories
-                </MenuItem>
-                <Divider />
-                <MenuItem component={Link} to="/system-categories" onClick={handleClose}>
+                <MenuItem component={Link} to="/system-categories" onClick={handleClose} disabled={!user?.uiFlags?.enableSystems}>
                     System Categories
                 </MenuItem>
-                <MenuItem component={Link} to="/system-applications" onClick={handleClose}>
+                <MenuItem component={Link} to="/system-applications" onClick={handleClose} disabled={!user?.uiFlags?.enableSystems}>
                     System Applications
                 </MenuItem>
             </Menu>

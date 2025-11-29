@@ -1,14 +1,15 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Divider from '@mui/material/Divider';
-
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function NavBarDocsMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const { user } = useAuth();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -46,11 +47,14 @@ export default function NavBarDocsMenu() {
                     list: { "aria-labelledby": "docs-button" },
                 }}
             >
-                <MenuItem component={Link} to="/docs/new" onClick={handleClose}>
+                <MenuItem component={Link} to="/docs/new" onClick={handleClose} disabled={!user?.uiFlags?.enableDocs}>
                     New Document
                 </MenuItem>
                 <Divider />
-                <MenuItem component={Link} to="/docs" onClick={handleClose}>
+                <MenuItem component={Link} to="/docs-categories" onClick={handleClose} disabled={!user?.uiFlags?.enableDocsCategories}>
+                    Document Categories
+                </MenuItem>
+                <MenuItem component={Link} to="/docs" onClick={handleClose} disabled={!user?.uiFlags?.enableDocs}>
                     Manage Documents
                 </MenuItem>
             </Menu>

@@ -18,6 +18,7 @@ import ResetPasswordForm from "../components/ResetPasswordForm";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import Alert from '@mui/material/Alert';
+import { useAuth } from "../context/AuthContext";
 
 export default function Users() {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function Users() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [showActive, setShowActive] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const { user } = useAuth();
 
     async function fetchUsers() {
         try {
@@ -79,13 +81,15 @@ export default function Users() {
             <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
                 <Typography variant="h2">Users</Typography>
                 <div className="cta-btn-container">
-                    <Button
-                        variant="contained"
-                        onClick={() => navigate("/users/new")}
-                        sx={{ mb: 2 }}
-                    >
-                        New
-                    </Button>
+                    {user?.uiFlags?.enableUserEdit && (
+                        <Button
+                            variant="contained"
+                            onClick={() => navigate("/users/new")}
+                            sx={{ mb: 2 }}
+                        >
+                            New
+                        </Button>
+                    )}
                     <Button
                         variant="outlined"
                         onClick={handleRefresh}
@@ -153,9 +157,11 @@ export default function Users() {
                                         </TableCell>
                                         <TableCell sx={{ pr: 0 }}>
                                             <div className="cta-btn-container">
-                                                <Button variant="outlined" onClick={() => navigate(`/users/${d._id}`)}>
-                                                    Edit
-                                                </Button>
+                                                {user?.uiFlags?.enableUserEdit && (
+                                                    <Button variant="outlined" onClick={() => navigate(`/users/${d._id}`)}>
+                                                        Edit
+                                                    </Button>
+                                                )}
                                                 {/* userReset false, will force user to reset their password upon login. */}
                                                 <ResetPasswordForm userReset={false} userIdToChange={d._id} />
                                             </div>
