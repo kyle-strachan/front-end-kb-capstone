@@ -10,6 +10,8 @@ import DOMPurify from "dompurify";
 import parse from "html-react-parser";
 import { useLoading } from "../context/LoadingContext";
 import Alert from '@mui/material/Alert';
+import "./DocsView.css";
+
 
 export default function DocsView() {
     const { id } = useParams(); // will be undefined for "New"
@@ -78,7 +80,9 @@ export default function DocsView() {
                     <Typography sx={{ mb: 2 }}>
                         {doc?.description}
                     </Typography>
-                    {parse(cleanHtml)}
+                    <div className="doc-body">
+                        {parse(cleanHtml)}
+                    </div>
                 </Paper>
             </div>
         </>
