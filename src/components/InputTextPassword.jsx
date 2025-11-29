@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-export default function InputTextPassword({ value, label = "Password" }) {
+export default function InputTextPassword({ id, value, label = "Password" }) {
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -28,9 +28,9 @@ export default function InputTextPassword({ value, label = "Password" }) {
         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <div>
                 <FormControl sx={{ mb: 2, width: '30ch' }} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
+                    <InputLabel htmlFor={id}>{label}</InputLabel>
                     <OutlinedInput
-                        id="outlined-adornment-password"
+                        id={id}
                         type={showPassword ? 'text' : 'password'}
                         onChange={value}
                         endAdornment={
