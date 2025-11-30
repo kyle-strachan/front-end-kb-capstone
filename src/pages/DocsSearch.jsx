@@ -8,16 +8,17 @@ import {
     ListItemText,
     CircularProgress,
     Pagination,
+    Paper,
 } from "@mui/material";
 import { api } from "../api";
 import { useLoading } from "../context/LoadingContext";
+import DocSearchBox from "../components/DocSearchBox";
 
 export default function DocsSearchResults() {
     const [searchParams, setSearchParams] = useSearchParams();
     const q = searchParams.get("q") || "";
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
-
     const [results, setResults] = useState([]);
     const [total, setTotal] = useState(0);
     const { loading, setLoading } = useLoading();
@@ -51,8 +52,9 @@ export default function DocsSearchResults() {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Typography variant="h5" gutterBottom>
-                Results for "{q}"
+            <DocSearchBox placeholder={q === "" ? "Search Documents" : q} />
+            <Typography variant="h6" gutterBottom>
+                {results.length !== 0 && (`Results for ${q}`)}
             </Typography>
 
             {loading && <CircularProgress />}
@@ -65,24 +67,26 @@ export default function DocsSearchResults() {
             {!loading && !error && (
                 <List>
                     {results.map((doc) => (
-                        <ListItem key={doc._id} alignItems="flex-start" sx={{ width: "100%", flexGrow: 1 }}>
-                            <div className="docs-search-result" >
-                                <a href={`/docs/view/${doc?._id}`}>
-                                    <ListItemText
-                                        primary={<Typography variant="h6">{doc.title}</Typography>}
-                                        secondary={
-                                            <>
-                                                {/* <Typography variant="body2" color="text.secondary"> */}
-                                                {doc.snippet}
-                                                {/* </Typography> */}
-                                                <Typography variant="caption" color="text.secondary">
-                                                    Updated: {new Date(doc.updatedAt).toLocaleDateString()}
-                                                </Typography>
-                                            </>
-                                        }
-                                    />
-                                </a>
-                            </div>
+                        <ListItem key={doc._id} alignItems="flex-start" sx={{ p: 0 }} >
+                            <Paper className="docs-search-result" sx={{ width: "100%", flexGrow: 1, pt: 1, pb: 1, pl: 2, pr: 2, mb: 1 }}>
+                                <div className="docs-search-result" >
+                                    <a href={`/docs/view/${doc?._id}`}>
+                                        <ListItemText
+                                            primary={<Typography variant="h6">{doc.title}</Typography>}
+                                            secondary={
+                                                <>
+                                                    <Typography variant="body2" component="span">
+                                                        {doc?.description}
+                                                    </Typography>
+                                                    <Typography variant="body2" component="span">
+                                                        {doc?.department?.department} &gt; {doc?.docsCategory?.category}
+                                                    </Typography>
+                                                </>
+                                            }
+                                        />
+                                    </a>
+                                </div>
+                            </Paper>
                         </ListItem>
                     ))}
                 </List>
