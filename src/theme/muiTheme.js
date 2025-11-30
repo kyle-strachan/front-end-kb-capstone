@@ -56,7 +56,7 @@ const muiTheme = createTheme({
       styleOverrides: {
         root: {
           "&:hover": {
-            backgroundColor: "rgba(197, 54, 10, 0.75) !important",
+            backgroundColor: "#fcc6e3ff",
           },
         },
       },
