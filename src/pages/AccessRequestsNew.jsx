@@ -53,7 +53,7 @@ export default function AccessRequestNew() {
         try {
             setLoading(true);
             setError(null);
-            const res = await api.get("/config/system-applications");
+            const res = await api.get("/config/system-applications?active=true");
             if (res.data.systemApplications) {
                 setSystemApplications(res.data.systemApplications);
             } else {
