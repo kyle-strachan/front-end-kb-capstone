@@ -18,7 +18,7 @@ import notify from "../utils/toastify";
 export default function UsersNewEdit() {
     let { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
     const [user, setUser] = useState({
         username: "",
         fullName: "",
@@ -46,6 +46,7 @@ export default function UsersNewEdit() {
 
     async function fetchUsers() {
         try {
+            setLoading(true);
             // fetch categories and users in parallel
             const [departmentRes, userRes, locationRes] = await Promise.all([
                 api.get("/config/departments"),
@@ -150,8 +151,6 @@ export default function UsersNewEdit() {
             notify(`User terminated failed: ${error}`, "error");
         }
     }
-
-    if (loading) return <p>Loading...</p>;
 
     return (
         <>
