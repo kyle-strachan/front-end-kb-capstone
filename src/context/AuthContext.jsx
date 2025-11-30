@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { api } from "../api";
+import LoadingSpinnerWithoutContext from "../components/LoadingSpinnerWithoutContext";
 
 const AuthContext = createContext();
 
@@ -69,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         fetchUser();
     }, []);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <LoadingSpinnerWithoutContext />; // No context as it hasn't been created yet.
 
     return (
         <AuthContext.Provider value={{ user, login, logout, refreshUser }}>
