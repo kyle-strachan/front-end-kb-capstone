@@ -14,7 +14,7 @@ import Alert from '@mui/material/Alert';
 import "./DocsView.css";
 
 export default function DocsView() {
-    const { id } = useParams(); // will be undefined for "New"
+    const { id } = useParams();
     const navigate = useNavigate();
     const { setLoading } = useLoading();
     const [error, setError] = useState();
@@ -32,7 +32,6 @@ export default function DocsView() {
             const res = await api.get(`/docs/${id}/sign-url`, { params: { key } });
             replaced = replaced.replace(`wasabi-key:${key}`, res.data.url);
         }
-
         return replaced;
     }
 
@@ -60,33 +59,30 @@ export default function DocsView() {
         <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
-        <>
-            <div style={{ margin: "0 auto", padding: "1rem" }}>
-                <Paper sx={{ p: 3, mb: 4 }}>
-                    <Typography variant="h5" sx={{ mb: 2 }}>
-                        {doc?.title}
-                    </Typography>
-                    <Typography sx={{ mb: 2 }}>
-                        {doc?.description}
-                    </Typography>
-                    <div className="cta-btn-container">
-                        {user?.uiFlags?.enableDocs && (
-                            <Button variant="contained" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
-                                Edit
-                            </Button>
-                        )}
-                    </div>
-                </Paper>
-                <Paper sx={{ p: 3 }}>
+        <div className="page-content">
+            <div style={{ display: "flex", gap: "10px", marginBottom: "16px" }}>
+                <Paper sx={{ mb: 0, p: "5px 12px", backgroundColor: "#6e92a1ff", color: "#FFF", width: "100%" }}>
 
-                    <div className="doc-body">
-                        {parse(cleanHtml)}
-                    </div>
-
-                    <Typography variant="caption" sx={{ lineHeight: "10px" }}>{doc?.department.department} &gt; {doc?.docsCategory.category}<br /></Typography>
-                    <Typography variant="caption" sx={{ lineHeight: "10px" }}>Last updated by: {doc?.lastModifiedBy.fullName} on {new Date(doc?.lastModifiedAt).toDateString()}</Typography>
+                    <Typography variant="h1">{doc?.title}</Typography>
                 </Paper>
+                {user?.uiFlags?.enableDocs && (
+                    <Button variant="contained" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
+                        Edit
+                    </Button>
+                )}
             </div>
-        </>
+            <Paper sx={{ p: 3, mb: 4 }}>
+                <Typography sx={{ mb: 2 }}>
+                    {doc?.description}
+                </Typography>
+            </Paper>
+            <Paper sx={{ p: 3 }}>
+                <div className="doc-body">
+                    {parse(cleanHtml)}
+                </div>
+                <Typography variant="caption" sx={{ lineHeight: "10px" }}>{doc?.department.department} &gt; {doc?.docsCategory.category}<br /></Typography>
+                <Typography variant="caption" sx={{ lineHeight: "10px" }}>Last updated by: {doc?.lastModifiedBy.fullName} on {new Date(doc?.lastModifiedAt).toDateString()}</Typography>
+            </Paper>
+        </div>
     );
 }
