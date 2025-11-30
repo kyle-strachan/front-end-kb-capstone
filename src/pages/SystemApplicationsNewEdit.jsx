@@ -12,11 +12,12 @@ import {
 import SelectWithSearch from "../components/SelectWithSearch";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import Alert from '@mui/material/Alert';
 
 export default function SystemApplicationsNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
     const [systemApp, setSystemApp] = useState({
         system: "",
         category: "",
@@ -34,10 +35,11 @@ export default function SystemApplicationsNewEdit() {
 
     async function fetchInitialData() {
         try {
-            // fetch categories and users in parallel
+            setLoading(true);
+            // Fetch categories and active users
             const [appRes, userRes] = await Promise.all([
                 api.get("/config/system-applications"),
-                api.get("/users"),
+                api.get("/users/active"),
             ]);
 
             setSystemCategories(appRes.data.systemCategories || []);
@@ -91,8 +93,6 @@ export default function SystemApplicationsNewEdit() {
         }
     }
 
-    if (loading) return <p>Loading...</p>;
-
     return (
         <div style={{ margin: "0 auto", padding: "1rem" }}>
             <Paper sx={{ p: 3 }}>
@@ -102,11 +102,11 @@ export default function SystemApplicationsNewEdit() {
 
                 <TextField
                     fullWidth
-                    variant="standard"
+                    variant="outlined"
                     label="System Name"
                     value={systemApp.system}
                     onChange={(e) => handleFieldChange("system", e.target.value)}
-                    sx={{ mb: 2 }}
+                    sx={{ mt: 2, mb: 2 }}
                 />
 
                 <SelectWithSearch
@@ -121,6 +121,7 @@ export default function SystemApplicationsNewEdit() {
                     }
                 />
 
+                <Alert severity="info">A system must be active to allow new user requests. Marking a system inactive will not remove access to existing users.</Alert>
                 <FormControlLabel
                     control={
                         <Checkbox
@@ -129,7 +130,7 @@ export default function SystemApplicationsNewEdit() {
                         />
                     }
                     label="Active"
-                    sx={{ mt: 2 }}
+                    sx={{ mt: 1, mb: 2 }}
                 />
 
                 <SelectWithSearch
@@ -146,7 +147,6 @@ export default function SystemApplicationsNewEdit() {
                     }
                 />
 
-
                 <FormControlLabel
                     control={
                         <Checkbox
@@ -154,7 +154,7 @@ export default function SystemApplicationsNewEdit() {
                             onChange={(e) => handleFieldChange("sendEmail", e.target.checked)}
                         />
                     }
-                    label="Send Email"
+                    label="Send Email to admin users for new requests?"
                     sx={{ mt: 2 }}
                 />
 
