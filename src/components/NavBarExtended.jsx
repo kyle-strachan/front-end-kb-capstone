@@ -13,7 +13,7 @@ import Paper from '@mui/material/Paper';
 import { Link } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
 import "./NavBarExtended.css";
-import NavBarConfigMenu from "./NavBarConfigMenu";
+import NavBarConfigMenu from "./NavBarConfigMenu2";
 import NavBarUacMenu from './NavBarUacMenu';
 import NavBarDocsMenu from './NavBarDocsMenu';
 import NavDrawerMobile from './NavDrawerMobile';
