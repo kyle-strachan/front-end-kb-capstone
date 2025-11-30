@@ -7,7 +7,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import RuleIcon from '@mui/icons-material/Rule';
 import PeopleIcon from "@mui/icons-material/People";
 import CheckIcon from "@mui/icons-material/Check";
@@ -15,21 +14,30 @@ import AddTaskIcon from "@mui/icons-material/AddTask";
 import ArticleIcon from "@mui/icons-material/Article";
 import CreateIcon from "@mui/icons-material/Create";
 import HomeIcon from "@mui/icons-material/Home";
+import SearchIcon from '@mui/icons-material/SearchOutlined';
 import SettingsIcon from "@mui/icons-material/Settings";
-import { IconButton, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import Logout from '@mui/icons-material/Logout';
+import AvatarIcon from '@mui/icons-material/ManageAccountsOutlined';
+import { IconButton, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function NavDrawerMobile() {
   const [open, setOpen] = React.useState(false);
+  const { logout } = useAuth();
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
   const NavDrawer = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
+    <Box sx={{ width: 300 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List sx={{
+        '& .MuiTypography-root': {
+          lineHeight: 1.1,
+        },
+      }}>
         <ListItem key={"Dashboard"} disablePadding>
           <ListItemButton component={Link} to="/dashboard">
             <ListItemIcon>
@@ -38,9 +46,40 @@ export default function NavDrawerMobile() {
             <ListItemText primary={"Dashboard"} />
           </ListItemButton>
         </ListItem>
+        <ListItem key={"MyAccount"} disablePadding>
+          <ListItemButton component={Link} to="/account">
+            <ListItemIcon>
+              <AvatarIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Account"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key={"Logout"} disablePadding>
+          <ListItemButton onClick={() => { logout(); }}>
+            <ListItemIcon>
+              <Logout />
+            </ListItemIcon>
+            <ListItemText primary={"Logout"} />
+          </ListItemButton>
+        </ListItem>
       </List>
       <Divider />
-      <List>
+
+      {/* Documents menu */}
+
+      <List sx={{
+        '& .MuiTypography-root': {
+          lineHeight: 1.1,
+        },
+      }}>
+        <ListItem key={"DocSearch"} disablePadding>
+          <ListItemButton component={Link} to="/docs/search">
+            <ListItemIcon>
+              <SearchIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Search Documents"} />
+          </ListItemButton>
+        </ListItem>
         <ListItem key={"NewDoc"} disablePadding>
           <ListItemButton component={Link} to="/docs/new">
             <ListItemIcon>
@@ -61,7 +100,11 @@ export default function NavDrawerMobile() {
       <Divider />
 
       {/* User access menu */}
-      <List>
+      <List sx={{
+        '& .MuiTypography-root': {
+          lineHeight: 1.1,
+        },
+      }}>
         <Typography sx={{ m: "8px 18px" }}><b>User Access</b></Typography>
         <ListItem key={"AccessOverview"} disablePadding>
           <ListItemButton component={Link} to="/access-overview">
@@ -99,7 +142,11 @@ export default function NavDrawerMobile() {
 
       <Divider />
 
-      <List>
+      <List sx={{
+        '& .MuiTypography-root': {
+          lineHeight: 1.1,
+        },
+      }}>
         <Typography sx={{ m: "8px 18px" }}><b>Configuration</b></Typography>
         <ListItem key={"Departments"} disablePadding>
           <ListItemButton component={Link} to="/departments">
@@ -142,9 +189,6 @@ export default function NavDrawerMobile() {
           </ListItemButton>
         </ListItem>
       </List>
-
-
-
     </Box>
   );
 

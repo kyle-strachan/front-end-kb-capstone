@@ -21,18 +21,18 @@ export default function NavBarDocsMenu() {
     return (
         <div>
             <Button
-                id="config-button"
-                aria-controls={open ? "config-menu" : undefined}
+                id="docs-button"
+                aria-controls={open ? "docs-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
                 sx={{
-                    textTransform: "none",       // match Typography
-                    color: "rgba(255, 255, 255, 1)",             // use parent text colour
-                    fontSize: "inherit",          // match surrounding text size
-                    fontWeight: 500,        // optional, for consistency
-                    padding: "0 15px",            // match your Typography padding
-                    minWidth: "auto",             // remove MUI button min-width
+                    textTransform: "none",
+                    color: "rgba(255, 255, 255, 1)",
+                    fontSize: "inherit",
+                    fontWeight: 500,
+                    padding: "0 15px",
+                    minWidth: "auto",
                 }}
             >
                 Docs
@@ -47,10 +47,13 @@ export default function NavBarDocsMenu() {
                     list: { "aria-labelledby": "docs-button" },
                 }}
             >
+                <MenuItem component={Link} to="/docs/search" onClick={handleClose}>
+                    Search Docs
+                </MenuItem>
+                <Divider />
                 <MenuItem component={Link} to="/docs/new" onClick={handleClose} disabled={!user?.uiFlags?.enableDocs}>
                     New Document
                 </MenuItem>
-                <Divider />
                 <MenuItem component={Link} to="/docs-categories" onClick={handleClose} disabled={!user?.uiFlags?.enableDocsCategories}>
                     Document Categories
                 </MenuItem>
