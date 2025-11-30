@@ -6,7 +6,7 @@ import Account from "./pages/Account";
 import Departments from "./pages/Departments";
 import DocsCategories from "./pages/DocsCategories";
 import DocsManage from "./pages/DocsManage";
-import DocsSearchResults from "./pages/DocsSearchResults";
+import DocsSearch from "./pages/DocsSearch";
 import DocsNewEdit from "./pages/DocsNewEdit";
 import DocsView from "./pages/DocsView";
 import Locations from "./pages/Locations";
@@ -60,7 +60,7 @@ function AppRoutes() {
         <Route path="/departments" element={<Departments />} />
         <Route path="/docs-categories" element={<DocsCategories />} />
         <Route path="/docs" element={<DocsManage />} />
-        <Route path="/docs/search" element={<DocsSearchResults />} />
+        <Route path="/docs/search" element={<DocsSearch />} />
         <Route path="/docs/new" element={<DocsNewEdit />} />
         <Route path="/docs/edit/:id" element={<DocsNewEdit />} />
         <Route path="/docs/view/:id" element={<DocsView />} />
