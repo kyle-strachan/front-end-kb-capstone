@@ -7,12 +7,14 @@ import {
     Button,
     FormControlLabel,
     Switch,
+    Typography,
 } from "@mui/material";
 import { api } from "../api";
 import SelectWithSearch from "../components/SelectWithSearch";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import LoadingSpinnerWithoutContext from "../components/LoadingSpinnerWithoutContext";
 
 export default function DocsNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -28,7 +30,7 @@ export default function DocsNewEdit() {
     const [newDocsCategoryId, setDocsCategoryId] = useState(null);
     const [docIsArchived, setDocIsArchived] = useState(false);
     const navigate = useNavigate();
-    const { loading, setLoading } = useLoading();
+    const { setLoading } = useLoading();
     const [error, setError] = useState(null);
 
     function handleEditorChange(newValue) {
@@ -166,7 +168,7 @@ export default function DocsNewEdit() {
     }
 
     if (id && !doc) {
-        return <div>Loading…</div>;
+        return <LoadingSpinnerWithoutContext />;
     }
 
     if (error) return (
@@ -176,9 +178,9 @@ export default function DocsNewEdit() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
             <PageTitle title={docId ? "Edit Document" : "New Document"} />
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
-                <h2>{docId ? "Edit Document" : "New Document"}</h2>
+                <Typography variant="h2">{docId ? "Edit Document" : "New Document"}</Typography>
                 <div className="field-container">
-                    <TextField id="doc-title" label="Document Title" variant="outlined" value={docTitle} onChange={(e) => setDocTitle(e.target.value)} />
+                    <TextField id="doc-title" label="Document Title" variant="outlined" value={docTitle} onChange={(e) => setDocTitle(e.target.value)} sx={{ mb: 2 }} />
                     <TextField
                         id="docDescription"
                         label="Short Description"
@@ -186,6 +188,7 @@ export default function DocsNewEdit() {
                         multiline
                         rows={3}
                         onChange={(e) => setDocDescription(e.target.value)}
+                        sx={{ mb: 2 }}
                     />
                     <SelectWithSearch
                         options={departments}
@@ -207,7 +210,7 @@ export default function DocsNewEdit() {
                         required
                     />
                     <FormControlLabel control={<Switch />} label="Show to All Users" checked={docIsPublic} onChange={(e) => setDocIsPublic(e.target.checked)} />
-                    <FormControlLabel control={<Switch />} label="Archive" checked={docIsArchived} onChange={(e) => setDocIsArchived(e.target.checked)} />
+                    <FormControlLabel control={<Switch />} label="Archive" checked={docIsArchived} onChange={(e) => setDocIsArchived(e.target.checked)} sx={{ mb: 2 }} />
                 </div>
                 <Editor key={docId || "new"} value={docBody} onChange={handleEditorChange} docId={docId} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
