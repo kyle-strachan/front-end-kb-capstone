@@ -29,9 +29,13 @@ export default function ApplicationsTransferList({ systems, selected, onChange }
     const [right, setRight] = React.useState(selected);
 
     React.useEffect(() => {
-        setLeft(systems);
-        setRight(systems.filter(s => selected.includes(s._id)));
+        const rightItems = systems.filter(s => selected.includes(s._id));
+        const leftItems = systems.filter(s => !selected.includes(s._id));
+
+        setLeft(leftItems);
+        setRight(rightItems);
     }, [systems, selected]);
+
 
     const leftChecked = intersection(checked, left);
     const rightChecked = intersection(checked, right);
