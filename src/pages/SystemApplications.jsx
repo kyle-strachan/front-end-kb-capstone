@@ -98,6 +98,7 @@ export default function SystemApplications() {
                             <TableRow>
                                 <TableCell sx={{ width: "40%", pl: 0 }}>System Application Name</TableCell>
                                 <TableCell>Category</TableCell>
+                                <TableCell>Active</TableCell>
                                 <TableCell sx={{ width: 120 }}></TableCell>
                             </TableRow>
                         </TableHead>
@@ -114,7 +115,9 @@ export default function SystemApplications() {
                                         </TableCell>
                                         <TableCell>
                                             {systemCategories.find((c) => c._id === d.category)?.category || 'Undefined'}
-
+                                        </TableCell>
+                                        <TableCell>
+                                            {d.isActive ? "Active" : "Inactive"}
                                         </TableCell>
                                         <TableCell sx={{ width: 120, pr: 0 }}>
                                             <div className="cta-btn-container">
