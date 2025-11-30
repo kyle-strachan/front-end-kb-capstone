@@ -264,7 +264,7 @@ export default function UsersNewEdit() {
                     {!id && (
                         <TextField
                             fullWidth
-                            variant="standard"
+                            variant="outlined"
                             label="Temporary Password"
                             type="password"
                             onChange={(e) => handleFieldChange("password", e.target.value)}

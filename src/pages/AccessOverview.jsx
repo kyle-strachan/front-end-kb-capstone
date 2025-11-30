@@ -34,9 +34,6 @@ export default function Users() {
         setTableNote("");
         try {
             const res = await api.get("/uac/access-assignments")
-            // if (res.status !== 200) {
-            //     console.log(res.status);
-            // }
             if (res.data.assignments) {
                 setAccessAssignments(res.data.assignments);
             }

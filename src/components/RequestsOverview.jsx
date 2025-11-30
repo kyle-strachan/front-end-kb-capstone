@@ -73,11 +73,11 @@ export default function RequestsOverview({ id, fullName }) {
                 </Typography>
                 <div className="dashboard-access-request-summary">
                     <div className="dashboard-access-request-icons">
-                        <Badge badgeContent={activateTotal} color="primary">
-                            <div className="dashboard-access-request-icons-background" >
+                        <div className="dashboard-access-request-icons-background" >
+                            <Badge badgeContent={activateTotal} color="primary">
                                 <KeyOutlinedIcon sx={{ fontSize: 75, color: "#00B388", fontVariationSettings: `"wght" 100, "OUTLINE" 0`, }} />
-                            </div>
-                        </Badge>
+                            </Badge>
+                        </div>
                         <div className="dashboard-access-request-icons-background" >
                             <Badge badgeContent={revokeTotal} color="primary">
                                 <KeyOffOutlinedIcon sx={{ fontSize: 75, color: "#E03C31", fontVariationSettings: `"wght" 100, "OUTLINE" 0`, }} />
