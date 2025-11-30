@@ -28,19 +28,13 @@ function ProtectedRoute() {
   const { user, loading } = useAuth()
   const location = useLocation();
 
-  if (loading) return "Logging in";
+  if (loading) return <LoadingSpinner />;
   if (!user) return <Navigate to="/login" />;
 
-  // Force password change, but don't redirect if already on /account
+  // Force password change for new/reset users
   if (user.passwordMustChange && location.pathname !== "/account") {
     return <Navigate to="/account" replace />;
   }
-  return (
-    <LayoutProtected />
-  );
-}
-
-function LayoutProtected() {
   return (
     <div className="App">
       <div className="content-wrapper">
@@ -57,7 +51,7 @@ function LayoutProtected() {
 function AppRoutes() {
   const routes = createRoutesFromElements(
     <>
-      {/* Public route */}
+      {/* Public route with no user */}
       <Route path="/login" element={<Login />} />
 
       {/* Protected group */}
@@ -85,6 +79,9 @@ function AppRoutes() {
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="*" element={<Navigate to="/dashboard" />} />
       </Route>
+
+      {/* User found but expired or browser resumption, public catch-all */}
+      <Route path="*" element={<Navigate to="/login" />} />
     </>
   );
   return useRoutes(routes);
