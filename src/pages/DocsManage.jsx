@@ -82,50 +82,43 @@ export default function Docs() {
                     Manage all documents that will be shown to Viewer users. Archive documents to remove from the Document Tree view and Search results.
                 </Typography>
 
-                <div className="space-between-container">
-                    <div className="filter-container">
+                <div className="cta-btn-container">
+                    <Button
+                        variant="contained"
+                        onClick={() => navigate("/docs/new")}
+                        sx={{ mb: 2 }}
+                    >
+                        New
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
+                    </Button>
+                </div>
+                <div className="filter-container">
+                    <TextField
+                        label="Filter"
+                        variant="outlined"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        sx={{ mb: 2, mr: 2, width: 300 }}
+                    />
 
-                        <TextField
-                            label="Filter"
-                            variant="outlined"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            sx={{ mb: 2, mr: 2, width: 300 }}
-                        />
-
-
-                        {/* Toggle to show Active / Inactive */}
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={showActive}
-                                    onChange={(e) => setShowActive(e.target.checked)}
-                                    color="primary"
-                                />
-                            }
-                            label={showActive ? "Showing Active Documents" : "Showing Archived Documents"}
-                            sx={{ mb: 1 }}
-                        />
-
-                    </div>
-
-
-                    <div className="cta-btn-container">
-                        <Button
-                            variant="contained"
-                            onClick={() => navigate("/docs/new")}
-                            sx={{ mb: 2 }}
-                        >
-                            New
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            onClick={handleRefresh}
-                            sx={{ mb: 2 }}
-                        >
-                            {loading === true ? "Loading" : "Refresh"}
-                        </Button>
-                    </div>
+                    {/* Toggle to show Active / Inactive */}
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={showActive}
+                                onChange={(e) => setShowActive(e.target.checked)}
+                                color="primary"
+                            />
+                        }
+                        label={showActive ? "Showing Active Documents" : "Showing Archived Documents"}
+                        sx={{ mb: 1 }}
+                    />
                 </div>
 
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
@@ -133,7 +126,7 @@ export default function Docs() {
                         stickyHeader
                         size="small"
                         aria-label="docs-table"
-                        sx={{ minWidth: 650, width: "100%" }}
+                        sx={{ minWidth: 395, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
