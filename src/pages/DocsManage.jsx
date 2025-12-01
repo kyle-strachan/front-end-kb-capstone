@@ -17,6 +17,7 @@ import "../App.css";
 import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import Alert from '@mui/material/Alert';
+import PageTitleCustom from "../components/PageTitleCustom";
 
 export default function Docs() {
     const navigate = useNavigate();
@@ -74,7 +75,13 @@ export default function Docs() {
 
     return (
         <div className="page-content">
-            <PageTitle title="Manage Documents" />
+            <div style={{ display: "flex", gap: "10px", marginBottom: "16px" }}>
+                <PageTitleCustom title="Manage Documents" />
+                <Button variant="contained" onClick={() => navigate(`/docs/new`)}>
+                    New
+                </Button>
+            </div>
+
             <Paper sx={{ width: "100%", overflow: "hidden", p: 3 }}>
                 <Typography variant="h2">All Documents</Typography>
 
@@ -82,22 +89,6 @@ export default function Docs() {
                     Manage all documents that will be shown to Viewer users. Archive documents to remove from the Document Tree view and Search results.
                 </Typography>
 
-                <div className="cta-btn-container">
-                    <Button
-                        variant="contained"
-                        onClick={() => navigate("/docs/new")}
-                        sx={{ mb: 2 }}
-                    >
-                        New
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        onClick={handleRefresh}
-                        sx={{ mb: 2 }}
-                    >
-                        {loading === true ? "Loading" : "Refresh"}
-                    </Button>
-                </div>
                 <div className="filter-container">
                     <TextField
                         label="Filter"
@@ -134,7 +125,19 @@ export default function Docs() {
                                 <TableCell>Description</TableCell>
                                 <TableCell>Department</TableCell>
                                 <TableCell>Category</TableCell>
-                                <TableCell sx={{ pr: 0 }}></TableCell>
+                                <TableCell>Public</TableCell>
+                                <TableCell sx={{ pr: 0 }}>
+                                    <div className="cta-btn-container">
+                                        <Button
+                                            variant="outlined"
+                                            onClick={handleRefresh}
+                                            sx={{ mb: 2 }}
+                                            disabled={loading}
+                                        >
+                                            {loading === true ? "Loading" : "Refresh"}
+                                        </Button>
+                                    </div>
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -156,6 +159,9 @@ export default function Docs() {
                                         </TableCell>
                                         <TableCell>
                                             {d.docsCategory?.category}
+                                        </TableCell>
+                                        <TableCell>
+                                            {d.isPublic === true ? "Y" : "N"}
                                         </TableCell>
                                         <TableCell sx={{ pr: 0 }}>
                                             <div className="cta-btn-container">

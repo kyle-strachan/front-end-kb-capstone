@@ -13,6 +13,7 @@ import { useAuth } from "../context/AuthContext";
 import Alert from '@mui/material/Alert';
 import "./DocsView.css";
 import { resolveWasabiKeys } from "../services/wasabi.js";
+import PageTitleCustom from "../components/PageTitleCustom.jsx"
 
 export default function DocsView() {
     const { id } = useParams();
@@ -51,10 +52,7 @@ export default function DocsView() {
     return (
         <div className="page-content">
             <div style={{ display: "flex", gap: "10px", marginBottom: "16px" }}>
-                <Paper sx={{ mb: 0, p: "5px 12px", backgroundColor: "#6e92a1ff", color: "#FFF", width: "100%" }}>
-
-                    <Typography variant="h1">{doc?.title}</Typography>
-                </Paper>
+                <PageTitleCustom title={doc?.title} />
                 {user?.uiFlags?.enableDocs && (
                     <Button variant="contained" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
                         Edit
