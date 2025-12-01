@@ -70,7 +70,7 @@ export default function AccessRequests() {
 
     async function handleConfirmRevocation(id) {
         try {
-            const res = await api.post(`uac/access-assignments/confirm-revoke/${id}`);
+            const res = await api.post(`/uac/access-assignments/confirm-revoke/${id}`);
             notify(res.data?.message || "Access confirmed as revoked.", "success")
         } catch (error) {
             const backendMessage = error.response?.data?.message;
