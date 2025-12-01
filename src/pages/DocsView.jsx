@@ -12,6 +12,7 @@ import { useLoading } from "../context/LoadingContext";
 import { useAuth } from "../context/AuthContext";
 import Alert from '@mui/material/Alert';
 import "./DocsView.css";
+import { resolveWasabiKeys } from "../services/wasabi.js";
 
 export default function DocsView() {
     const { id } = useParams();
@@ -22,26 +23,13 @@ export default function DocsView() {
     const [cleanHtml, setCleanHtml] = useState("");
     const { user } = useAuth();
 
-    async function resolveKeysToUrls(html) {
-        const regex = /wasabi-key:([^"]+)/g;
-        let replaced = html;
-        let match;
-
-        while ((match = regex.exec(html)) !== null) {
-            const key = match[1];
-            const res = await api.get(`/docs/${id}/sign-url`, { params: { key } });
-            replaced = replaced.replace(`wasabi-key:${key}`, res.data.url);
-        }
-        return replaced;
-    }
-
     async function fetchSingleDoc() {
         setLoading(true);
         setError(false);
         try {
             const res = await api.get(`/docs/${id}`);
             const rawHtml = res.data.doc.body;
-            const resolvedHtml = await resolveKeysToUrls(rawHtml);
+            const resolvedHtml = await resolveWasabiKeys(rawHtml);
             setDoc(res.data.doc);
             setCleanHtml(DOMPurify.sanitize(resolvedHtml));
         } catch {
@@ -53,6 +41,8 @@ export default function DocsView() {
 
     useEffect(() => {
         fetchSingleDoc();
+        // id (of document) is stable, only run on mount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (error) return (
