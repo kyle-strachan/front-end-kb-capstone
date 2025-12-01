@@ -200,7 +200,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
   let icon;
   if (status.expandable) {
     icon = FolderRounded;
-  } else if (item.fileType) {
+  } else if (item?.fileType) {
     icon = getIconFromFileType(item.fileType);
   }
 
