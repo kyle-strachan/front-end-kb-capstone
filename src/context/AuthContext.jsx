@@ -17,10 +17,12 @@ export const AuthProvider = ({ children }) => {
         try {
             const res = await api.post("/auth/login", { username, password });
             setUser(res.data.user);
-            return true;
-        } catch (err) {
-            console.error("Login failed:", err.response?.data || err.message);
-            return false;
+            return { success: true };
+        } catch (error) {
+            // Return api response if available
+            const apiResponse = error.response?.data?.message || error.response?.data;
+            const networkMsg = error.message === "Network Error" ? "Application unavailable, unable to connect." : error.message;
+            return { success: false, message: apiResponse || networkMsg || "Application unavailable, unknown error." };
         }
     };
 
@@ -42,7 +44,11 @@ export const AuthProvider = ({ children }) => {
             const res = await api.get("/auth/me");
             setUser(res.data.user);
         } catch (err) {
-            console.error("Failed to refresh user:", err.message);
+            if (err.response?.status === 401) {
+                setUser(null); // Not logged in, suppress console error
+            } else {
+                // console.error(err);
+            }
         }
     };
 
@@ -61,8 +67,12 @@ export const AuthProvider = ({ children }) => {
             try {
                 const res = await api.get("/auth/me");
                 setUser(res.data.user); // refresh from server if provided
-            } catch {
-                // LocalStorage keeps the last known user during refresh, fallthrough if auto-login fails
+            } catch (error) {
+                if (error.response?.status === 401) {
+                    setUser(null); // not logged in
+                } else {
+                    // console.error(error);
+                }
             } finally {
                 setLoading(false);
             }

@@ -6,35 +6,49 @@ import {
     TextField,
     Button,
     Typography,
-    Box
+    Box,
+    Alert,
 } from "@mui/material";
 import { useLoading } from "../context/LoadingContext";
 
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const { loading, setLoading } = useLoading();
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const success = await login(username.trim(), password.trim());
-        if (success) navigate("/dashboard");
-        else alert("Invalid credentials");
+        setLoading(true);
+
+        // Password rules not exposed on front-end
+        if (username.length < 3 || password.length < 8) {
+            setLoading(false);
+            return setError("Invalid credentials, please try again.");
+        }
+
+        const response = await login(username.trim(), password.trim());
+
+        if (response.success) {
+            setError("");
+            navigate("/dashboard");
+        } else {
+            setError(response.message);
+        }
+
+        setLoading(false);
     };
 
     return (
         <div className="login-screen">
             <Paper
-                variant="elevation"
                 sx={{ width: 300, padding: "32px 24px", textAlign: "center" }}
             >
-                {/* Padlock Icon */}
-                {/* <LockOutlinedIcon sx={{ fontSize: 40, mb: 1 }} /> */}
-                <img src="/logo-black-sq.svg" width="40px" />
-
-                {/* Title */}
+                <div className="login-logo" >
+                    <img src="/logo-black-sq.svg" width="35px" />
+                </div>
                 <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
                     LobbyLock
                 </Typography>
@@ -58,11 +72,13 @@ export default function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
 
+                        {error && <Alert severity="error">{error}</Alert>}
                         <Button
                             type="submit"
                             variant="contained"
                             fullWidth
                             sx={{ mt: 1 }}
+                            disabled={loading}
                         >
                             Login
                         </Button>
