@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-export default function InputTextPassword({ id, value, label = "Password" }) {
+export default function InputTextPassword({ id, value, onChange, label = "Password" }) {
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -32,7 +32,8 @@ export default function InputTextPassword({ id, value, label = "Password" }) {
                     <OutlinedInput
                         id={id}
                         type={showPassword ? 'text' : 'password'}
-                        onChange={value}
+                        value={value}
+                        onChange={onChange}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
