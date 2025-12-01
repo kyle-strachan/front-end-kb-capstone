@@ -16,7 +16,7 @@ export default function SelectWithSearch({
             getOptionLabel={(option) => option?.[labelField] || ""}
             value={value}
             onChange={onChange}
-            isOptionEqualToValue={(option, value) => option._id === value._id} // E.g. name could reasonably be duplicate, force use of id instead.
+            isOptionEqualToValue={(option, value) => option?._id === value?._id} // User's full name could reasonably be duplicate, force use of id instead.
             renderOption={(props, option) => (
                 <li {...props} key={option._id}>
                     {option[labelField]}
