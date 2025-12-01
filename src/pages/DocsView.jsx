@@ -80,8 +80,8 @@ export default function DocsView() {
                 <div className="doc-body">
                     {parse(cleanHtml)}
                 </div>
-                <Typography variant="caption" sx={{ lineHeight: "10px" }}>{doc?.department.department} &gt; {doc?.docsCategory.category}<br /></Typography>
-                <Typography variant="caption" sx={{ lineHeight: "10px" }}>Last updated by: {doc?.lastModifiedBy.fullName} on {new Date(doc?.lastModifiedAt).toDateString()}</Typography>
+                <Typography variant="caption" sx={{ lineHeight: "10px" }}>{doc?.department?.department} &gt; {doc?.docsCategory?.category}<br /></Typography>
+                <Typography variant="caption" sx={{ lineHeight: "10px" }}>Last updated by: {doc?.lastModifiedBy?.fullName} on {new Date(doc?.lastModifiedAt).toDateString()}</Typography>
             </Paper>
         </div>
     );

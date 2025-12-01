@@ -158,17 +158,17 @@ export default function AccessRequests() {
                                                 {d.requestType === "Revoke" ? (<CustomDialogYesNo
                                                     buttonLabel={"Confirm Revocation"}
                                                     dialogTitle={"Confirm Revocation"}
-                                                    dialogContent={`Has ${d.userId?.fullName} been completely removed from ${d.applicationId.system}?`}
+                                                    dialogContent={`Has ${d.userId?.fullName} been completely removed from ${d.applicationId?.system}?`}
                                                     dialogueYesAction={() => handleConfirmRevocation(d._id)}
                                                 />) : (<><CustomDialogYesNo
                                                     buttonLabel={"Approve"}
                                                     dialogTitle={"Confirm Approval"}
-                                                    dialogContent={`Has ${d.userId?.fullName} been setup in ${d.applicationId.system} and you wish to confirm the approval?`}
+                                                    dialogContent={`Has ${d.userId?.fullName} been setup in ${d.applicationId?.system} and you wish to confirm the approval?`}
                                                     dialogueYesAction={() => handleApproveOrReject(d._id, "Approved")}
                                                 /><CustomDialogYesNo
                                                         buttonLabel={"Reject"}
                                                         dialogTitle={"Confirm Rejection"}
-                                                        dialogContent={`You are rejecting the request for ${d.userId?.fullName} to access ${d.applicationId.system}. Do you wish to continue?`}
+                                                        dialogContent={`You are rejecting the request for ${d.userId?.fullName} to access ${d.applicationId?.system}. Do you wish to continue?`}
                                                         dialogueYesAction={() => handleApproveOrReject(d._id, "Rejected")}
                                                     /></>)}
                                             </div>

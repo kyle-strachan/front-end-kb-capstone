@@ -67,8 +67,8 @@ export default function Users() {
     // Multiple filters
     const filteredUsers = users.filter((u) => u.isActive === showActive).filter((u) => {
         const term = searchTerm.toLowerCase(); return (
-            u.fullName.toLowerCase().includes(term) ||
-            u.username.toLowerCase().includes(term) ||
+            (u.fullName ?? "").toLowerCase().includes(term) ||
+            (u.username ?? "").toLowerCase().includes(term) ||
             (u.position || "").toLowerCase().includes(term));
     });
 

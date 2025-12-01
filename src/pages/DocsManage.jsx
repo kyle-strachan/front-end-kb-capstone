@@ -64,9 +64,9 @@ export default function Docs() {
     // Multiple filters
     const filteredDocs = docs.filter((d) => d.isArchived !== showActive).filter((d) => {
         const term = searchTerm.toLowerCase(); return (
-            d.description.toLowerCase().includes(term) ||
-            d.body.toLowerCase().includes(term) ||
-            d.title.toLowerCase().includes(term));
+            (d.description?.toLowerCase() ?? "").includes(term) ||
+            (d.body.toLowerCase() ?? "").includes(term) ||
+            (d.title.toLowerCase() ?? "").includes(term));
     });
 
     if (error) return (

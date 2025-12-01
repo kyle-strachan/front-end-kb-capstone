@@ -66,8 +66,8 @@ export default function Users() {
     const filteredAccessAssignments = accessAssignments.filter((d) => {
         const term = searchTerm.toLowerCase();
         return (
-            d.userId?.fullName.toLowerCase().includes(term) ||
-            d.applicationId.system.toLowerCase().includes(term)
+            (d.userId?.fullName.toLowerCase() ?? "").includes(term) ||
+            (d.applicationId?.system.toLowerCase() ?? "").includes(term)
         );
     });
 

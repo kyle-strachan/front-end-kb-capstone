@@ -236,7 +236,7 @@ export default function DocsCategories() {
                                         }}
                                     >
                                         <TableCell sx={{ width: "40%", pl: 0 }}>
-                                            {d.departmentId.department}
+                                            {d.departmentId?.department}
                                         </TableCell>
                                         <TableCell sx={{ width: "60%" }}>
                                             <TextField
