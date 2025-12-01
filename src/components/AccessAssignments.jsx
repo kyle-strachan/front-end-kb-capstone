@@ -50,6 +50,8 @@ export default function AccessAssignments({ id, fullName, notify }) {
 
     useEffect(() => {
         fetchAccessAssignments();
+        // id (of logged in user) is stable, only run on mount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleRefresh() {
