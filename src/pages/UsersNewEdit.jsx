@@ -129,7 +129,6 @@ export default function UsersNewEdit() {
             } else {
                 // New
                 const res = await api.post(`/users`, user);
-                // console.log(res);
                 setUser(prev => ({ ...prev, _id: res.data.newId }));
                 navigate(`/users/${res.data.newId}`);
                 notify("User created successfully.", "success");

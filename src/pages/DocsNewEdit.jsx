@@ -145,8 +145,6 @@ export default function DocsNewEdit() {
                     docsCategory: newDocsCategoryId?._id,
                     isArchived: docIsArchived,
                 });
-                console.log(res);
-                console.log(res.data.docId);
                 setDocId(res.data.docId);
 
             } else {
@@ -163,7 +161,7 @@ export default function DocsNewEdit() {
             notify("Document saved successfully.", "success");
             fetchExistingDoc();
         } catch (error) {
-            console.log('Unable to save document', error);
+            notify(`Unable to save document. ${error}`, "error");
         }
     }
 
