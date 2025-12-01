@@ -45,7 +45,7 @@ export default function AccountMenu() {
                 <div style={{ display: "flex" }}>
                     <img style={{ padding: "5px 10px", width: "40px" }} src="/logo-white-sq.svg" />
                     <div className="nav-bar-lobby-lock nav-bar-links">
-                        <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard" style={{ color: "inherit", textDecoration: "none" }}>Lobby Lock</Link></Typography>
+                        <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard" style={{ color: "inherit", textDecoration: "none" }}>LobbyLock</Link></Typography>
                     </div>
                     <div className="nav-bar-links">
                         <Typography sx={{ padding: '0 15px' }}><Link to="/dashboard" style={{ color: "inherit", textDecoration: "none" }}>Dashboard</Link></Typography>

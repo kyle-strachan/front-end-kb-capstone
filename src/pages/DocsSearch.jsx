@@ -55,6 +55,7 @@ export default function DocsSearchResults() {
             <DocSearchBox placeholder={q === "" ? "Search Documents" : q} />
             <Typography variant="h6" gutterBottom>
                 {results.length !== 0 && (`Results for ${q}`)}
+                {results.length === 0 && q !== "" && (`No results found for "${q}". Try whole words. `)}
             </Typography>
 
             {loading && <CircularProgress />}

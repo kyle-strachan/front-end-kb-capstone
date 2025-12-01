@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 export default function notify(message, type = "info") {
   switch (type.toLowerCase()) {
     case "success":
-      toast.success(message, { autoClose: 2000 });
+      toast.success(message, { autoClose: 1500 });
       break;
     case "error":
       toast.error(message, { autoClose: 5000 });
