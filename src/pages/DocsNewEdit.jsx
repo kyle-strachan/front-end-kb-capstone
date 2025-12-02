@@ -107,7 +107,6 @@ export default function DocsNewEdit() {
         if (newDepartmentId) fetchDocsCategories();
     }, [newDepartmentId]);
 
-    // SAFER: DOM-based normalization (no regex in JSX)
     function normalizeDocBody(body) {
         if (!body) return body;
 
@@ -151,7 +150,7 @@ export default function DocsNewEdit() {
                 setDocId(res.data.docId);
 
             } else {
-                await api.patch(`/docs/edit/${id}`, {
+                await api.patch(`/docs/edit/${docId}`, {
                     title: docTitle,
                     description: docDescription,
                     body: normalizedBody,
@@ -218,7 +217,7 @@ export default function DocsNewEdit() {
                 </div>
                 <Editor key={docId || "new"} value={docBody} onChange={handleEditorChange} docId={docId} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
-                    <Button variant="contained" onClick={() => handleSave(id ? "edit" : "new")} disabled={loading}>
+                    <Button variant="contained" onClick={() => handleSave(docId ? "edit" : "new")} disabled={loading}>
                         {docId ? "Update" : "Insert"}
                     </Button>
                     <Button variant="outlined" onClick={() => navigate(docId ? `/docs/view/${docId}` : -1)}>
