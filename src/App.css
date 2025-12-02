@@ -51,11 +51,6 @@ footer {
   background-size: cover;
 }
 
-/* Editor */
-.ck.ck-editor__editable_inline {
-  min-height: 300px !important;
-}
-
 /* Search results */
 .docs-search-result {
   width: 100%;
@@ -73,7 +68,7 @@ footer {
   margin-bottom: 1rem;
 }
 
-/* Dahsboard */
+/* Dashboard */
 
 .dashboard-document-tree-pane {
   width: 300px;
