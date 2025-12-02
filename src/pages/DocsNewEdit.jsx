@@ -1,5 +1,5 @@
 import Editor from "../components/Editor"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     Paper,
@@ -17,6 +17,7 @@ import notify from "../utils/toastify";
 import LoadingSpinnerWithoutContext from "../components/LoadingSpinnerWithoutContext";
 
 export default function DocsNewEdit() {
+    const saveLock = useRef(false); // State update was too slow to prevent duplicate new documents if double-clicked
     const { id } = useParams(); // will be undefined for "New"
     const [docId, setDocId] = useState(id);
     const [doc, setDoc] = useState(null);
@@ -30,7 +31,7 @@ export default function DocsNewEdit() {
     const [newDocsCategoryId, setDocsCategoryId] = useState(null);
     const [docIsArchived, setDocIsArchived] = useState(false);
     const navigate = useNavigate();
-    const { setLoading } = useLoading();
+    const { loading, setLoading } = useLoading();
     const [error, setError] = useState(null);
 
     function handleEditorChange(newValue) {
@@ -132,8 +133,10 @@ export default function DocsNewEdit() {
     }
 
     async function handleSave(mode) {
+        if (saveLock.current) return; // Prevent double fire
+        saveLock.current = true;
         const normalizedBody = normalizeDocBody(docBody);
-
+        setLoading(true);
         try {
             if (mode === "new") {
                 const res = await api.post(`/docs/`, {
@@ -162,6 +165,9 @@ export default function DocsNewEdit() {
             fetchExistingDoc();
         } catch (error) {
             notify(`Unable to save document. ${error}`, "error");
+        } finally {
+            setLoading(false);
+            saveLock.current = false;
         }
     }
 
@@ -212,7 +218,7 @@ export default function DocsNewEdit() {
                 </div>
                 <Editor key={docId || "new"} value={docBody} onChange={handleEditorChange} docId={docId} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
-                    <Button variant="contained" onClick={() => handleSave(id ? "edit" : "new")}>
+                    <Button variant="contained" onClick={() => handleSave(id ? "edit" : "new")} disabled={loading}>
                         {docId ? "Update" : "Insert"}
                     </Button>
                     <Button variant="outlined" onClick={() => navigate(docId ? `/docs/view/${docId}` : -1)}>
