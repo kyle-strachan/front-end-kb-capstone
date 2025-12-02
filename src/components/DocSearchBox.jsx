@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Paper } from "@mui/material";
 
-export default function DocSearch({ placeholder = "Search Documents" }) {
+export default function DocSearchBox({ placeholder = "Search Documents" }) {
 
     const [query, setQuery] = useState(""); // Holds search query
     const navigate = useNavigate();

@@ -5,8 +5,7 @@ import '@fontsource/roboto/700.css';
 import Paper from "@mui/material/Paper";
 import DocTree from "../components/DocTree";
 import RequestsOverview from '../components/RequestsOverview';
-import DocSearch from '../components/DocSearchBox';
-// import { useLoading } from "../context/LoadingContext";
+import DocSearchBox from '../components/DocSearchBox';
 import { Typography } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import PlaceholderMaintenanceRequest from '../components/PlaceholderMaintenanceRequest';
@@ -18,7 +17,6 @@ import PlaceholderItRequest from '../components/PlaceholderItRequest';
 import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
-    // const { loading, setLoading } = useLoading();
     const { user } = useAuth();
 
     return (
@@ -26,7 +24,7 @@ export default function Dashboard() {
             <div className="dashboard-two-column">
                 <div className="dashboard-left-column">
                     <Paper style={{ width: "100%" }}>
-                        <DocSearch />
+                        <DocSearchBox />
                     </Paper>
                     <Paper style={{ width: "100%", marginBottom: "1rem" }}>
                         <DocTree />
