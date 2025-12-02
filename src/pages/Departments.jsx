@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import { useAuth } from "../context/AuthContext";
 import { api } from "../api";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
@@ -18,6 +17,7 @@ import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
 import { Typography } from "@mui/material";
 import Alert from '@mui/material/Alert';
+import { MINIMUM_DEPARTMENT_LENGTH } from "../utils/constants";
 
 export default function Departments() {
     const [departments, setDepartments] = useState([]);
@@ -28,6 +28,12 @@ export default function Departments() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
+    // Variable to disable Save button if any of the text inputs have fewer than three characters
+    const hasInvalid = departments.some(
+        (d) => d.department.trim().length < MINIMUM_DEPARTMENT_LENGTH
+    );
+
+    // Populate department list
     async function fetchDepartments() {
         try {
             setLoading(true);
@@ -39,8 +45,7 @@ export default function Departments() {
                 setDepartments([]);
                 setError(res.data.message || "No departments found.");
             }
-        } catch (err) {
-            console.error("Failed to fetch departments:", err.message);
+        } catch {
             setError("Could not load departments.");
         } finally {
             setLoading(false);
@@ -49,13 +54,32 @@ export default function Departments() {
 
     useEffect(() => {
         fetchDepartments();
-    }, []);
+    }, []); // Only required on initial page load
 
     function handleFieldChange(id, field, value) {
-        setDepartments((prev) =>
-            prev.map((dept) => (dept._id === id ? { ...dept, [field]: value } : dept))
-        );
-        setEdited((prev) => [...new Set([...prev, id])]);
+        // Update the departments state
+        setDepartments((prevDepartments) => {
+            // Create map based on the previous values
+            const updatedDepartments = prevDepartments.map((dept) => {
+                if (dept._id === id) {
+                    // Return revised departments
+                    return {
+                        ...dept, // Copy all existing fields
+                        [field]: value // Overwrite only the changed field
+                    };
+                } else {
+                    // Return the department unchanged
+                    return dept;
+                }
+            });
+            return updatedDepartments;
+        });
+
+        // Track which departments have been edited (for UI styling)
+        setEdited((prevEdited) => {
+            // Add the ID to the list and remove duplicates using a set
+            return [...new Set([...prevEdited, id])];
+        });
     }
 
     async function handleSave() {
@@ -68,33 +92,29 @@ export default function Departments() {
 
             const res = await api.put("/config/departments", { updates });
             const results = res.data.results || [];
-            const failedIds = results.filter((r) => !r.success).map((r) => r.id);
+            const failedIds = results.filter((result) => !result.success).map((result) => result.id);
 
+            // Keep failed updates highlighted in UI, but they are returned to their previous value
             setEdited((prev) => prev.filter((id) => failedIds.includes(id)));
 
             if (failedIds.length > 0) {
-                notify(`Some updates failed:\n` +
-                    results
-                        .filter((r) => !r.success)
-                        .map((r) => `${r.id}: ${r.message}`)
-                        .join("\n"), "error");
-
+                notify(`Some updates failed, see highlights below.`, "error");
             } else {
                 notify("All changes saved successfully.", "success");
                 setEdited([]);
             }
 
             await fetchDepartments();
-        } catch (error) {
-            console.error("Save failed:", error.message);
+        } catch {
             notify("Failed to save changes.", "error");
         }
     }
 
+    // Insert new department
     async function handleInsert() {
         try {
-            if (newDepartment.trim().length < 3) {
-                notify("New departments must have a minimum of 3 characters.", "error");
+            if (newDepartment.trim().length < MINIMUM_DEPARTMENT_LENGTH) {
+                notify(`New departments must have a minimum of ${MINIMUM_DEPARTMENT_LENGTH} characters.`, "error");
                 return;
             }
 
@@ -104,8 +124,7 @@ export default function Departments() {
             notify("Department added successfully.", "success");
             setNewDepartment("");
             await fetchDepartments();
-        } catch (error) {
-            console.error("Insert failed:", error.message);
+        } catch {
             notify("Failed to insert department.", "error");
         }
     }
@@ -120,12 +139,12 @@ export default function Departments() {
         <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="Configure Departments" />
 
+            {/* Insert new department */}
             <Paper sx={{ mb: 4, p: 3 }}>
                 <Typography variant="h2">Add New Department</Typography>
-                {/* <div className="btn-inline-container"> */}
                 <TextField
                     id="input-new-department"
                     helperText="Minimum three characters"
@@ -135,7 +154,6 @@ export default function Departments() {
                     onChange={(e) => setNewDepartment(e.target.value)}
                     sx={{ mr: 2, width: "100%" }}
                 />
-                {/* </div> */}
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
@@ -147,24 +165,23 @@ export default function Departments() {
                 </div>
             </Paper>
 
+            {/* Current departments table */}
             <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
                 <Typography variant="h2">Departments</Typography>
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
                         onClick={handleSave}
-                        disabled={edited.length === 0}
+                        disabled={edited.length === 0 || hasInvalid}
                         sx={{ mb: 2 }}
                     >
                         Save
                     </Button>
                 </div>
 
-
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
-
                         size="small"
                         aria-label="departments table"
                         sx={{ minWidth: 395, width: "100%" }}
@@ -190,6 +207,7 @@ export default function Departments() {
                                     >
                                         <TableCell sx={{ width: "100%", pl: 0 }}>
                                             <TextField
+                                                error={dept.department.length < 3}
                                                 variant="outlined"
                                                 value={dept.department}
                                                 onChange={(e) =>
@@ -200,7 +218,13 @@ export default function Departments() {
                                                     )
                                                 }
                                                 fullWidth
+                                                helperText={
+                                                    dept.department.length < 3
+                                                        ? "Must be at least 3 characters."
+                                                        : ""
+                                                }
                                             />
+
                                         </TableCell>
                                         <TableCell sx={{ width: 120 }}>
                                             <Checkbox
