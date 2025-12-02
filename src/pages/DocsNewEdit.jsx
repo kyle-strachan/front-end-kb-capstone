@@ -8,6 +8,7 @@ import {
     FormControlLabel,
     Switch,
     Typography,
+    Alert,
 } from "@mui/material";
 import { api } from "../api";
 import SelectWithSearch from "../components/SelectWithSearch";
@@ -215,6 +216,7 @@ export default function DocsNewEdit() {
                     />
                     <FormControlLabel control={<Switch />} label="Show to All Users" checked={docIsPublic} onChange={(e) => setDocIsPublic(e.target.checked)} />
                     <FormControlLabel control={<Switch />} label="Archive" checked={docIsArchived} onChange={(e) => setDocIsArchived(e.target.checked)} sx={{ mb: 2 }} />
+                    {!docId && (<Alert sx={{ mb: 2 }} severity="info">Images can be uploaded after saving the document for the first time.</Alert>)}
                 </div>
                 <Editor key={docId || "new"} value={docBody} onChange={handleEditorChange} docId={docId} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
