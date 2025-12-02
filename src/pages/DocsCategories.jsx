@@ -125,7 +125,7 @@ export default function DocsCategories() {
 
             await api.post("/config/docs-categories", {
                 category: newDocsCategory.trim(),
-                departmentId: [newDepartmentId?._id],
+                departmentId: newDepartmentId?._id,
             });
 
             notify("Document category added successfully.", "success");
