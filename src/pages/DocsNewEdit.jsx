@@ -163,7 +163,8 @@ export default function DocsNewEdit() {
             notify("Document saved successfully.", "success");
             fetchExistingDoc();
         } catch (error) {
-            notify(`Unable to save document. ${error}`, "error");
+            console.log(error);
+            notify(`Unable to save document. ${error.response.data.message}`, "error");
         } finally {
             setLoading(false);
             saveLock.current = false;
