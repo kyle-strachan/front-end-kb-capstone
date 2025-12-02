@@ -114,3 +114,17 @@
     min-width: 140px !important;
     width: auto !important;
 }
+
+/* Editor */
+.ck.ck-editor__editable_inline {
+    min-height: 300px !important;
+}
+
+code {
+    background: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    margin: 0 5px;
+}

@@ -13,14 +13,12 @@ import {
     ImageToolbar,
     ImageUpload,
     Table,
-    TableToolbar
+    TableToolbar,
+    Code,
 } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
 import { api } from '../api';
-
-// =============================
-// 1. Custom Upload Adapter
-// =============================
+// import Code from '@ckeditor/ckeditor5-basic-styles/src/code';
 
 class CustomUploadAdapter {
     constructor(loader, docId) {
@@ -48,20 +46,14 @@ class CustomUploadAdapter {
 
 }
 
-// =============================
-// 2. Plugin that registers adapter
-// =============================
-
+// Register adapter
 function UploadPlugin(editor, docId) {
     editor.plugins.get("FileRepository").createUploadAdapter = loader => {
         return new CustomUploadAdapter(loader, docId);
     };
 }
 
-// =============================
-// Editor build
-// =============================
-
+// Editor features
 class ClassicEditor extends ClassicEditorBase { }
 
 ClassicEditor.builtinPlugins = [
@@ -78,6 +70,7 @@ ClassicEditor.builtinPlugins = [
     ImageUpload,
     Table,
     TableToolbar,
+    Code,
 ];
 
 ClassicEditor.defaultConfig = {
@@ -86,7 +79,7 @@ ClassicEditor.defaultConfig = {
     toolbar: [
         'undo', 'redo', '|',
         'heading', '|',
-        'bold', 'italic', '|',
+        'bold', 'italic', 'code', '|',
         'blockQuote', '|',
         'bulletedList', 'numberedList', '|',
         'link', 'insertImage', 'insertTable',
