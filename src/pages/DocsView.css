@@ -90,3 +90,12 @@
     text-align: left;
     padding-left: 15px;
 }
+
+.ck-editor__editable table {
+    table-layout: fixed !important;
+}
+
+.ck-editor__editable table col {
+    min-width: 140px !important;
+    width: auto !important;
+}
