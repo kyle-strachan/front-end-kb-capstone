@@ -13,6 +13,7 @@ import {
 import { api } from "../api";
 import { useLoading } from "../context/LoadingContext";
 import DocSearchBox from "../components/DocSearchBox";
+import DocTree from "../components/DocTree";
 
 export default function DocsSearchResults() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -51,56 +52,73 @@ export default function DocsSearchResults() {
     };
 
     return (
-        <Box sx={{ p: 3 }}>
-            <DocSearchBox placeholder={q === "" ? "Search Documents" : q} />
-            <Typography variant="h6" gutterBottom>
-                {results.length !== 0 && (`Results for ${q}`)}
-                {results.length === 0 && q !== "" && (`No results found for "${q}". Try whole words. `)}
-            </Typography>
+        <>
+            <div style={{ maxWidth: "1280px", height: "vh", margin: "0 auto", padding: "1rem" }}>
+                <DocSearchBox placeholder={q === "" ? "Search Documents" : q} />
+                <div className="dashboard-two-column">
+                    <div className="dashboard-left-column">
+                        <Paper style={{ width: "100%", marginBottom: "1rem" }}>
+                            <DocTree />
+                        </Paper>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1rem", width: "100%" }}>
+                        <Box sx={{ p: 0 }}>
+                            <Typography variant="h6" gutterBottom>
+                                {results.length !== 0 && (`Results for ${q}`)}
+                                {results.length === 0 && q !== "" && (`No results found for "${q}". Try whole words. `)}
+                            </Typography>
 
-            {loading && <CircularProgress />}
-            {error && (
-                <Typography color="error" sx={{ mt: 2 }}>
-                    {error}
-                </Typography>
-            )}
+                            {loading && <CircularProgress />}
+                            {error && (
+                                <Typography color="error" sx={{ mt: 2 }}>
+                                    {error}
+                                </Typography>
+                            )}
 
-            {!loading && !error && (
-                <List>
-                    {results.map((doc) => (
-                        <ListItem key={doc._id} alignItems="flex-start" sx={{ p: 0 }} >
-                            <Paper className="docs-search-result" sx={{ width: "100%", flexGrow: 1, pt: 1, pb: 1, pl: 2, pr: 2, mb: 1 }}>
-                                <div className="docs-search-result" >
-                                    <a href={`/docs/view/${doc?._id}`}>
-                                        <ListItemText
-                                            primary={<Typography variant="h6">{doc.title}</Typography>}
-                                            secondary={
-                                                <>
-                                                    <Typography variant="body2" component="span">
-                                                        {doc?.description}
-                                                    </Typography>
-                                                    <Typography variant="body2" component="span">
-                                                        {doc?.department?.department} &gt; {doc?.docsCategory?.category}
-                                                    </Typography>
-                                                </>
-                                            }
-                                        />
-                                    </a>
-                                </div>
-                            </Paper>
-                        </ListItem>
-                    ))}
-                </List>
-            )}
+                            {!loading && !error && (
+                                <List>
+                                    {results.map((doc) => (
+                                        <ListItem key={doc._id} alignItems="flex-start" sx={{ p: 0 }} >
+                                            <Paper className="docs-search-result" sx={{ width: "100%", flexGrow: 1, pt: 1, pb: 1, pl: 2, pr: 2, mb: 1 }}>
+                                                <div className="docs-search-result" >
+                                                    <a href={`/docs/view/${doc?._id}`}>
+                                                        <ListItemText
+                                                            primary={<Typography variant="h6">{doc.title}</Typography>}
+                                                            secondary={
+                                                                <>
+                                                                    <Typography variant="body2" component="span">
+                                                                        {doc?.description}
+                                                                    </Typography>
+                                                                    <Typography variant="body2" component="span">
+                                                                        {doc?.department?.department} &gt; {doc?.docsCategory?.category}
+                                                                    </Typography>
+                                                                </>
+                                                            }
+                                                        />
+                                                    </a>
+                                                </div>
+                                            </Paper>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            )}
 
-            {total > limit && (
-                <Pagination
-                    count={Math.ceil(total / limit)}
-                    page={page}
-                    onChange={handlePageChange}
-                    sx={{ mt: 2 }}
-                />
-            )}
-        </Box>
+                            {total > limit && (
+                                <Pagination
+                                    count={Math.ceil(total / limit)}
+                                    page={page}
+                                    onChange={handlePageChange}
+                                    sx={{ mt: 2 }}
+                                />
+                            )}
+                        </Box>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </>
     );
 }
