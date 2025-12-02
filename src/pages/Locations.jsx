@@ -119,7 +119,7 @@ export default function Locations() {
         <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title="Configure Locations" />
             <Paper sx={{ mb: 4, p: 3 }}>
                 <Typography variant="h2">Add New Location</Typography>

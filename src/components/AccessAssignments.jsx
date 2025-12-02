@@ -78,7 +78,7 @@ export default function AccessAssignments({ id, fullName, notify }) {
     if (error) return <p>{error}</p>;
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
 
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>

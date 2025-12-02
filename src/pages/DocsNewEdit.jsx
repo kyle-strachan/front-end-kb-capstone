@@ -180,7 +180,7 @@ export default function DocsNewEdit() {
         <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
     return (
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "1rem" }}>
+        <div className="page-content">
             <PageTitle title={docId ? "Edit Document" : "New Document"} />
             <Paper sx={{ width: "100%", overflow: "hidden", padding: "20px" }}>
                 <Typography variant="h2">{docId ? "Edit Document" : "New Document"}</Typography>
