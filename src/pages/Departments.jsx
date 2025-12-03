@@ -30,7 +30,7 @@ export default function Departments() {
 
     // Variable to disable Save button if any of the text inputs have fewer than three characters
     const hasInvalid = departments.some(
-        (d) => d.department.trim().length < MINIMUM_DEPARTMENT_LENGTH
+        (d) => d.department?.trim().length < MINIMUM_DEPARTMENT_LENGTH
     );
 
     // Populate department list
@@ -84,6 +84,7 @@ export default function Departments() {
 
     async function handleSave() {
         try {
+            // Send only updated values
             const updates = departments.filter((d) => edited.includes(d._id));
             if (updates.length === 0) {
                 notify("No changes to save.", "error");
@@ -219,8 +220,8 @@ export default function Departments() {
                                                 }
                                                 fullWidth
                                                 helperText={
-                                                    dept.department.length < 3
-                                                        ? "Must be at least 3 characters."
+                                                    dept.department.length < MINIMUM_DEPARTMENT_LENGTH
+                                                        ? `Must be at least ${MINIMUM_DEPARTMENT_LENGTH} characters.`
                                                         : ""
                                                 }
                                             />

@@ -18,6 +18,7 @@ import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
 import Alert from '@mui/material/Alert';
 import { Typography } from "@mui/material";
+import { MINIMUM_CATEGORY_LENGTH } from "../utils/constants";
 
 export default function DocsCategories() {
     const [docsCategories, setDocsCategories] = useState([]);
@@ -29,6 +30,11 @@ export default function DocsCategories() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [departments, setDepartments] = useState([]);
     const [newDepartmentId, setNewDepartmentId] = useState(null);
+
+    // Variable to disable Save button if any of the text inputs have fewer than three characters
+    const hasInvalid = docsCategories.some(
+        (d) => d.category?.trim().length < MINIMUM_CATEGORY_LENGTH
+    );
 
     async function fetchDocsCategories() {
         try {
@@ -49,10 +55,6 @@ export default function DocsCategories() {
         }
     }
 
-    useEffect(() => {
-        fetchDocsCategories();
-    }, []);
-
     async function fetchDepartments() {
         try {
             const res = await api.get("/config/departments");
@@ -71,19 +73,39 @@ export default function DocsCategories() {
     }
 
     useEffect(() => {
+        fetchDocsCategories();
         fetchDepartments();
-    }, []);
-
+    }, []); // Required on initial load
 
     function handleFieldChange(id, field, value) {
-        setDocsCategories((prev) =>
-            prev.map((dept) => (dept._id === id ? { ...dept, [field]: value } : dept))
-        );
-        setEdited((prev) => [...new Set([...prev, id])]);
+        // Update the category state
+        setDocsCategories((prev) => {
+            // Create map based on the previous values
+            const updatedCategories = prev.map((category) => {
+                if (category._id === id) {
+                    // Return revised categories
+                    return {
+                        ...category, // Copy all existing fields
+                        [field]: value // Overwrite only the changed field
+                    };
+                } else {
+                    // Return the categories unchanged
+                    return category;
+                }
+            });
+            return updatedCategories;
+        });
+
+        // Track which categories have been edited (for UI styling)
+        setEdited((prevEdited) => {
+            // Add the ID to the list and remove duplicates using a set
+            return [...new Set([...prevEdited, id])];
+        });
     }
 
     async function handleSave() {
         try {
+            // Send only updated values
             const updates = docsCategories.filter((d) => edited.includes(d._id));
             if (updates.length === 0) {
                 notify("No changes to save.", "error");
@@ -94,19 +116,14 @@ export default function DocsCategories() {
             const results = res.data.results || [];
             const failedIds = results.filter((r) => !r.success).map((r) => r.id);
 
+            // Keep failed updates highlighted in UI, but they are returned to their previous value
             setEdited((prev) => prev.filter((id) => failedIds.includes(id)));
 
             if (failedIds.length > 0) {
-                notify(`Some updates failed:\n` +
-                    results
-                        .filter((r) => !r.success)
-                        .map((r) => `${r.id}: ${r.message}`)
-                        .join("\n"), "error");
-
+                notify(`Some updates failed, see highlights below.`, "error");
             } else {
                 notify("All changes saved successfully.", "success");
                 setEdited([]);
-
             }
 
             await fetchDocsCategories();
@@ -116,10 +133,11 @@ export default function DocsCategories() {
         }
     }
 
+    // Insert new category
     async function handleInsert() {
         try {
-            if (newDocsCategory.trim().length < 3) {
-                notify("New document categories must have a minimum of 3 characters.", "error");
+            if (newDocsCategory.trim().length < MINIMUM_CATEGORY_LENGTH) {
+                notify(`New document categories must have a minimum of ${MINIMUM_CATEGORY_LENGTH} characters.`, "error");
                 return;
             }
 
@@ -131,8 +149,7 @@ export default function DocsCategories() {
             notify("Document category added successfully.", "success");
             setNewDocsCategory("");
             await fetchDocsCategories();
-        } catch (error) {
-            console.error("Insert failed:", error.message);
+        } catch {
             notify("Failed to insert document category.", "error");
         }
     }
@@ -194,7 +211,7 @@ export default function DocsCategories() {
                     <Button
                         variant="contained"
                         onClick={handleSave}
-                        disabled={edited.length === 0}
+                        disabled={edited.length === 0 || hasInvalid}
                         sx={{ mb: 2 }}
                     >
                         Save
@@ -240,6 +257,7 @@ export default function DocsCategories() {
                                         </TableCell>
                                         <TableCell sx={{ width: "60%" }}>
                                             <TextField
+                                                error={d.category?.length < MINIMUM_CATEGORY_LENGTH}
                                                 variant="outlined"
                                                 value={d.category}
                                                 onChange={(e) =>
@@ -250,6 +268,11 @@ export default function DocsCategories() {
                                                     )
                                                 }
                                                 fullWidth
+                                                helperText={
+                                                    d.category?.length < MINIMUM_CATEGORY_LENGTH
+                                                        ? `Must be at least ${MINIMUM_CATEGORY_LENGTH} characters.`
+                                                        : ""
+                                                }
                                             />
                                         </TableCell>
 
