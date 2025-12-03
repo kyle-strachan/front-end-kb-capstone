@@ -34,7 +34,7 @@ export default function DocsView() {
             setDoc(res.data.doc);
             setCleanHtml(DOMPurify.sanitize(resolvedHtml));
         } catch {
-            setError("Cannot load documents.")
+            setError("Cannot load document.")
         } finally {
             setLoading(false);
         }
