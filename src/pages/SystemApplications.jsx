@@ -25,6 +25,7 @@ export default function SystemApplications() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
+    // Populate applications list
     async function fetchSystemApplications() {
         try {
             setLoading(true);
@@ -38,9 +39,8 @@ export default function SystemApplications() {
                 setSystemCategories([]);
                 setError(res.data.message || "No system applications or categories found.");
             }
-        } catch (err) {
-            console.error("Failed to fetch system applications:", err.message);
-            setError("Could not load system applications.");
+        } catch (error) {
+            setError(`Could not load system applications. ${error.message}`);
         } finally {
             setLoading(false);
         }
@@ -48,7 +48,7 @@ export default function SystemApplications() {
 
     useEffect(() => {
         fetchSystemApplications();
-    }, []);
+    }, []); // Get only on initial load
 
     function handleRefresh() {
         fetchSystemApplications();
@@ -85,7 +85,6 @@ export default function SystemApplications() {
                         {loading === true ? "Loading" : "Refresh"}
                     </Button>
                 </div>
-
 
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
