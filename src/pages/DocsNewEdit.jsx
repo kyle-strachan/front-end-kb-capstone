@@ -90,6 +90,22 @@ export default function DocsNewEdit() {
     }
 
     useEffect(() => {
+        // When switching to new document while existing a current one.
+        if (!id) {
+            setDoc(null);
+            setDocId(null);
+            setDocTitle("");
+            setDocDescription("");
+            setDocIsPublic(false);
+            setDocIsArchived(false);
+            setSelectedDepartmentId(null);
+            setSelectedDocsCategoryId(null);
+            setDocBody("");
+        }
+    }, [id]);
+
+
+    useEffect(() => {
         fetchDepartments();
         fetchExistingDoc();
     }, []); // On inital load attempt to load existing document in edit mode plus departments list
