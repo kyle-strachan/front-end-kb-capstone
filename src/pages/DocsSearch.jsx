@@ -17,7 +17,7 @@ import DocTree from "../components/DocTree";
 
 export default function DocsSearchResults() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const q = searchParams.get("q") || "";
+    const query = searchParams.get("q") || "";
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
     const [results, setResults] = useState([]);
@@ -27,12 +27,12 @@ export default function DocsSearchResults() {
 
     useEffect(() => {
         const fetchResults = async () => {
-            if (!q) return;
+            if (!query) return;
             setLoading(true);
             setError(null);
             try {
                 const res = await api.get(
-                    `/docs/search?q=${encodeURIComponent(q)}&page=${page}&limit=${limit}`
+                    `/docs/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`
                 );
                 setResults(res.data.results);
                 setTotal(res.data.total);
@@ -45,16 +45,16 @@ export default function DocsSearchResults() {
         };
 
         fetchResults();
-    }, [q, page, limit]);
+    }, [query, page, limit]);
 
     const handlePageChange = (event, value) => {
-        setSearchParams({ q, page: value, limit });
+        setSearchParams({ q: query, page: value, limit });
     };
 
     return (
         <>
             <div style={{ maxWidth: "1280px", height: "vh", margin: "0 auto", padding: "1rem" }}>
-                <DocSearchBox placeholder={q === "" ? "Search Documents" : q} />
+                <DocSearchBox placeholder={query === "" ? "Search Documents" : query} />
                 <div className="dashboard-two-column">
                     <div className="dashboard-left-column">
                         <Paper style={{ width: "100%", marginBottom: "1rem" }}>
@@ -64,8 +64,8 @@ export default function DocsSearchResults() {
                     <div style={{ display: "flex", flexDirection: "column", gap: "1rem", width: "100%" }}>
                         <Box sx={{ p: 0 }}>
                             <Typography variant="h6" gutterBottom>
-                                {results.length !== 0 && (`Results for ${q}`)}
-                                {results.length === 0 && q !== "" && (`No results found for "${q}". Try whole words. `)}
+                                {results.length !== 0 && (`Results for ${query}`)}
+                                {results.length === 0 && query !== "" && (`No results found for "${query}". Try whole words. `)}
                             </Typography>
 
                             {loading && <CircularProgress />}

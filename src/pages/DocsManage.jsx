@@ -14,7 +14,6 @@ import TableRow from "@mui/material/TableRow";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import "../App.css";
-import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import Alert from '@mui/material/Alert';
 import PageTitleCustom from "../components/PageTitleCustom";
@@ -29,6 +28,7 @@ export default function Docs() {
     const [showActive, setShowActive] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
 
+    // Get all documents (no filters)
     async function fetchDocs() {
         try {
             setLoading(true);
@@ -40,8 +40,7 @@ export default function Docs() {
                 setDocs([]);
                 setError(res.data.message || "No documents found.");
             }
-        } catch (err) {
-            console.error("Failed to fetch docs:", err.message);
+        } catch {
             setError("Could not load docs.");
         } finally {
             setLoading(false);
@@ -50,11 +49,7 @@ export default function Docs() {
 
     useEffect(() => {
         fetchDocs();
-    }, []);
-
-    function handleRefresh() {
-        fetchDocs();
-    }
+    }, []); // Initial load only
 
     const handleChangePage = (_, newPage) => setPage(newPage);
     const handleChangeRowsPerPage = (e) => {
@@ -62,7 +57,7 @@ export default function Docs() {
         setPage(0);
     };
 
-    // Multiple filters
+    // Table filters to show archived or seach term documents.
     const filteredDocs = docs.filter((d) => d.isArchived !== showActive).filter((d) => {
         const term = searchTerm.toLowerCase(); return (
             (d.description?.toLowerCase() ?? "").includes(term) ||
@@ -130,7 +125,7 @@ export default function Docs() {
                                     <div className="cta-btn-container">
                                         <Button
                                             variant="outlined"
-                                            onClick={handleRefresh}
+                                            onClick={fetchDocs}
                                             sx={{ mb: 2 }}
                                             disabled={loading}
                                         >
