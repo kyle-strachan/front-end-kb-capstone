@@ -7,6 +7,7 @@ import {
     Button,
     Typography,
     Autocomplete,
+    Alert,
 } from "@mui/material";
 import SelectWithSearch from "../components/SelectWithSearch";
 import AccessRequests from "../components/AccessRequests";
@@ -14,6 +15,7 @@ import AccessAssignments from "../components/AccessAssignments";
 import CustomDialogYesNo from "../components/CustomDialogYesNo";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
+import { MINIMUM_USERNAME_LENGTH } from "../utils/constants";
 
 export default function UsersNewEdit() {
     let { id } = useParams(); // will be undefined for "New"
@@ -100,12 +102,16 @@ export default function UsersNewEdit() {
 
     async function handleSave() {
         // Validate form
-        if (user.username.trim().length < 3) {
-            notify("A username must have a minimum of 3 characters.", "error");
+        if (user.username.trim().length < MINIMUM_USERNAME_LENGTH) {
+            notify(`A username must have a minimum of ${MINIMUM_USERNAME_LENGTH} characters.`, "error");
             return;
         }
         if (user.fullName.trim().length < 3) {
             notify("Full name must have a minimum of 3 characters.", "error");
+            return;
+        }
+        if (user.roles.length === 0) {
+            notify("At least one role is required.", "error");
             return;
         }
         if (user.department.length === 0) {
@@ -117,7 +123,7 @@ export default function UsersNewEdit() {
             return;
         }
         if (user.position.length === 0) {
-            notify("A position is required.", "error");
+            notify("The user's position is required.", "error");
             return;
         }
 
@@ -200,10 +206,10 @@ export default function UsersNewEdit() {
                         sx={{ mb: 2 }}
                     />
 
-
+                    <Alert sx={{ mb: 2 }} severity="info">Departments provide access to documents.</Alert>
                     <SelectWithSearch
                         options={departments}
-                        label="Department (provide Doc access to)"
+                        label="Departments"
                         labelField="department"
                         multiple
                         value={departments.filter((c) => (user.department || []).includes(c._id))}
@@ -244,25 +250,13 @@ export default function UsersNewEdit() {
                         sx={{ mb: 2 }}
                     />
 
-                    {/* Show isActive box only for existing users. All new users are active by default */}
-                    {/* {id && (
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={user.isActive}
-                                    onChange={(e) => handleFieldChange("isActive", e.target.checked)}
-                                />
-                            }
-                            label="Active"
-                            sx={{ mt: 2 }}
-                        />
-                    )} */}
                     {id && (<Typography>Status: {user.isActive ? "Active" : "Terminated"}</Typography>)}
 
                     {/* Show password box for new users only */}
                     {!id && (
                         <TextField
                             fullWidth
+                            autoComplete="new-password"
                             variant="outlined"
                             label="Temporary Password"
                             type="password"
@@ -298,9 +292,6 @@ export default function UsersNewEdit() {
                             dialogContent={`Are you sure you wish to terminate ${user?.fullName}? Terminate access requests will be sent to all admins.`}
                             dialogueYesAction={handleTerminate}
                         />)}
-                        {/* {id && (<Button variant="outlined" color="error" onClick={handleTerminate}>
-                            Terminate
-                        </Button>)} */}
                     </div>
                 </Paper>
             </div>

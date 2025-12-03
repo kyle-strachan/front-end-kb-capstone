@@ -45,8 +45,8 @@ export default function Departments() {
                 setDepartments([]);
                 setError(res.data.message || "No departments found.");
             }
-        } catch {
-            setError("Could not load departments.");
+        } catch (error) {
+            setError(`Could not load departments. ${error.message}`);
         } finally {
             setLoading(false);
         }
@@ -106,8 +106,8 @@ export default function Departments() {
             }
 
             await fetchDepartments();
-        } catch {
-            notify("Failed to save changes.", "error");
+        } catch (error) {
+            notify(`Failed to save changes. ${error.message}`, "error");
         }
     }
 
@@ -125,8 +125,8 @@ export default function Departments() {
             notify("Department added successfully.", "success");
             setNewDepartment("");
             await fetchDepartments();
-        } catch {
-            notify("Failed to insert department.", "error");
+        } catch (error) {
+            notify(`Failed to insert department. ${error.message}`, "error");
         }
     }
 
@@ -153,13 +153,13 @@ export default function Departments() {
                     variant="outlined"
                     value={newDepartment}
                     onChange={(e) => setNewDepartment(e.target.value)}
-                    sx={{ mr: 2, width: "100%" }}
+                    sx={{ width: "100%" }}
                 />
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
                         onClick={handleInsert}
-                        disabled={newDepartment.trim().length < 3}
+                        disabled={newDepartment.trim().length < MINIMUM_DEPARTMENT_LENGTH}
                     >
                         Insert
                     </Button>
@@ -208,7 +208,7 @@ export default function Departments() {
                                     >
                                         <TableCell sx={{ width: "100%", pl: 0 }}>
                                             <TextField
-                                                error={dept.department.length < 3}
+                                                error={dept.department.length < MINIMUM_DEPARTMENT_LENGTH}
                                                 variant="outlined"
                                                 value={dept.department}
                                                 onChange={(e) =>

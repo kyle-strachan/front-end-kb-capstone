@@ -13,6 +13,7 @@ import SelectWithSearch from "../components/SelectWithSearch";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
 import Alert from '@mui/material/Alert';
+import { MINIMUM_SYSTEM_LENGTH } from "../utils/constants";
 
 export default function SystemApplicationsNewEdit() {
     const { id } = useParams(); // will be undefined for "New"
@@ -85,8 +86,7 @@ export default function SystemApplicationsNewEdit() {
                 await api.post(`/config/system-applications`, systemApp);
                 notify("System application created successfully.", "success");
             }
-            // navigate("/system-applications");
-            setTimeout(() => navigate("/system-applications"), 1200);
+            navigate("/system-applications");
         } catch (error) {
             console.error("Save failed:", error.message);
             notify("Failed to save changes.", "error");
@@ -107,6 +107,11 @@ export default function SystemApplicationsNewEdit() {
                     value={systemApp.system}
                     onChange={(e) => handleFieldChange("system", e.target.value)}
                     sx={{ mt: 2, mb: 2 }}
+                    helperText={
+                        systemApp.system.length < MINIMUM_SYSTEM_LENGTH
+                            ? `Must be at least ${MINIMUM_SYSTEM_LENGTH} characters.`
+                            : ""
+                    }
                 />
 
                 <SelectWithSearch
@@ -170,14 +175,14 @@ export default function SystemApplicationsNewEdit() {
                 />
 
                 <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
-                    <Button variant="contained" onClick={handleSave}>
+                    <Button variant="contained" onClick={handleSave} disabled={(systemApp.system.length < MINIMUM_SYSTEM_LENGTH) || systemApp.category === "" || systemApp.adminUser.length === 0}>
                         Save
                     </Button>
-                    <Button variant="outlined" onClick={() => navigate(-1)}>
-                        Cancel
+                    <Button variant="outlined" onClick={() => navigate("/system-applications")}>
+                        Close
                     </Button>
                 </div>
-            </Paper>
-        </div>
+            </Paper >
+        </div >
     );
 }

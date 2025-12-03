@@ -17,6 +17,7 @@ import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
 import { Typography } from "@mui/material";
 import Alert from '@mui/material/Alert';
+import { MINIMUM_LOCATION_LENGTH } from "../utils/constants";
 
 export default function Locations() {
     const [locations, setLocations] = useState([]);
@@ -27,6 +28,12 @@ export default function Locations() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
+    // Variable to disable Save button if any of the text inputs have fewer than three characters
+    const hasInvalid = locations.some(
+        (d) => d.location?.trim().length < MINIMUM_LOCATION_LENGTH
+    );
+
+    // Populate locations list
     async function fetchLocations() {
         try {
             setLoading(true);
@@ -38,8 +45,7 @@ export default function Locations() {
                 setLocations([]);
                 setError(res.data.message || "No locations found.");
             }
-        } catch (err) {
-            console.error("Failed to fetch locations:", err.message);
+        } catch {
             setError("Could not load locations.");
         } finally {
             setLoading(false);
@@ -48,17 +54,37 @@ export default function Locations() {
 
     useEffect(() => {
         fetchLocations();
-    }, []);
+    }, []); // Only required on initial page load
 
     function handleFieldChange(id, field, value) {
-        setLocations((prev) =>
-            prev.map((dept) => (dept._id === id ? { ...dept, [field]: value } : dept))
-        );
-        setEdited((prev) => [...new Set([...prev, id])]);
+        // Update the locations state
+        setLocations((prevLocations) => {
+            // Create map based on the previous values
+            const updatedLocations = prevLocations.map((loc) => {
+                if (loc._id === id) {
+                    // Return revised locations
+                    return {
+                        ...loc, // Copy all existing fields
+                        [field]: value // Overwrite only the changed field
+                    };
+                } else {
+                    // Return the location unchanged
+                    return loc;
+                }
+            });
+            return updatedLocations;
+        });
+
+        // Track which locations have been edited (for UI styling)
+        setEdited((prevEdited) => {
+            // Add the ID to the list and remove duplicates using a set
+            return [...new Set([...prevEdited, id])];
+        });
     }
 
     async function handleSave() {
         try {
+            // Send only updated values
             const updates = locations.filter((d) => edited.includes(d._id));
             if (updates.length === 0) {
                 notify("No changes to save.", "error");
@@ -67,33 +93,29 @@ export default function Locations() {
 
             const res = await api.put("/config/locations", { updates });
             const results = res.data.results || [];
-            const failedIds = results.filter((r) => !r.success).map((r) => r.id);
+            const failedIds = results.filter((result) => !result.success).map((result) => result.id);
 
+            // Keep failed updates highlighted in UI, but they are returned to their previous value
             setEdited((prev) => prev.filter((id) => failedIds.includes(id)));
 
             if (failedIds.length > 0) {
-                notify(`Some updates failed:\n` +
-                    results
-                        .filter((r) => !r.success)
-                        .map((r) => `${r.id}: ${r.message}`)
-                        .join("\n"), "error");
-
+                notify(`Some updates failed, see highlights below.`, "error");
             } else {
                 notify("All changes saved successfully.", "success");
                 setEdited([]);
-
             }
+
             await fetchLocations();
-        } catch (error) {
-            console.error("Save failed:", error.message);
+        } catch {
             notify("Failed to save changes.", "error");
         }
     }
 
+    // Insert new location
     async function handleInsert() {
         try {
-            if (newLocation.trim().length < 3) {
-                notify("New locations must have a minimum of 3 characters.", "error");
+            if (newLocation.trim().length < MINIMUM_LOCATION_LENGTH) {
+                notify(`New locations must have a minimum of ${MINIMUM_LOCATION_LENGTH} characters.`, "error");
                 return;
             }
 
@@ -103,8 +125,8 @@ export default function Locations() {
             notify("Location added successfully.", "success");
             setNewLocation("");
             await fetchLocations();
-        } catch (error) {
-            console.error("Insert failed:", error.message);
+        } catch {
+            // console.error("Insert failed:", error.message);
             notify("Failed to insert location.", "error");
         }
     }
@@ -121,6 +143,8 @@ export default function Locations() {
     return (
         <div className="page-content">
             <PageTitle title="Configure Locations" />
+
+            {/* Insert new location */}
             <Paper sx={{ mb: 4, p: 3 }}>
                 <Typography variant="h2">Add New Location</Typography>
                 <div className="btn-inline-container">
@@ -138,34 +162,33 @@ export default function Locations() {
                     <Button
                         variant="contained"
                         onClick={handleInsert}
-                        disabled={newLocation.trim().length < 3}
+                        disabled={newLocation.trim().length < MINIMUM_LOCATION_LENGTH}
                     >
                         Insert
                     </Button>
                 </div>
             </Paper>
 
+            {/* Current locations table */}
             <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
                 <Typography variant="h2">Locations</Typography>
-
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
                         onClick={handleSave}
-                        disabled={edited.length === 0}
+                        disabled={edited.length === 0 || hasInvalid}
                         sx={{ mb: 2 }}
                     >
                         Save
                     </Button>
                 </div>
 
-
                 <TableContainer sx={{ width: "100%", overflowX: "auto" }}>
                     <Table
                         stickyHeader
                         size="small"
                         aria-label="locations table"
-                        sx={{ minWidth: 650, width: "100%" }}
+                        sx={{ minWidth: 395, width: "100%" }}
                     >
                         <TableHead>
                             <TableRow>
@@ -176,36 +199,42 @@ export default function Locations() {
                         <TableBody>
                             {locations
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((dept) => (
+                                .map((loc) => (
                                     <TableRow
-                                        key={dept._id}
+                                        key={loc._id}
                                         hover
                                         sx={{
-                                            backgroundColor: edited.includes(dept._id)
+                                            backgroundColor: edited.includes(loc._id)
                                                 ? "#fffbe6"
                                                 : "inherit",
                                         }}
                                     >
                                         <TableCell sx={{ width: "100%", pl: 0 }}>
                                             <TextField
+                                                error={loc.location.length < MINIMUM_LOCATION_LENGTH}
                                                 variant="outlined"
-                                                value={dept.location}
+                                                value={loc.location}
                                                 onChange={(e) =>
                                                     handleFieldChange(
-                                                        dept._id,
+                                                        loc._id,
                                                         "location",
                                                         e.target.value
                                                     )
                                                 }
                                                 fullWidth
+                                                helperText={
+                                                    loc.location.length < MINIMUM_LOCATION_LENGTH
+                                                        ? `Must be at least ${MINIMUM_LOCATION_LENGTH} characters.`
+                                                        : ""
+                                                }
                                             />
                                         </TableCell>
                                         <TableCell sx={{ width: 120 }}>
                                             <Checkbox
-                                                checked={dept.isActive}
+                                                checked={loc.isActive}
                                                 onChange={(e) =>
                                                     handleFieldChange(
-                                                        dept._id,
+                                                        loc._id,
                                                         "isActive",
                                                         e.target.checked
                                                     )
