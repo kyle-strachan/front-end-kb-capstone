@@ -24,14 +24,17 @@ export default function DocsView() {
     const [cleanHtml, setCleanHtml] = useState("");
     const { user } = useAuth();
 
+    // Get single document
     async function fetchSingleDoc() {
         setLoading(true);
         setError(false);
         try {
             const res = await api.get(`/docs/${id}`);
             const rawHtml = res.data.doc.body;
+            // Replace placeholder Wasabi reference with signed URL
             const resolvedHtml = await resolveWasabiKeys(rawHtml);
             setDoc(res.data.doc);
+            // Sanitize body contents
             setCleanHtml(DOMPurify.sanitize(resolvedHtml));
         } catch {
             setError("Cannot load document.")
@@ -66,7 +69,7 @@ export default function DocsView() {
             </Paper>
             <Paper sx={{ p: 3 }}>
                 <div className="doc-body">
-                    {parse(cleanHtml)}
+                    {cleanHtml ? parse(cleanHtml) : null}
                 </div>
                 <Typography variant="caption" sx={{ lineHeight: "10px" }}>{doc?.department?.department} &gt; {doc?.docsCategory?.category}<br /></Typography>
                 <Typography variant="caption" sx={{ lineHeight: "10px" }}>Last updated by: {doc?.lastModifiedBy?.fullName} on {new Date(doc?.lastModifiedAt).toDateString()}</Typography>

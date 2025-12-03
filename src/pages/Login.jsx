@@ -10,6 +10,7 @@ import {
     Alert,
 } from "@mui/material";
 import { useLoading } from "../context/LoadingContext";
+import { MINIMUM_PASSWORD_LENGTH, MINIMUM_USERNAME_LENGTH } from "../utils/constants";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -23,8 +24,8 @@ export default function Login() {
         e.preventDefault();
         setLoading(true);
 
-        // Password rules not exposed on front-end
-        if (username.length < 3 || password.length < 8) {
+        // Only basic password validation exposed on front-end
+        if (username.length < MINIMUM_USERNAME_LENGTH || password.length < MINIMUM_PASSWORD_LENGTH) {
             setLoading(false);
             return setError("Invalid credentials, please try again.");
         }
