@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import {
     Paper,
-    TextField,
     Button,
     Typography,
 } from "@mui/material";
@@ -25,55 +24,44 @@ export default function AccessRequestNew() {
     const [requestNote, setRequestNote] = useState("");
 
     // Required to populate user list
-    async function fetchUsers() {
-        try {
-            setLoading(true);
-            setError(null);
-            const res = await api.get("/users/active");
-            if (res.data.users) {
-                setUsers(res.data.users);
-            } else {
-                setUsers([]);
-                setError(res.data.message || "No users found.");
-            }
-        } catch (err) {
-            console.error("Failed to fetch users:", err.message);
-            setError("Could not load users.");
-        } finally {
-            setLoading(false);
-        }
-    }
-
     useEffect(() => {
-        fetchUsers();
-    }, []);
+        async function load() {
+            try {
+                setLoading(true);
+                setError(null);
 
-    // Required to populate system apps
-    async function fetchSystemApplications() {
-        try {
-            setLoading(true);
-            setError(null);
-            const res = await api.get("/config/system-applications?active=true");
-            if (res.data.systemApplications) {
-                setSystemApplications(res.data.systemApplications);
-            } else {
-                setSystemApplications([]);
-                setError(res.data.message || "No system applications found.");
+                const [usersRes, appsRes] = await Promise.all([
+                    api.get("/users/active"),
+                    api.get("/config/system-applications?active=true"),
+                ]);
+
+                // Users
+                if (usersRes.data.users) {
+                    setUsers(usersRes.data.users);
+                } else {
+                    setUsers([]);
+                    setError(usersRes.data.message || "No users found.");
+                }
+
+                // System Apps
+                if (appsRes.data.systemApplications) {
+                    setSystemApplications(appsRes.data.systemApplications);
+                } else {
+                    setSystemApplications([]);
+                    setError(appsRes.data.message || "No system applications found.");
+                }
+
+            } catch {
+                setError("Failed to load required data.");
+            } finally {
+                setLoading(false);
             }
-        } catch (err) {
-            console.error("Failed to fetch system applications:", err.message);
-            setError("Could not load system applications.");
-        } finally {
-            setLoading(false);
         }
-    }
 
-    useEffect(() => {
-        fetchSystemApplications();
-    }, []);
+        load();
+    }, []); // Data fetch only on load
 
     async function handleSubmit() {
-        // setLoading(true);
         try {
             if (!selectedUser) {
                 notify("Request not submitted. No user selected.", "error");
@@ -84,6 +72,11 @@ export default function AccessRequestNew() {
                 userId: selectedUser._id,
                 applicationId: selectedApplications,
                 requestNote,
+            }
+
+            if (request.applicationId.length === 0) {
+                notify("Request not submitted. At least one system must be selected.", "error");
+                return;
             }
 
             const response = await api.post(`/uac/access-requests`, request);
@@ -128,7 +121,7 @@ export default function AccessRequestNew() {
 
                 <ApplicationsTransferList systems={systemApplications} selected={selectedApplications} onChange={setSelectedApplications} sx={{ mt: 10 }} />
 
-                {/* Notes not fully implemented into UI */}
+                {/* Notes on requests are supported in DB and backend but not yet implemented into UI. Hidden for now */}
                 {/* <TextField
                     fullWidth
                     multiline
@@ -141,7 +134,6 @@ export default function AccessRequestNew() {
                     }
                     sx={{ mt: 2 }}
                 /> */}
-
 
                 <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
                     <Button variant="contained" onClick={handleSubmit}>

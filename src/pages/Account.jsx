@@ -1,5 +1,5 @@
 import { useAuth } from "../context/AuthContext";
-import { Paper, Typography, Button, TextField } from "@mui/material"
+import { Paper, Typography, Button } from "@mui/material"
 import InputTextPassword from "../components/InputTextPassword"
 import { useState } from "react";
 import { api } from "../api";
@@ -15,18 +15,14 @@ export default function Account() {
     const [newPassword2, setNewPassword2] = useState("");
     const { setLoading } = useLoading();
 
-
     async function handleUpdatePassword() {
         try {
             setLoading(true);
-            const res = await api.patch("/auth/change-password", { newPassword }); //Add new password only.
-            if (res.status === 200) {
-                notify("Password changed successfully.", "success");
-                // Reload user from DB to clear redirect
-                await refreshUser();
-            } else {
-                notify(res.message, "error");
-            }
+            // Send new password only, user will be obtained from backend middleware for security
+            await api.patch("/auth/change-password", { newPassword });
+            notify("Password changed successfully.", "success");
+            // Reload user from DB to clear any forced redirect (for new/reset users)
+            await refreshUser();
         } catch (error) {
             const message =
                 error.response?.data?.message || error.message || "Unknown error";
@@ -44,8 +40,6 @@ export default function Account() {
             <PageTitle title="My Account" />
             <Paper sx={{ p: 3 }}>
                 <Typography variant="h2">{user.fullName} ({user.username})</Typography>
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                </Typography>
                 <Typography variant="h3" sx={{ mb: 2 }}>
                     Change Password
                 </Typography>

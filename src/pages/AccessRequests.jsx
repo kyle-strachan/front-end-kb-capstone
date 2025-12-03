@@ -26,6 +26,7 @@ export default function AccessRequests() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
+    // Get pending access requsts
     async function fetchAccessRequests() {
         try {
             setLoading(true);
@@ -40,8 +41,7 @@ export default function AccessRequests() {
                 setAccessRequests([]);
                 setError(res.data.message || "No pending access requests found.");
             }
-        } catch (error) {
-            console.error(`Failed to fetch access requests in "New" status.`, error.message);
+        } catch {
             setError("Could not load access requests.");
         } finally {
             setLoading(false);
@@ -50,17 +50,19 @@ export default function AccessRequests() {
 
     useEffect(() => {
         fetchAccessRequests();
-    }, []);
+    }, []); // Only fetch on initial load
 
     function handleRefresh() {
         fetchAccessRequests();
     }
 
+    // Actions to approve or reject a pending request
     async function handleApproveOrReject(id, action) {
         try {
             const res = await api.patch(`/uac/access-requests/${id}`, { action });
-            notify(res.data?.message || "Access request updated completed successfully.", "success")
+            notify(res.data?.message || "Request actioned successfully.", "success")
         } catch (error) {
+            // Force backend message as there are multiple reasons this could be rejected.
             const backendMessage = error.response?.data?.message;
             notify(`${backendMessage}` || `Access request not completed.`, "error");
         } finally {
@@ -73,6 +75,7 @@ export default function AccessRequests() {
             const res = await api.post(`/uac/access-assignments/confirm-revoke/${id}`);
             notify(res.data?.message || "Access confirmed as revoked.", "success")
         } catch (error) {
+            // Force backend message as there are multiple reasons this could be rejected.
             const backendMessage = error.response?.data?.message;
             notify(`${backendMessage}` || `Access request not completed`, "error")
         } finally {
@@ -144,7 +147,6 @@ export default function AccessRequests() {
                                             {d.applicationId?.system}
                                         </TableCell>
                                         <TableCell>
-                                            {/* {d.requestType === "Revoke" ? <Typography color="red">{d.requestType}</Typography> : d.requestType} */}
                                             {d.requestType === "Revoke"
                                                 ? <span style={{ color: "red" }}>{d.requestType}</span>
                                                 : d.requestType}

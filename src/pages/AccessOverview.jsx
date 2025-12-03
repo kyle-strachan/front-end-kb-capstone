@@ -24,21 +24,19 @@ export default function Users() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
-    const [tableNote, setTableNote] = useState(null)
     const [accessAssignments, setAccessAssignments] = useState([]);
     const { user } = useAuth();
 
+    // Get current access list
     async function fetchAccessAssignments() {
         setLoading(true);
         setError(null);
-        setTableNote("");
         try {
             const res = await api.get("/uac/access-assignments")
             if (res.data.assignments) {
                 setAccessAssignments(res.data.assignments);
             }
         } catch (error) {
-            setTableNote("No access assignments found.");
             setError(`Could not load Access Assignments. ${error}`)
         } finally {
             setLoading(false);
@@ -47,7 +45,7 @@ export default function Users() {
 
     useEffect(() => {
         fetchAccessAssignments();
-    }, []);
+    }, []); // Fetch on initial load only
 
     function handleRefresh() {
         fetchAccessAssignments();
@@ -62,7 +60,7 @@ export default function Users() {
     if (error) return (
         <div className="page-content"><Alert severity="error">{error}</Alert></div>);
 
-    // Multiple filters
+    // Filter fetch results
     const filteredAccessAssignments = accessAssignments.filter((d) => {
         const term = searchTerm.toLowerCase();
         return (
