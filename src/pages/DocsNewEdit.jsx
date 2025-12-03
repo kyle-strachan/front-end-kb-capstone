@@ -16,6 +16,7 @@ import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
 import LoadingSpinnerWithoutContext from "../components/LoadingSpinnerWithoutContext";
+import { resolveKeysToUrlsForEdit } from "../utils/wasabi";
 
 export default function DocsNewEdit() {
     const saveLock = useRef(false); // State update was too slow to prevent duplicate new documents if double-clicked
@@ -27,9 +28,9 @@ export default function DocsNewEdit() {
     const [docIsPublic, setDocIsPublic] = useState(false);
     const [docBody, setDocBody] = useState("");
     const [departments, setDepartments] = useState([]);
-    const [newDepartmentId, setNewDepartmentId] = useState(null);
     const [docsCategories, setDocsCategories] = useState([]);
-    const [newDocsCategoryId, setDocsCategoryId] = useState(null);
+    const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
+    const [selectedDocsCategoryId, setSelectedDocsCategoryId] = useState(null);
     const [docIsArchived, setDocIsArchived] = useState(false);
     const navigate = useNavigate();
     const { loading, setLoading } = useLoading();
@@ -39,6 +40,7 @@ export default function DocsNewEdit() {
         setDocBody(newValue);
     }
 
+    // Get departments list
     async function fetchDepartments() {
         try {
             setLoading(true);
@@ -46,106 +48,98 @@ export default function DocsNewEdit() {
             if (Array.isArray(res.data.departments)) setDepartments(res.data.departments);
             else setDepartments([]);
         } catch (error) {
-            setError("Could not load documents.", error.message);
+            setError(`Could not load documents. ${error.message}`);
         } finally {
             setLoading(false);
         }
     }
 
+    // Get categories lsit when department has been selected
     async function fetchDocsCategories() {
-        if (newDepartmentId !== null) {
+        if (selectedDepartmentId !== null) {
             try {
                 const res = await api.get("/config/docs-categories", {
-                    params: { departmentId: newDepartmentId._id }
+                    params: { departmentId: selectedDepartmentId._id }
                 });
                 if (Array.isArray(res.data.docsCategories)) setDocsCategories(res.data.docsCategories);
                 else setDocsCategories([]);
             } catch (error) {
-                console.error("Failed to fetch document categories:", error.message);
+                setError(`Failed to fetch document categories. ${error.message}`);
             }
         }
     }
 
-    // Resolve keys to fresh signed URLs so the editor shows images while editing
-    async function resolveKeysToUrlsForEdit(html) {
-        if (!html) return "";
-        const regex = /wasabi-key:([^"]+)/g;
-        let replaced = html;
-        let match;
-        while ((match = regex.exec(html)) !== null) {
-            const key = match[1];
-            const res = await api.get(`/docs/${id}/sign-url`, { params: { key } });
-            replaced = replaced.replace(`wasabi-key:${key}`, res.data.url);
-        }
-        return replaced;
-    }
-
+    // Populate fields if in edit mode/ id is not null
     async function fetchExistingDoc() {
         if (!id) return;
         try {
             const res = await api.get(`/docs/${id}`);
             const rawHtml = res.data.doc.body;
-            const resolvedForEditor = await resolveKeysToUrlsForEdit(rawHtml);
+            const resolvedForEditor = await resolveKeysToUrlsForEdit(rawHtml, id);
             setDoc(res.data.doc);
             setDocTitle(res.data.doc.title ?? "");
             setDocDescription(res.data.doc.description ?? "");
             setDocIsPublic(res.data.doc.isPublic ?? false);
             setDocIsArchived(res.data.doc.isArchived ?? false);
-            setNewDepartmentId(res.data.doc.department ?? null);
-            setDocsCategoryId(res.data.doc.docsCategory ?? null);
+            setSelectedDepartmentId(res.data.doc.department ?? null);
+            setSelectedDocsCategoryId(res.data.doc.docsCategory ?? null);
             setDocBody(resolvedForEditor); // editor shows fresh URLs
-        } catch (err) {
-            console.error("Failed to fetch document:", err.message);
+        } catch (error) {
+            setError(`Failed to fetch document. ${error.message}`);
         }
     }
 
     useEffect(() => {
         fetchDepartments();
         fetchExistingDoc();
-    }, []);
+    }, []); // On inital load attempt to load existing document in edit mode plus departments list
+    // TO DO: check whether department is overwriting edit doc
 
     useEffect(() => {
-        if (newDepartmentId) fetchDocsCategories();
-    }, [newDepartmentId]);
+        if (selectedDepartmentId) fetchDocsCategories();
+    }, [selectedDepartmentId]); // Refetch categories if department is changed.
 
     function normalizeDocBody(body) {
         if (!body) return body;
 
+        // Wrap document html in div tag
         const container = document.createElement("div");
         container.innerHTML = body;
 
-        // Convert all <img src="...documents/.../file.webp?..."> to wasabi-key markers
-        const imgs = container.querySelectorAll("img");
-        imgs.forEach(img => {
-            const src = img.getAttribute("src") || "";
-            // Only process if path includes /documents/ and ends with .webp (ignore query params)
+        // Convert all images to wasabi-key markers
+        // Submission note: Section of code required AI use
+        const images = container.querySelectorAll("img");
+        images.forEach(image => {
+            const src = image.getAttribute("src") || "";
+            // Only process if path includes /documents/ and ends with .webp - as this is the upload format
             const url = new URL(src, window.location.origin);
             const pathname = url.pathname; // e.g. /documents/<docId>/<file>.webp
             if (pathname.includes("/documents/") && pathname.endsWith(".webp")) {
                 // Extract "documents/<docId>/<file>.webp" from pathname
                 const idx = pathname.indexOf("documents/");
                 const key = pathname.substring(idx); // documents/<docId>/<file>.webp
-                img.setAttribute("src", `wasabi-key:${key}`);
+                image.setAttribute("src", `wasabi-key:${key}`);
             }
         });
-
         return container.innerHTML;
     }
 
     async function handleSave(mode) {
-        if (saveLock.current) return; // Prevent double fire
+        if (saveLock.current) return; // Prevent double click, noticed bug if left to state variable
         saveLock.current = true;
+
         const normalizedBody = normalizeDocBody(docBody);
         setLoading(true);
+
         try {
             if (mode === "new") {
                 const res = await api.post(`/docs/`, {
                     title: docTitle,
                     description: docDescription,
                     body: normalizedBody,
-                    department: newDepartmentId?._id,
+                    department: selectedDepartmentId?._id,
                     isPublic: docIsPublic,
-                    docsCategory: newDocsCategoryId?._id,
+                    docsCategory: selectedDocsCategoryId?._id,
                     isArchived: docIsArchived,
                 });
                 setDocId(res.data.docId);
@@ -155,16 +149,15 @@ export default function DocsNewEdit() {
                     title: docTitle,
                     description: docDescription,
                     body: normalizedBody,
-                    department: newDepartmentId?._id,
+                    department: selectedDepartmentId?._id,
                     isPublic: docIsPublic,
-                    docsCategory: newDocsCategoryId?._id,
+                    docsCategory: selectedDocsCategoryId?._id,
                     isArchived: docIsArchived,
                 });
             }
             notify("Document saved successfully.", "success");
             fetchExistingDoc();
         } catch (error) {
-            console.log(error);
             notify(`Unable to save document. ${error.response.data.message}`, "error");
         } finally {
             setLoading(false);
@@ -173,7 +166,7 @@ export default function DocsNewEdit() {
     }
 
     if (id && !doc) {
-        return <LoadingSpinnerWithoutContext />;
+        return <LoadingSpinnerWithoutContext />; // Workaround - see known issues doc
     }
 
     if (error) return (
@@ -199,10 +192,10 @@ export default function DocsNewEdit() {
                         options={departments}
                         label="Department"
                         labelField="department"
-                        value={newDepartmentId}
+                        value={selectedDepartmentId}
                         onChange={(e, newValue) => {
-                            setNewDepartmentId(newValue);
-                            setDocsCategoryId(null); // clear category only when user changes
+                            setSelectedDepartmentId(newValue);
+                            setSelectedDocsCategoryId(null); // clear category only when user changes
                         }}
                         required
                     />
@@ -210,8 +203,8 @@ export default function DocsNewEdit() {
                         options={docsCategories}
                         label="Category"
                         labelField="category"
-                        value={newDocsCategoryId ?? null}
-                        onChange={(e, newValue) => setDocsCategoryId(newValue)}
+                        value={selectedDocsCategoryId ?? null}
+                        onChange={(e, newValue) => setSelectedDocsCategoryId(newValue)}
                         required
                     />
                     <FormControlLabel control={<Switch />} label="Show to All Users" checked={docIsPublic} onChange={(e) => setDocIsPublic(e.target.checked)} />
@@ -221,7 +214,7 @@ export default function DocsNewEdit() {
                 <Editor key={docId || "new"} value={docBody} onChange={handleEditorChange} docId={docId} />
                 <div style={{ marginTop: "2rem", display: "flex", gap: "1rem" }}>
                     <Button variant="contained" onClick={() => handleSave(docId ? "edit" : "new")} disabled={loading}>
-                        {docId ? "Update" : "Insert"}
+                        {docId ? "Update" : "Create"}
                     </Button>
                     <Button variant="outlined" onClick={() => navigate(docId ? `/docs/view/${docId}` : -1)}>
                         {docId ? "Close" : "Cancel"}
