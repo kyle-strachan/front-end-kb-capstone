@@ -15,7 +15,7 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import "../App.css";
 import ResetPasswordForm from "../components/ResetPasswordForm";
-import PageTitle from "../components/PageTitle";
+import PageTitleCustom from "../components/PageTitleCustom";
 import { useLoading } from "../context/LoadingContext";
 import Alert from '@mui/material/Alert';
 import { useAuth } from "../context/AuthContext";
@@ -31,6 +31,7 @@ export default function Users() {
     const [searchTerm, setSearchTerm] = useState("");
     const { user } = useAuth();
 
+    // Get all users
     async function fetchUsers() {
         try {
             setLoading(true);
@@ -42,9 +43,8 @@ export default function Users() {
                 setUsers([]);
                 setError(res.data.message || "No users found.");
             }
-        } catch (err) {
-            console.error("Failed to fetch users:", err.message);
-            setError("Could not load users.");
+        } catch (error) {
+            setError(`Could not load users. ${error.message}`);
         } finally {
             setLoading(false);
         }
@@ -52,7 +52,7 @@ export default function Users() {
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, []); // Initial load only
 
     function handleRefresh() {
         fetchUsers();
@@ -64,7 +64,7 @@ export default function Users() {
         setPage(0);
     };
 
-    // Multiple filters
+    // Table filters to show inactive/active users or filter search.
     const filteredUsers = users.filter((u) => u.isActive === showActive).filter((u) => {
         const term = searchTerm.toLowerCase(); return (
             (u.fullName ?? "").toLowerCase().includes(term) ||
@@ -77,27 +77,17 @@ export default function Users() {
 
     return (
         <div className="page-content">
-            <PageTitle title="Manage Users" />
+            <div style={{ display: "flex", gap: "10px", marginBottom: "16px" }}>
+                <PageTitleCustom title="Manage Users" />
+                <Button variant="contained" onClick={() => navigate(`/users/new`)}
+                    disabled={!user?.uiFlags?.enableUserEdit}>
+                    New
+                </Button>
+            </div>
+
             <Paper sx={{ width: "100%", overflow: "hidden", padding: 3 }}>
-                <Typography variant="h2">Users</Typography>
-                <div className="cta-btn-container">
-                    {user?.uiFlags?.enableUserEdit && (
-                        <Button
-                            variant="contained"
-                            onClick={() => navigate("/users/new")}
-                            sx={{ mb: 2 }}
-                        >
-                            New
-                        </Button>
-                    )}
-                    <Button
-                        variant="outlined"
-                        onClick={handleRefresh}
-                        sx={{ mb: 2 }}
-                    >
-                        {loading === true ? "Loading" : "Refresh"}
-                    </Button>
-                </div>
+                <Typography variant="h2">All Users</Typography>
+
                 <div className="filter-container">
                     <TextField
                         label="Search"
@@ -135,7 +125,17 @@ export default function Users() {
                                 <TableCell sx={{ pl: 0 }}>Full Name</TableCell>
                                 <TableCell>Username</TableCell>
                                 <TableCell>Position</TableCell>
-                                <TableCell sx={{ pr: 0 }}></TableCell>
+                                <TableCell sx={{ pr: 0 }}>
+                                    <div className="cta-btn-container">
+                                        <Button
+                                            variant="outlined"
+                                            onClick={handleRefresh}
+                                            sx={{ mb: 2 }}
+                                        >
+                                            {loading === true ? "Loading" : "Refresh"}
+                                        </Button>
+                                    </div>
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
