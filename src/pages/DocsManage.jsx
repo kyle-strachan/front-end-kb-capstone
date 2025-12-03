@@ -57,7 +57,7 @@ export default function Docs() {
         setPage(0);
     };
 
-    // Table filters to show archived or seach term documents.
+    // Table filters to show archived or search term documents.
     const filteredDocs = docs.filter((d) => d.isArchived !== showActive).filter((d) => {
         const term = searchTerm.toLowerCase(); return (
             (d.description?.toLowerCase() ?? "").includes(term) ||
