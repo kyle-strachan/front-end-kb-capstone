@@ -1,2 +1,3 @@
 export const MINIMUM_DEPARTMENT_LENGTH = 3;
 export const MINIMUM_LOCATION_LENGTH = 3;
+export const MINIMUM_CATEGORY_LENGTH = 3;
