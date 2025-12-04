@@ -55,7 +55,7 @@ npm install
 Create a .env file in the back end's root directory with unique access and refresh secrets.
 ```
 # MongoDB Connection String
-MONGO_URI=mongodb://localhost:27017/[your-db-name]
+MONGO_URI=mongodb://localhost:27017/lobbylock
 
 # Server Configuration
 PORT=3000
@@ -72,8 +72,8 @@ WASABI_KEY=
 WASABI_SECRET=
 WASABI_BUCKET=
 
-# CORS - add front and back end ports as required for local hosting.
-CORS_ORIGINS=http://localhost:XXXX,http://localhost:XXXX
+# CORS - adjust front and back end ports as required for local hosting.
+CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 
 ```
 
