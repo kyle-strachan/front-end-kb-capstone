@@ -57,7 +57,18 @@ export default function DocsView() {
             <div style={{ display: "flex", gap: "10px", marginBottom: "16px" }}>
                 <PageTitleCustom title={doc?.title} />
                 {user?.uiFlags?.enableDocs && (
-                    <Button variant="contained" onClick={() => navigate(`/docs/edit/${doc._id}`)}>
+                    <Button
+                        variant="contained"
+                        onClick={() => navigate(`/docs/edit/${doc._id}`)}
+                        // Disable Edit button if viewing a public document
+                        disabled={
+                            !user?.department?.some(
+                                (d) =>
+                                    d.toString() ===
+                                    (doc?.department?._id?.toString() || doc?.department?.toString())
+                            )
+                        }
+                    >
                         Edit
                     </Button>
                 )}
