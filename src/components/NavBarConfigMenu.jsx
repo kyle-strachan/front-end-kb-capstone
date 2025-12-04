@@ -27,12 +27,12 @@ export default function NavBarConfigMenu() {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
                 sx={{
-                    textTransform: "none",       // match Typography
-                    color: "rgba(255, 255, 255, 1)",             // use parent text colour
-                    fontSize: "inherit",          // match surrounding text size
-                    fontWeight: 500,        // optional, for consistency
-                    padding: "0 15px",            // match your Typography padding
-                    minWidth: "auto",             // remove MUI button min-width
+                    textTransform: "none",
+                    color: "rgba(255, 255, 255, 1)",
+                    fontSize: "inherit",
+                    fontWeight: 500,
+                    padding: "0 15px",
+                    minWidth: "auto",
                 }}
             >
                 Configuration
@@ -47,17 +47,17 @@ export default function NavBarConfigMenu() {
                     list: { "aria-labelledby": "config-button" },
                 }}
             >
-                <MenuItem component={Link} to="/departments" onClick={handleClose} disabled={!user?.uiFlags?.enableDepartments}>
+                <MenuItem component={Link} to="/departments" onClick={handleClose} disabled={!user?.uiFlags || !user?.uiFlags?.enableDepartments}>
                     Departments
                 </MenuItem>
-                <MenuItem component={Link} to="/locations" onClick={handleClose} disabled={!user?.uiFlags?.enableLocations}>
+                <MenuItem component={Link} to="/locations" onClick={handleClose} disabled={!user?.uiFlags || !user?.uiFlags?.enableLocations}>
                     Locations
                 </MenuItem>
                 <Divider />
-                <MenuItem component={Link} to="/system-categories" onClick={handleClose} disabled={!user?.uiFlags?.enableSystems}>
+                <MenuItem component={Link} to="/system-categories" onClick={handleClose} disabled={!user?.uiFlags || !user?.uiFlags?.enableSystems}>
                     System Categories
                 </MenuItem>
-                <MenuItem component={Link} to="/system-applications" onClick={handleClose} disabled={!user?.uiFlags?.enableSystems}>
+                <MenuItem component={Link} to="/system-applications" onClick={handleClose} disabled={!user?.uiFlags || !user?.uiFlags?.enableSystems}>
                     System Applications
                 </MenuItem>
             </Menu>
