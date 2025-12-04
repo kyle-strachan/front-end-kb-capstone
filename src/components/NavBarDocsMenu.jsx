@@ -48,7 +48,7 @@ export default function NavBarDocsMenu() {
                 }}
             >
                 <MenuItem component={Link} to="/docs/search" onClick={handleClose}>
-                    Search Docs
+                    Search Documents
                 </MenuItem>
                 <Divider />
                 <MenuItem component={Link} to="/docs/new" onClick={handleClose} disabled={!user?.uiFlags?.enableDocs}>
