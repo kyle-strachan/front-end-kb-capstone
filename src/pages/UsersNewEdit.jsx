@@ -110,10 +110,10 @@ export default function UsersNewEdit() {
             notify("Full name must have a minimum of 3 characters.", "error");
             return;
         }
-        if (user.roles.length === 0) {
-            notify("At least one role is required.", "error");
-            return;
-        }
+        // if (user.roles.length === 0) { // Role may be blank for external supplier
+        //     notify("At least one role is required.", "error");
+        //     return;
+        // }
         if (user.department.length === 0) {
             notify("At least one department is required.", "error");
             return;
