@@ -174,15 +174,6 @@ export default function DocsCategories() {
             <Paper sx={{ mb: 4, p: 3 }}>
                 <Typography variant="h2">Add New Document Category</Typography>
                 <div className="btn-inline-container">
-                    <TextField
-                        id="input-new-doc-category"
-                        helperText="Minimum three characters"
-                        label="Category Name"
-                        variant="outlined"
-                        value={newDocsCategory}
-                        onChange={(e) => setNewDocsCategory(e.target.value)}
-                        sx={{ mr: 2, width: "100%" }}
-                    />
                     <SelectWithSearch
                         options={departments}
                         label="Department"
@@ -192,6 +183,15 @@ export default function DocsCategories() {
                             setNewDepartmentId(newValue)
                         }
                         required
+                    />
+                    <TextField
+                        id="input-new-doc-category"
+                        helperText="Minimum three characters"
+                        label="Category Name"
+                        variant="outlined"
+                        value={newDocsCategory}
+                        onChange={(e) => setNewDocsCategory(e.target.value)}
+                        sx={{ ml: 2, width: "100%" }}
                     />
                 </div>
                 <div className="cta-btn-container"><Button
