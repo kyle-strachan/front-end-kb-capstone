@@ -119,7 +119,7 @@ export default function NavDrawerMobile() {
             <ListItemIcon>
               <RuleIcon />
             </ListItemIcon>
-            <ListItemText primary={"Manage Access Requests"} />
+            <ListItemText primary={"Pending Access Requests"} />
           </ListItemButton>
         </ListItem>
         <ListItem key={"NewAccessRequest"} disablePadding>

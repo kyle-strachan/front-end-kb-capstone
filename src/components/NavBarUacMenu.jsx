@@ -51,7 +51,7 @@ export default function NavBarUacMenu() {
                     Access Overview
                 </MenuItem>
                 <MenuItem component={Link} to="/access-requests" onClick={handleClose} disabled={!user?.uiFlags?.enableAccessRequests}>
-                    Manage Access Requests
+                    Pending Access Requests
                 </MenuItem>
 
                 <MenuItem component={Link} to="/access-request" onClick={handleClose} disabled={!user?.uiFlags?.enableAccessRequests}>
