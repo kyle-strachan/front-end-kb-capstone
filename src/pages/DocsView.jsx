@@ -12,7 +12,7 @@ import { useLoading } from "../context/LoadingContext";
 import { useAuth } from "../context/AuthContext";
 import Alert from '@mui/material/Alert';
 import "./DocsView.css";
-import { resolveWasabiKeys } from "../services/wasabi.js";
+import { resolveWasabiKeys } from "../utils/wasabi.js";
 import PageTitleCustom from "../components/PageTitleCustom.jsx"
 
 export default function DocsView() {
