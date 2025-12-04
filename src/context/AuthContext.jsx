@@ -12,11 +12,13 @@ export const AuthProvider = ({ children }) => {
     });
 
     const [loading, setLoading] = useState(true);
+    const [initialised, setInitialised] = useState(false);
 
     const login = async (username, password) => {
         try {
             const res = await api.post("/auth/login", { username, password });
             setUser(res.data.user);
+            localStorage.setItem("user", JSON.stringify(res.data.user)); // Replaces any stale data from previous logins
             return { success: true };
         } catch (error) {
             // Return api response if available
@@ -42,7 +44,9 @@ export const AuthProvider = ({ children }) => {
     const refreshUser = async () => {
         try {
             const res = await api.get("/auth/me");
+            localStorage.setItem("user", JSON.stringify(res.data.user)); // Replaces any stale data from previous logins
             setUser(res.data.user);
+            setInitialised(true);
         } catch (err) {
             if (err.response?.status === 401) {
                 setUser(null); // Not logged in, suppress console error
@@ -66,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         const fetchUser = async () => {
             try {
                 const res = await api.get("/auth/me");
-                setUser(res.data.user); // refresh from server if provided
+                setUser(res.data.user); // Refresh from server if provided
             } catch (error) {
                 if (error.response?.status === 401) {
                     setUser(null); // not logged in
@@ -74,13 +78,14 @@ export const AuthProvider = ({ children }) => {
                     // console.error(error);
                 }
             } finally {
+                setInitialised(true);
                 setLoading(false);
             }
         };
         fetchUser();
     }, []);
 
-    if (loading) return <LoadingSpinnerWithoutContext />; // No context as it hasn't been created yet.
+    if (!initialised) return <LoadingSpinnerWithoutContext />; // No context as it hasn't been created yet.
 
     return (
         <AuthContext.Provider value={{ user, login, logout, refreshUser }}>
