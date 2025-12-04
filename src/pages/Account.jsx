@@ -7,6 +7,7 @@ import PageTitle from "../components/PageTitle";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
 import Alert from '@mui/material/Alert';
+import { MINIMUM_PASSWORD_LENGTH } from "../utils/constants";
 
 export default function Account() {
     const { user, refreshUser } = useAuth();
@@ -46,12 +47,15 @@ export default function Account() {
                 {user.passwordMustChange === true && (<Alert sx={{ mb: 2 }} severity="warning">Password must be changed to continue.</Alert>)}
 
                 <InputTextPassword id="current-password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} label="Current Password" />
+                <Typography variant="body2" sx={{ mb: 2, mt: 1 }}>
+                    Minimum {MINIMUM_PASSWORD_LENGTH} characters.
+                </Typography>
                 <InputTextPassword id="new-password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} label="New Password" />
                 <InputTextPassword id="new-password-confirm" value={newPassword2} onChange={(e) => setNewPassword2(e.target.value)} label="Confirm New Password" />
                 {newPassword2.length > 0 && newPassword !== newPassword2 && (
                     <Typography color="error" sx={{ mb: 2 }}>New passwords do not match.</Typography>
                 )}
-                <Button variant="contained" onClick={handleUpdatePassword} disabled={!(currentPassword.length > 0 && newPassword.length > 0 && newPassword2.length > 0 && newPassword === newPassword2)} >
+                <Button variant="contained" onClick={handleUpdatePassword} disabled={!(currentPassword.length >= MINIMUM_PASSWORD_LENGTH && newPassword.length >= MINIMUM_PASSWORD_LENGTH && newPassword2.length >= MINIMUM_PASSWORD_LENGTH && newPassword === newPassword2)} >
                     Change Password
                 </Button>
             </Paper>
