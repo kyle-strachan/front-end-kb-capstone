@@ -8,9 +8,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { api } from "../api";
 import notify from '../utils/toastify';
+import Paper from '@mui/material/Paper';
+import { MINIMUM_PASSWORD_LENGTH } from "../utils/constants.js";
+import { useState } from 'react';
 
 export default function ResetPasswordForm({ userReset, userIdToChange }) {
     const [open, setOpen] = React.useState(false);
+    const [password, setPassword] = useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,19 +26,10 @@ export default function ResetPasswordForm({ userReset, userIdToChange }) {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const formJson = Object.fromEntries(formData.entries());
-        const newPassword = formJson.newPassword;
+        const newPassword = password.trim();
         const forceUserToUpdate = !userReset;
 
         try {
-
-            // TODO: APPLY STANDARD PASSWORD FRONT END LOGIC
-            // if (newPassword.trim().length < 8) {
-            //     notify("New locations must have a minimum of 8 characters.", "error");
-            //     return;
-            // }
-
             await api.post("/auth/reset", {
                 userId: userIdToChange,
                 newPassword: newPassword.trim(),
@@ -49,37 +44,43 @@ export default function ResetPasswordForm({ userReset, userIdToChange }) {
         }
     };
 
+    // MUI boilerplate
     return (
         <React.Fragment>
             <Button variant="outlined" onClick={handleClickOpen}>
                 Reset Password
             </Button>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Reset Password</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Reset user password.
-                    </DialogContentText>
-                    <form onSubmit={handleSubmit} id="reset-password-form">
-                        <TextField
-                            autoFocus
-                            required
-                            margin="dense"
-                            id="newPassword"
-                            name="newPassword"
-                            label="Enter New Password"
-                            type="password"
-                            fullWidth
-                            variant="standard"
-                        />
-                    </form>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button type="submit" form="reset-password-form">
-                        Reset Password
-                    </Button>
-                </DialogActions>
+            <Dialog open={open} onClose={handleClose} >
+                <Paper sx={{ p: 1 }}>
+                    <DialogTitle>Reset Password</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Reset user password.
+                        </DialogContentText>
+                        <form onSubmit={handleSubmit} id="reset-password-form">
+                            <TextField
+                                autoFocus
+                                required
+                                margin="dense"
+                                id="newPassword"
+                                name="newPassword"
+                                label="Temporary password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                type="password"
+                                fullWidth
+                                variant="outlined"
+                                helperText={`Minimum ${MINIMUM_PASSWORD_LENGTH} characters`}
+                            />
+                        </form>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button type="submit" form="reset-password-form" variant="contained" disabled={password.length < MINIMUM_PASSWORD_LENGTH}>
+                            Reset Password
+                        </Button>
+                        <Button onClick={handleClose} variant="outlined">Cancel</Button>
+                    </DialogActions>
+                </Paper>
             </Dialog>
         </React.Fragment>
     );
