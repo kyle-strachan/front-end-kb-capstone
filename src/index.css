@@ -19,30 +19,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.App {
+body {
+  margin: 0;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   background-color: #f7f7f7;
-  background-image: url("/images/bg.webp");
-  /* Keep absolute to prevent conflict with React router */
-}
-
-/* this controls width and centring */
-.content-wrapper {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 1280px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.page-content {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 1rem;
 }
 
 a {
@@ -53,12 +33,6 @@ a {
 
 a:hover {
   color: #42152d;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background-color: #f7f7f7;
 }
 
 h1 {
@@ -92,19 +66,30 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f7f7f7;
+  background-image: url("/images/bg.webp");
+  /* Keep absolute to prevent conflict with React router */
+}
 
-  a:hover {
-    color: #42152d;
-  }
+/* this controls width and centring */
+.content-wrapper {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
 
-  button {
-    background-color: #f9f9f9;
-  }
+.page-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 .login-screen {
@@ -118,4 +103,19 @@ button:focus-visible {
 
 .login-logo {
   margin-bottom: 10px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #42152d;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  }
 }

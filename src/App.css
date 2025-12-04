@@ -14,12 +14,10 @@
   gap: 10px;
 }
 
-
 .cta-btn-container {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-
 }
 
 .btn-inline-container {
@@ -74,12 +72,6 @@ footer {
   width: 300px;
 }
 
-@media (max-width: 768px) {
-  .dashboard-document-tree-pane {
-    width: 100%;
-  }
-}
-
 .dashboard-two-column {
   display: flex;
   flex-direction: row;
@@ -90,16 +82,6 @@ footer {
 .dashboard-left-column {
   width: 500px;
   min-width: 275px;
-}
-
-@media (max-width: 768px) {
-  .dashboard-two-column {
-    display: block;
-  }
-
-  .dashboard-left-column {
-    width: 100%;
-  }
 }
 
 .dashboard-access-request-summary {
@@ -128,4 +110,19 @@ footer {
 
 .dashboard-access-request-icons-background:hover {
   background-color: rgb(202, 202, 202);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .dashboard-document-tree-pane {
+    width: 100%;
+  }
+
+  .dashboard-two-column {
+    display: block;
+  }
+
+  .dashboard-left-column {
+    width: 100%;
+  }
 }
