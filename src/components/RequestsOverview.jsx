@@ -20,7 +20,7 @@ export default function RequestsOverview({ id, fullName }) {
 
     const navigate = useNavigate();
     const [accessRequests, setAccessRequests] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true); // Removed on components. See known issues.
     const [error, setError] = useState(null);
     const [tableNote, setTableNote] = useState(null);
     const [activateTotal, setActivateTotal] = useState(0);
@@ -29,7 +29,7 @@ export default function RequestsOverview({ id, fullName }) {
     async function fetchMyAccessRequests() {
         try {
             setTableNote(null);
-            setLoading(true);
+            // setLoading(true);
             setError(null);
             const res = await api.get("/uac/access-requests/to-action", {
                 params: { userId: id, status: "New" }
@@ -39,8 +39,8 @@ export default function RequestsOverview({ id, fullName }) {
 
             const items = res.data.toActionRequests || [];
             setAccessRequests(items);
-            setActivateTotal(res.data?.counts.activate);
-            setRevokeTotal(res.data?.counts.revoke);
+            setActivateTotal(res.data?.counts?.activate ?? 0);
+            setRevokeTotal(res.data?.counts?.revoke ?? 0);
 
             if (items.length === 0) {
                 setTableNote("No pending requests");
@@ -53,7 +53,7 @@ export default function RequestsOverview({ id, fullName }) {
             setError("Could not load access requests.");
             setAccessRequests([]);
         } finally {
-            setLoading(false);
+            // setLoading(false);
         }
     }
 
