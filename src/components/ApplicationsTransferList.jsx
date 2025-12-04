@@ -10,16 +10,14 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
+// MUI boilerplate
+
 function not(a, b) {
     return a.filter((value) => !b.includes(value));
 }
 
 function intersection(a, b) {
     return a.filter((value) => b.includes(value));
-}
-
-function union(a, b) {
-    return [...a, ...not(b, a)];
 }
 
 export default function ApplicationsTransferList({ systems, selected, onChange }) {
@@ -37,29 +35,25 @@ export default function ApplicationsTransferList({ systems, selected, onChange }
     }, [systems, selected]);
 
 
-    const leftChecked = intersection(checked, left);
-    const rightChecked = intersection(checked, right);
+    const leftChecked = left.filter(x => checked.includes(x._id));
+    const rightChecked = right.filter(x => checked.includes(x._id));
+
 
     const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-
+        const id = value._id;
+        const newChecked = checked.includes(id)
+            ? checked.filter(x => x !== id)
+            : [...checked, id];
         setChecked(newChecked);
     };
 
     const numberOfChecked = (items) => intersection(checked, items).length;
 
     const handleToggleAll = (items) => () => {
-        if (numberOfChecked(items) === items.length) {
-            setChecked(not(checked, items));
+        if (items.every(x => checked.includes(x._id))) {
+            setChecked(checked.filter(id => !items.some(x => x._id === id)));
         } else {
-            setChecked(union(checked, items));
+            setChecked([...checked, ...items.map(x => x._id).filter(id => !checked.includes(id))]);
         }
     };
 
@@ -72,7 +66,7 @@ export default function ApplicationsTransferList({ systems, selected, onChange }
         setLeft(newLeft);
         setChecked(newChecked);
 
-        // 🔥 Send updated IDs to parent
+        // Send updated IDs to parent
         onChange(newRight.map(item => item._id));
     };
 
@@ -85,7 +79,7 @@ export default function ApplicationsTransferList({ systems, selected, onChange }
         setLeft(newLeft);
         setChecked(newChecked);
 
-        // 🔥 Send updated IDs to parent
+        // Send updated IDs to parent
         onChange(newRight.map(item => item._id));
     };
 
@@ -132,7 +126,7 @@ export default function ApplicationsTransferList({ systems, selected, onChange }
                         >
                             <ListItemIcon>
                                 <Checkbox
-                                    checked={checked.includes(value)}
+                                    checked={checked.includes(value._id)}
                                     tabIndex={-1}
                                     disableRipple
                                     inputProps={{
