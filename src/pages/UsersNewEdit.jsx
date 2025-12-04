@@ -16,12 +16,13 @@ import CustomDialogYesNo from "../components/CustomDialogYesNo";
 import { useLoading } from "../context/LoadingContext";
 import notify from "../utils/toastify";
 import { MINIMUM_USERNAME_LENGTH } from "../utils/constants";
+import { useAuth } from "../context/AuthContext";
 
 export default function UsersNewEdit() {
     let { id } = useParams(); // will be undefined for "New"
     const navigate = useNavigate();
     const { setLoading } = useLoading();
-    const [user, setUser] = useState({
+    const [userToManage, setUserToManage] = useState({
         username: "",
         fullName: "",
         location: "",
@@ -41,6 +42,8 @@ export default function UsersNewEdit() {
         { label: "Human Resources", value: "HumanResources" },
         { label: "Administrator", value: "SystemAdmin" },
     ];
+    const { user } = useAuth();
+
 
     useEffect(() => {
         fetchUsers();
@@ -64,7 +67,7 @@ export default function UsersNewEdit() {
                 // Edit mode: fetch this users's current data
                 const foundUser = userRes.data.users.find((a) => a._id === id);
                 if (foundUser) {
-                    setUser({
+                    setUserToManage({
                         _id: foundUser._id,
                         username: foundUser.username || "",
                         fullName: foundUser.fullName || "",
@@ -97,16 +100,16 @@ export default function UsersNewEdit() {
     }
 
     function handleFieldChange(field, value) {
-        setUser((prev) => ({ ...prev, [field]: value }));
+        setUserToManage((prev) => ({ ...prev, [field]: value }));
     }
 
     async function handleSave() {
         // Validate form
-        if (user.username.trim().length < MINIMUM_USERNAME_LENGTH) {
+        if (userToManage.username.trim().length < MINIMUM_USERNAME_LENGTH) {
             notify(`A username must have a minimum of ${MINIMUM_USERNAME_LENGTH} characters.`, "error");
             return;
         }
-        if (user.fullName.trim().length < 3) {
+        if (userToManage.fullName.trim().length < 3) {
             notify("Full name must have a minimum of 3 characters.", "error");
             return;
         }
@@ -114,15 +117,15 @@ export default function UsersNewEdit() {
         //     notify("At least one role is required.", "error");
         //     return;
         // }
-        if (user.department.length === 0) {
+        if (userToManage.department.length === 0) {
             notify("At least one department is required.", "error");
             return;
         }
-        if (user.location.length === 0) {
+        if (userToManage.location.length === 0) {
             notify("A location is required.", "error");
             return;
         }
-        if (user.position.length === 0) {
+        if (userToManage.position.length === 0) {
             notify("The user's position is required.", "error");
             return;
         }
@@ -130,12 +133,12 @@ export default function UsersNewEdit() {
         try {
             if (id) {
                 // Edit
-                await api.put(`/users/${id}`, user);
+                await api.put(`/users/${id}`, userToManage);
                 notify("User updated successfully.", "success");
             } else {
                 // New
-                const res = await api.post(`/users`, user);
-                setUser(prev => ({ ...prev, _id: res.data.newId }));
+                const res = await api.post(`/users`, userToManage);
+                setUserToManage(prev => ({ ...prev, _id: res.data.newId }));
                 navigate(`/users/${res.data.newId}`);
                 notify("User created successfully.", "success");
             }
@@ -169,7 +172,7 @@ export default function UsersNewEdit() {
                         disabled={disabled}
                         variant="outlined"
                         label="Username"
-                        value={user.username}
+                        value={userToManage.username}
                         onChange={(e) => handleFieldChange("username", e.target.value)}
                         sx={{ mb: 2 }}
                     />
@@ -177,7 +180,7 @@ export default function UsersNewEdit() {
                         fullWidth
                         variant="outlined"
                         label="Full Name"
-                        value={user.fullName}
+                        value={userToManage.fullName}
                         onChange={(e) => handleFieldChange("fullName", e.target.value)}
                         sx={{ mb: 2 }}
                     />
@@ -186,7 +189,7 @@ export default function UsersNewEdit() {
                         multiple
                         options={roleOptions}
                         getOptionLabel={(option) => option.label}
-                        value={roleOptions.filter((opt) => (user.roles || []).includes(opt.value))}
+                        value={roleOptions.filter((opt) => (userToManage.roles || []).includes(opt.value))}
                         onChange={(e, newValue) =>
                             handleFieldChange(
                                 "roles",
@@ -212,7 +215,7 @@ export default function UsersNewEdit() {
                         label="Departments"
                         labelField="department"
                         multiple
-                        value={departments.filter((c) => (user.department || []).includes(c._id))}
+                        value={departments.filter((c) => (userToManage.department || []).includes(c._id))}
                         onChange={(e, newValue) =>
                             handleFieldChange(
                                 "department",
@@ -225,7 +228,7 @@ export default function UsersNewEdit() {
                         options={locations}
                         label="Location"
                         labelField="location"
-                        value={locations.find((c) => c._id === user.location) || null}
+                        value={locations.find((c) => c._id === userToManage.location) || null}
                         onChange={(e, newValue) =>
                             handleFieldChange("location", newValue ? newValue._id : "")
                         }
@@ -236,7 +239,7 @@ export default function UsersNewEdit() {
                         fullWidth
                         variant="outlined"
                         label="Email"
-                        value={user.email}
+                        value={userToManage.email}
                         onChange={(e) => handleFieldChange("email", e.target.value)}
                         sx={{ mb: 2 }}
                     />
@@ -245,12 +248,12 @@ export default function UsersNewEdit() {
                         fullWidth
                         variant="outlined"
                         label="Position"
-                        value={user.position}
+                        value={userToManage.position}
                         onChange={(e) => handleFieldChange("position", e.target.value)}
                         sx={{ mb: 2 }}
                     />
 
-                    {id && (<Typography>Status: {user.isActive ? "Active" : "Terminated"}</Typography>)}
+                    {id && (<Typography>Status: {userToManage.isActive ? "Active" : "Terminated"}</Typography>)}
 
                     {/* Show password box for new users only */}
                     {!id && (
@@ -266,16 +269,16 @@ export default function UsersNewEdit() {
                     )}
 
                     <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
-                        {id && user.isActive === false && (<CustomDialogYesNo
+                        {id && userToManage.isActive === false && (<CustomDialogYesNo
                             variant="contained"
                             buttonLabel={"Reactivate"}
                             dialogTitle={"Confirm Reactivation"}
-                            dialogContent={`Are you sure you wish to reactivate ${user?.fullName}? Any previous granted access to software must be requested again.`}
+                            dialogContent={`Are you sure you wish to reactivate ${userToManage?.fullName}? Any previous granted access to software must be requested again.`}
                             dialogueYesAction={handleSave}
                         />)}
-                        {id && user.isActive === true && (
+                        {id && userToManage.isActive === true && (
                             <Button variant="contained" onClick={handleSave}>
-                                {id && user.isActive === false ? "Reactivate" : "Save"}
+                                {id && userToManage.isActive === false ? "Reactivate" : "Save"}
                             </Button>
                         )}
                         {!id && (
@@ -286,18 +289,18 @@ export default function UsersNewEdit() {
                         <Button variant="outlined" onClick={() => navigate("/users")}>
                             {id ? "Close" : "Cancel"}
                         </Button>
-                        {id && user?.isActive && (<CustomDialogYesNo
+                        {id && userToManage?.isActive && (<CustomDialogYesNo
                             buttonLabel={"Terminate"}
                             dialogTitle={"Confirm Termination"}
-                            dialogContent={`Are you sure you wish to terminate ${user?.fullName}? Terminate access requests will be sent to all admins.`}
+                            dialogContent={`Are you sure you wish to terminate ${userToManage?.fullName}? Terminate access requests will be sent to all admins.`}
                             dialogueYesAction={handleTerminate}
-                            disabled={user?.uiFlags?.enableTerminate}
+                            disabled={!user?.uiFlags?.enableTerminate}
                         />)}
                     </div>
                 </Paper>
             </div>
-            {id && (<div><AccessAssignments id={user._id} fullName={user.fullName} notify={notify} /></div>)}
-            {id && (<div><AccessRequests id={user._id} fullName={user.fullName} /></div>)}
+            {id && (<div><AccessAssignments id={userToManage._id} fullName={userToManage.fullName} notify={notify} /></div>)}
+            {id && (<div><AccessRequests id={userToManage._id} fullName={userToManage.fullName} /></div>)}
         </>
     );
 }
