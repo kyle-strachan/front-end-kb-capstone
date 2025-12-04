@@ -175,7 +175,7 @@ export default function Users() {
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={filteredUsers.length} // ✅ pagination uses filtered count
+                    count={filteredUsers.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
