@@ -26,22 +26,7 @@ import { useTreeItemModel } from "@mui/x-tree-view/hooks";
 import { api } from "../api";
 import { useNavigate } from "react-router-dom";
 
-// function DotIcon() {
-//   return (
-//     <Box
-//       sx={{
-//         width: 6,
-//         height: 6,
-//         borderRadius: "10%",
-//         bgcolor: "warning.main",
-//         display: "inline-block",
-//         verticalAlign: "middle",
-//         zIndex: 1,
-//         mx: 1,
-//       }}
-//     />
-//   );
-// }
+// MUI boilerplate
 
 const TreeItemRoot = styled("li")(({ theme }) => ({
   listStyle: "none",
@@ -223,6 +208,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
 
                 // Docs: prevent expand + navigate
                 e.stopPropagation();
+                if (!item) return;
                 if (item.fileType) {
                   navigate(`/docs/view/${itemId}`);
                 }
@@ -257,8 +243,8 @@ export default function DocTree() {
   return (
     <RichTreeView
       items={items}
-      defaultExpandedItems={["1", "1.1"]}
-      defaultSelectedItems="1.1"
+      // defaultExpandedItems={["1", "1.1"]} // Retaining for possible future dev, auto expand user's home department. 
+      // defaultSelectedItems="1.1"
       sx={{
         // maxWidth: 400,
         overflow: "visible", // no internal scrollbars
