@@ -41,7 +41,7 @@ export default function Docs() {
                 setError(res.data.message || "No documents found.");
             }
         } catch {
-            setError("Could not load docs.");
+            setError("No documents found to manage.");
         } finally {
             setLoading(false);
         }
@@ -174,7 +174,7 @@ export default function Docs() {
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={filteredDocs.length} // ✅ pagination uses filtered count
+                    count={filteredDocs.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
