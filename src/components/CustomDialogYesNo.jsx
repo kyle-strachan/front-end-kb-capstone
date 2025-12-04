@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function CustomDialogYesNo({ buttonLabel, dialogTitle, dialogContent, dialogueYesAction, variant = "outlined" }) {
+export default function CustomDialogYesNo({ buttonLabel, dialogTitle, dialogContent, dialogueYesAction, variant = "outlined", disabled = false }) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -19,7 +19,7 @@ export default function CustomDialogYesNo({ buttonLabel, dialogTitle, dialogCont
 
     return (
         <React.Fragment>
-            <Button variant={variant} onClick={handleClickOpen} >
+            <Button variant={variant} onClick={handleClickOpen} disabled={disabled} >
                 {buttonLabel}
             </Button>
             <Dialog

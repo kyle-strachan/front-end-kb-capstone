@@ -291,6 +291,7 @@ export default function UsersNewEdit() {
                             dialogTitle={"Confirm Termination"}
                             dialogContent={`Are you sure you wish to terminate ${user?.fullName}? Terminate access requests will be sent to all admins.`}
                             dialogueYesAction={handleTerminate}
+                            disabled={user?.uiFlags?.enableTerminate}
                         />)}
                     </div>
                 </Paper>
