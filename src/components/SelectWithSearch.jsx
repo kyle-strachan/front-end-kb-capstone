@@ -14,7 +14,7 @@ export default function SelectWithSearch({
             multiple={multiple}
             options={options}
             getOptionLabel={(option) => option?.[labelField] || ""}
-            value={value}
+            value={multiple ? (value || []) : value}
             onChange={onChange}
             isOptionEqualToValue={(option, value) => option?._id === value?._id} // User's full name could reasonably be duplicate, force use of id instead.
             renderOption={(props, option) => (
@@ -25,7 +25,6 @@ export default function SelectWithSearch({
             renderInput={(params) => (
                 <TextField {...params} label={label} placeholder="Search..." variant="outlined" />
             )}
-            // size="medium"
             fullWidth
             sx={{ mb: 2 }}
         />
