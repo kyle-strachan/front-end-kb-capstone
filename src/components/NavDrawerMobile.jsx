@@ -25,7 +25,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function NavDrawerMobile() {
   const [open, setOpen] = React.useState(false);
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -81,15 +81,23 @@ export default function NavDrawerMobile() {
           </ListItemButton>
         </ListItem>
         <ListItem key={"NewDoc"} disablePadding>
-          <ListItemButton component={Link} to="/docs/new">
+          <ListItemButton component={Link} to="/docs/new" disabled={!user?.uiFlags?.enableDocs}>
             <ListItemIcon>
               <CreateIcon />
             </ListItemIcon>
             <ListItemText primary={"New Document"} />
           </ListItemButton>
         </ListItem>
+        <ListItem key={"DepartmentCategories"} disablePadding>
+          <ListItemButton component={Link} to="/docs-categories" disabled={!user?.uiFlags?.enableDocsCategories}>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Document Categories"} />
+          </ListItemButton>
+        </ListItem>
         <ListItem key={"ManageDoc"} disablePadding>
-          <ListItemButton component={Link} to="/docs">
+          <ListItemButton component={Link} to="/docs" disabled={!user?.uiFlags?.enableDocs}>
             <ListItemIcon>
               <ArticleIcon />
             </ListItemIcon>
@@ -107,7 +115,7 @@ export default function NavDrawerMobile() {
       }}>
         <Typography sx={{ m: "8px 18px" }}><b>User Access</b></Typography>
         <ListItem key={"AccessOverview"} disablePadding>
-          <ListItemButton component={Link} to="/access-overview">
+          <ListItemButton component={Link} to="/access-overview" disabled={!user?.uiFlags?.enableAccessRequests}>
             <ListItemIcon>
               <CheckIcon />
             </ListItemIcon>
@@ -115,7 +123,7 @@ export default function NavDrawerMobile() {
           </ListItemButton>
         </ListItem>
         <ListItem key={"ManageAccessRequests"} disablePadding>
-          <ListItemButton component={Link} to="/access-requests">
+          <ListItemButton component={Link} to="/access-requests" disabled={!user?.uiFlags?.enableAccessRequests}>
             <ListItemIcon>
               <RuleIcon />
             </ListItemIcon>
@@ -123,7 +131,7 @@ export default function NavDrawerMobile() {
           </ListItemButton>
         </ListItem>
         <ListItem key={"NewAccessRequest"} disablePadding>
-          <ListItemButton component={Link} to="/access-request">
+          <ListItemButton component={Link} to="/access-request" disabled={!user?.uiFlags?.enableAccessRequests}>
             <ListItemIcon>
               <AddTaskIcon />
             </ListItemIcon>
@@ -131,7 +139,7 @@ export default function NavDrawerMobile() {
           </ListItemButton>
         </ListItem>
         <ListItem key={"Users"} disablePadding>
-          <ListItemButton component={Link} to="/users">
+          <ListItemButton component={Link} to="/users" disabled={!user?.uiFlags?.enableUsers}>
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
@@ -149,31 +157,23 @@ export default function NavDrawerMobile() {
       }}>
         <Typography sx={{ m: "8px 18px" }}><b>Configuration</b></Typography>
         <ListItem key={"Departments"} disablePadding>
-          <ListItemButton component={Link} to="/departments">
+          <ListItemButton component={Link} to="/departments" disabled={!user?.uiFlags || !user?.uiFlags?.enableDepartments}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary={"Departments"} />
           </ListItemButton>
         </ListItem>
-        <ListItem key={"Locations"} disablePadding>
-          <ListItemButton component={Link} to="/locations">
+        <ListItem key={"Locations"} disablePadding >
+          <ListItemButton component={Link} to="/locations" disabled={!user?.uiFlags || !user?.uiFlags?.enableLocations}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary={"Locations"} />
           </ListItemButton>
         </ListItem>
-        <ListItem key={"DepartmentCategories"} disablePadding>
-          <ListItemButton component={Link} to="/docs-categories">
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Document Categories"} />
-          </ListItemButton>
-        </ListItem>
         <ListItem key={"SystemCategories"} disablePadding>
-          <ListItemButton component={Link} to="/system-categories">
+          <ListItemButton component={Link} to="/system-categories" disabled={!user?.uiFlags || !user?.uiFlags?.enableSystems}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
@@ -181,7 +181,7 @@ export default function NavDrawerMobile() {
           </ListItemButton>
         </ListItem>
         <ListItem key={"SystemApplications"} disablePadding>
-          <ListItemButton component={Link} to="/system-applications">
+          <ListItemButton component={Link} to="/system-applications" disabled={!user?.uiFlags || !user?.uiFlags?.enableSystems}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
