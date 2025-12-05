@@ -1,15 +1,5 @@
 import { api } from "../api";
 
-// export function replaceWasabiUrls(html, images) {
-//   let output = html;
-//   images.forEach((img) => {
-//     const placeholder = `wasabi://${img.key}`;
-//     const signedUrl = img.url;
-//     output = output.replaceAll(placeholder, signedUrl);
-//   });
-//   return output;
-// }
-
 // Resolve keys to fresh signed URLs so the editor shows images while editing
 export async function resolveKeysToUrlsForEdit(html, id) {
   if (!html) return "";
