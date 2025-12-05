@@ -74,9 +74,11 @@ export default function DocsView() {
                 )}
             </div>
             <Paper sx={{ p: 3, mb: 4 }}>
-                <Typography sx={{ mb: 2 }}>
-                    {doc?.description}
-                </Typography>
+                <div className="doc-description">
+                    <Typography sx={{ mb: 2 }}>
+                        {doc?.description}
+                    </Typography>
+                </div>
             </Paper>
             <Paper sx={{ p: 3 }}>
                 <div className="doc-body">

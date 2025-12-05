@@ -19,6 +19,10 @@
     margin-top: 1.5rem;
 }
 
+.doc-description>p {
+    margin-bottom: 0px;
+}
+
 .doc-body>h1,
 .ck>h1 {
     font-size: 2.2rem;
