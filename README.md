@@ -72,7 +72,7 @@ WASABI_KEY=
 WASABI_SECRET=
 WASABI_BUCKET=
 
-# CORS - adjust front and back end ports as required for local hosting.
+# CORS - add front and back end ports as required for local hosting.
 CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 
 ```
@@ -81,6 +81,7 @@ For production environments, add `NODE_ENV=production` for HTTPS cookie transmis
 
 #### Run locally
 ```
+npm run seed
 npm start
 ```
 
