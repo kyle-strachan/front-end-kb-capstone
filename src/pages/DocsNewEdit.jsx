@@ -22,7 +22,7 @@ export default function DocsNewEdit() {
     const saveLock = useRef(false); // State update was too slow to prevent duplicate new documents if double-clicked
     const { id } = useParams(); // will be undefined for "New"
     const [docId, setDocId] = useState(id);
-    const [doc, setDoc] = useState(null);
+    // const [doc, setDoc] = useState(null);
     const [docTitle, setDocTitle] = useState("");
     const [docDescription, setDocDescription] = useState("");
     const [docIsPublic, setDocIsPublic] = useState(false);
@@ -77,10 +77,11 @@ export default function DocsNewEdit() {
     async function fetchExistingDoc() {
         if (!id) return;
         try {
+            setLoading(true);
             const res = await api.get(`/docs/${id}`);
             const rawHtml = res.data.doc.body;
             const resolvedForEditor = await resolveKeysToUrlsForEdit(rawHtml, id);
-            setDoc(res.data.doc);
+            // setDoc(res.data.doc);
             setDocTitle(res.data.doc.title ?? "");
             setDocDescription(res.data.doc.description ?? "");
             setDocIsPublic(res.data.doc.isPublic ?? false);
@@ -90,13 +91,15 @@ export default function DocsNewEdit() {
             setDocBody(resolvedForEditor); // editor shows fresh URLs
         } catch (error) {
             setError(`Failed to fetch document. ${error.message}`);
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
         // When switching to new document while existing a current one.
         if (!id) {
-            setDoc(null);
+            // setDoc(null);
             setDocId(null);
             setDocTitle("");
             setDocDescription("");
@@ -185,12 +188,17 @@ export default function DocsNewEdit() {
         }
     }
 
-    if (id && !doc) {
-        return <LoadingSpinnerWithoutContext />; // Workaround - see known issues doc
+    if (loading && !docId) {
+        return <LoadingSpinnerWithoutContext />;
     }
 
-    if (error) return (
-        <div className="page-content"><Alert severity="error">{error}</Alert></div>);
+    if (error) {
+        return (
+            <div className="page-content">
+                <Alert severity="error">{error}</Alert>
+            </div>
+        );
+    }
 
     return (
         <div className="page-content">
