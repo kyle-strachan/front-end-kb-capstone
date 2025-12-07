@@ -57,8 +57,6 @@ export default function DocsNewEdit() {
     // Get categories lsit when department has been selected
     async function fetchDocsCategories() {
         if (selectedDepartmentId !== null) {
-            setLoading(true);
-
             try {
                 const res = await api.get("/config/docs-categories", {
                     params: { departmentId: selectedDepartmentId._id, isActive: true }
@@ -67,8 +65,6 @@ export default function DocsNewEdit() {
                 else setDocsCategories([]);
             } catch (error) {
                 setError(`Failed to fetch document categories. ${error.message}`);
-            } finally {
-                setLoading(false);
             }
         }
     }
