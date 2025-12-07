@@ -18,6 +18,6 @@
     </style>
   </defs>
   <path class="cls-1" d="M82,124.75H10V43.75c0-45,72-45,72,0v9"/>
-  <polyline class="cls-1" points="64 88.75 46.14 88.75 46.14 75.61"/>
-  <line class="cls-2" x1="46" y1="45.31" x2="46" y2="75.61"/>
+  <line class="cls-1" x1="61.95" y1="88.75" x2="46" y2="88.75"/>
+  <line class="cls-2" x1="46" y1="45.31" x2="46" y2="88.75"/>
 </svg>
