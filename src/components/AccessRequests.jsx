@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 
 export default function AccessRequests({ id, fullName }) {
-
     const navigate = useNavigate();
     const [accessRequests, setAccessRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,6 +21,9 @@ export default function AccessRequests({ id, fullName }) {
     const [tableNote, setTableNote] = useState(null)
 
     async function fetchAccessRequests() {
+        if (!id) {
+            return;
+        }
         try {
             setTableNote(null);
             setLoading(true);
@@ -30,8 +32,7 @@ export default function AccessRequests({ id, fullName }) {
                 params: { userId: id, status: "New" }
             });
 
-            // Continue to display table headers if results are empty, for more consistent UI. 404 downed on back-end too.
-
+            // Continue to display table headers if results are empty, for more consistent UI.
             const items = res.data.accessRequests || [];
             setAccessRequests(items);
 
@@ -53,7 +54,7 @@ export default function AccessRequests({ id, fullName }) {
 
     useEffect(() => {
         fetchAccessRequests();
-    }, []);
+    }, [id]);
 
     function handleRefresh() {
         fetchAccessRequests();

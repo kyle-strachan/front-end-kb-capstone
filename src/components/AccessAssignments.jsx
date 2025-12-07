@@ -20,6 +20,9 @@ export default function AccessAssignments({ id, fullName, notify }) {
     const [tableNote, setTableNote] = useState(null)
 
     async function fetchAccessAssignments() {
+        if (!id) {
+            return;
+        }
         try {
             setTableNote(null);
             setLoading(true);
@@ -52,7 +55,7 @@ export default function AccessAssignments({ id, fullName, notify }) {
         fetchAccessAssignments();
         // id (of logged in user) is stable, only run on mount
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [id]);
 
     function handleRefresh() {
         fetchAccessAssignments();
