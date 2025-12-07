@@ -13,7 +13,7 @@ import {
     Typography,
 } from "@mui/material";
 
-export default function AccessRequests({ id, fullName }) {
+export default function AccessRequests({ id, fullName, refreshKey }) {
     const navigate = useNavigate();
     const [accessRequests, setAccessRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -54,7 +54,7 @@ export default function AccessRequests({ id, fullName }) {
 
     useEffect(() => {
         fetchAccessRequests();
-    }, [id]);
+    }, [id, refreshKey]);
 
     function handleRefresh() {
         fetchAccessRequests();
@@ -74,17 +74,17 @@ export default function AccessRequests({ id, fullName }) {
                 <div className="cta-btn-container">
                     <Button
                         variant="contained"
-                        onClick={handleRefresh}
-                        sx={{ mb: 2 }}
-                    >
-                        {loading === true ? "Loading" : "Refresh"}
-                    </Button>
-                    <Button
-                        variant="contained"
                         onClick={() => navigate("/access-request")}
                         sx={{ mb: 2 }}
                     >
                         New
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={handleRefresh}
+                        sx={{ mb: 2 }}
+                    >
+                        {loading === true ? "Loading" : "Refresh"}
                     </Button>
                 </div>
 

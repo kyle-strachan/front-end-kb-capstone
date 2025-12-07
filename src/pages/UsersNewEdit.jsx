@@ -32,6 +32,7 @@ export default function UsersNewEdit() {
         isActive: true,
         roles: [],
     });
+    const [refreshRequests, setRefreshRequests] = useState(0);
     const [departments, setDepartments] = useState([]);
     const [locations, setLocations] = useState([]);
     const [disabled, setDisabled] = useState(false); // Remove later, use !id
@@ -299,8 +300,8 @@ export default function UsersNewEdit() {
                     </div>
                 </Paper>
             </div>
-            {id && (<div><AccessAssignments id={userToManage._id} fullName={userToManage.fullName} notify={notify} /></div>)}
-            {id && (<div><AccessRequests id={userToManage._id} fullName={userToManage.fullName} /></div>)}
+            {id && (<div><AccessAssignments id={userToManage._id} fullName={userToManage.fullName} notify={notify} onChanged={() => setRefreshRequests(prev => prev + 1)} /></div>)}
+            {id && (<div><AccessRequests id={userToManage._id} fullName={userToManage.fullName} refreshKey={refreshRequests} /></div>)}
         </>
     );
 }

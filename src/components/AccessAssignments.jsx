@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import CustomDialogYesNo from "./CustomDialogYesNo";
 
-export default function AccessAssignments({ id, fullName, notify }) {
+export default function AccessAssignments({ id, fullName, notify, onChanged }) {
     const [accessAssignments, setAccessAssignments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -67,6 +67,9 @@ export default function AccessAssignments({ id, fullName, notify }) {
             if (res.status === 200) {
                 notify("Revocation request submitted successfully.", "success");
 
+                if (typeof onChanged === "function") {
+                    onChanged();
+                }
             } else {
                 notify("Revocation request not submitted. Response not OK.", "error");
             }
@@ -76,6 +79,7 @@ export default function AccessAssignments({ id, fullName, notify }) {
             fetchAccessAssignments();
         }
     }
+
 
     // Block module if error during rendering.
     if (error) return <p>{error}</p>;
@@ -90,7 +94,7 @@ export default function AccessAssignments({ id, fullName, notify }) {
 
                 <div className="cta-btn-container">
                     <Button
-                        variant="contained"
+                        variant="outlined"
                         onClick={handleRefresh}
                         sx={{ mb: 2 }}
                     >
