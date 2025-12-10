@@ -40,7 +40,7 @@ export default function Dashboard() {
                         <Typography variant='h2'>Future Development Modules</Typography>
                         <Alert sx={{ mb: 2 }} severity="info"><b>Capstone Submission Note</b><br />The following tiles are examples of future modules that will
                             be added, utilising the project's existing user and permissions configuration. Maintenance Requests and Purchase Requests will follow
-                            a similar ticket and approval process as the project's Request System Access. These module are out of scope of this submission.</Alert>
+                            a similar ticket and approval process as the project's Request System Access. These modules are out of scope of this submission.</Alert>
                         <div style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
